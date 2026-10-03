@@ -93,6 +93,19 @@
         panel.hidden = panel.id !== button.dataset.previewTarget;
         if (panel.hidden) panel.querySelectorAll('video').forEach(video => video.pause());
       });
+      if (group === 'hobbies') {
+        const tile = button.closest('.hobby-tile');
+        const tabs = [...tile.querySelectorAll('[data-preview-target]')];
+        const panel = document.getElementById(button.dataset.previewTarget);
+        tile.querySelector('[data-hobby-status]').textContent = `${panel.querySelector('h2').textContent}, ${tabs.indexOf(button) + 1} of ${tabs.length}`;
+      }
+    });
+  });
+  document.querySelectorAll('[data-hobby-step]').forEach(button => {
+    button.addEventListener('click', () => {
+      const tabs = [...button.closest('.hobby-tile').querySelectorAll('[data-preview-target]')];
+      const current = tabs.findIndex(tab => tab.getAttribute('aria-pressed') === 'true');
+      tabs[(current + Number(button.dataset.hobbyStep) + tabs.length) % tabs.length].click();
     });
   });
   document.querySelectorAll('[data-copy-email]').forEach(button => {

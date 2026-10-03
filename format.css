@@ -227,7 +227,10 @@ body{background:#fffdf9}
 [data-flip-preview][data-view=alternate] .preview-flipper{transform:rotateY(180deg)}
 .mosaic-project .demo-frame{transform:none;max-height:none}
 .mosaic-project .demo-frame video{max-height:none;object-fit:contain!important;object-position:center}
-.video-tile .preview-flipper,.experience-project .preview-flipper{width:min(100%,340px)}
+.mosaic{grid-auto-rows:minmax(calc((100cqw - 48px)/4),auto)}
+.video-tile,.experience-project{min-height:calc((100cqw - 112px)*9/32 + 88px)}
+.video-tile .tile-media,.experience-project .tile-media{inset:24px 24px 64px}
+.video-tile .preview-flipper,.experience-project .preview-flipper{width:100%}
 .spotify-tile .tile-media{inset:28px 24px 68px;align-items:center}
 .spotify-tile .preview-flipper{width:min(100%,250px)}
 .spotify-tile .demo-frame{width:100%;border:5px solid #253632;border-radius:24px}
@@ -240,3 +243,9 @@ body{background:#fffdf9}
 @media(max-width:700px){.role-summary{gap:12px}.role-tile .preview-panel h3{font-size:20px}.role-tile{min-height:340px}.mosaic-project .tile-media{inset:30px 24px 68px}.spotify-tile .tile-media{inset:24px 24px 68px}.stock-tile .tile-media{inset:40px 24px 68px}}
 @media(max-width:370px){.brand-badge{width:52px;height:46px;flex-basis:52px}.brand-amazon img{width:43px}.role-tile .preview-panel h3{font-size:18px}.career-tile .experience-row h3{font-size:18px}.career-tile .brand-badge{width:42px;height:40px;flex-basis:42px}.career-tile .brand-amazon img{width:35px}.career-tile .brand-uiuc img{width:20px;height:30px}.education-icon img{width:24px;height:34px}.tile-caption{font-size:10px;left:58px;right:130px}.switch-preview{font-size:10px;padding-inline:10px}}
 @media(prefers-reduced-motion:reduce){.preview-flipper{transition:none;transform:none!important}.flip-back{transform:none;opacity:0}.flip-front{opacity:1}[data-flip-preview][data-view=alternate] .flip-front{opacity:0}[data-flip-preview][data-view=alternate] .flip-back{opacity:1}}
+.hobby-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px}
+.hobby-controls .hobby-dots{margin-top:0}
+.hobby-arrow{display:grid;place-items:center;width:40px;height:40px;flex:0 0 40px;border:1px solid #684b7033;border-radius:50%;background:#ffffff80;color:#714775;font-size:22px;line-height:1;transition:background .2s}
+.hobby-arrow:hover{background:white}
+@media(max-width:1279px){.mosaic{grid-auto-rows:minmax(328px,auto)}.video-tile,.experience-project{min-height:calc((100cqw - 48px)*9/16 + 88px)}}
+@media(max-width:700px){.mosaic{grid-auto-rows:auto}.video-tile,.experience-project{min-height:max(300px,calc((100cqw - 48px)*9/16 + 88px))}.video-tile .tile-media,.experience-project .tile-media{inset:24px 24px 64px}}
