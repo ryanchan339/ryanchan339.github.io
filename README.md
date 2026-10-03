@@ -31,7 +31,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 - `projects/*.html`: project explanations and source links.
 - `styles.css`: layout, typography, colors, and responsive behavior.
 - `format.css`: Marco-style tile grid, floating pill, gallery, and message-style Contact layout.
-- `site.js`: interactive preview switching, copy-email actions, legacy section-link redirects, and demo playback.
+- `site.js`: project flips, interactive preview switching, email actions, legacy section-link redirects, and demo playback.
 - `assets/*.jpg`, `assets/*.png`: still preview posters.
 - `assets/*.mp4`: 16-second silent walkthrough loops, encoded as H.264 with fast-start metadata.
 
@@ -41,6 +41,8 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 - Stock Trader captures the original dashboard with committed report data generated September 11, 2026. The footage preserves its distinctions between backtests, walk-forward evaluations, and paper trading. It is a historical snapshot, not live data.
 - SpotifyBook captures the original templates using fictitious tracks, artists, and generated cover art. No account is authenticated and no playlist is created during the capture.
 - The tall Home tile uses a separate portrait SpotifyBook walkthrough captured from the same original templates at mobile size.
+- Project tiles flip to a second captured interface state on mouse hover or project-link focus. The Switch view button supports touch and keyboard use. Videos pause while the alternate view is visible, and reduced-motion preferences use an instant view change.
+- Amazon's white wordmark and orange smile are sourced from the [About Amazon footer](https://www.aboutamazon.com/). Illinois's full-color Block I is sourced from the [official brand web resources](https://web.brand.illinois.edu/logos/), using https://cdn.brand.illinois.edu/logos/block-i.svg. Both are stored locally as SVGs; the original artwork is retained.
 - The MP4s are edited walkthroughs assembled from four captured interface states each, with short transitions. No soundtrack is included.
 - Homepage loops load only when visible, pause when offscreen or the page is hidden, and have user-operated pause controls. Reduced-motion preferences show still posters until the visitor explicitly starts a demo.
 - Experience and education use Ryan's supplied résumé as background. Descriptions are rewritten, and GPA, the phone number, and the private NFL project are excluded.
@@ -53,4 +55,4 @@ Source projects:
 
 ## Included decisions
 
-Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, a floating Home / About / Work / Experience / Contact pill, and neutral typography. The grid fits the viewport and becomes two columns or one column on smaller screens. Ryan's content, original three projects, supplied About text, muted blue accent, and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.
+Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, and a floating Home / About / Work / Experience / Contact pill. A warm off-white canvas and blue, lavender, peach, mint, and pink tiles give each area a distinct color. The grid fits the viewport and becomes two columns or one column on smaller screens. Straight project previews flip to alternate interface captures. Amazon and UIUC logo badges identify the roles and education. Ryan's content, original three projects, supplied About text, and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.

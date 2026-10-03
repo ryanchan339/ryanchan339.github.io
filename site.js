@@ -15,7 +15,8 @@
       button.setAttribute('aria-pressed', String(!video.paused));
     };
     state.update = async () => {
-      const shouldPlay = state.visible && !document.hidden && !state.userPaused && !state.failed && (!motion.matches || state.userStarted);
+      const alternateVisible = video.closest('[data-flip-preview]')?.dataset.view === 'alternate';
+      const shouldPlay = state.visible && !alternateVisible && !document.hidden && !state.userPaused && !state.failed && (!motion.matches || state.userStarted);
       if (!shouldPlay) { video.pause(); label(); return; }
       if (!video.dataset.loaded) {
         video.querySelectorAll('source[data-src]').forEach(source => { source.src = source.dataset.src; });
@@ -41,6 +42,45 @@
   demos.forEach(state => observer.observe(state.video));
   document.addEventListener('visibilitychange', () => demos.forEach(state => state.update()));
   motion.addEventListener('change', () => demos.forEach(state => { state.userStarted = false; state.update(); }));
+
+  document.querySelectorAll('[data-flip-preview]').forEach(tile => {
+    const button = tile.querySelector('.switch-preview');
+    const front = tile.querySelector('.flip-front');
+    const back = tile.querySelector('.flip-back');
+    const projectLink = tile.querySelector('.tile-project-link');
+    const project = tile.querySelector('video').dataset.project;
+    let hovering = false;
+    let focused = false;
+    let lockedView = null;
+    const update = () => {
+      const alternate = lockedView === null ? hovering || focused : lockedView;
+      tile.dataset.view = alternate ? 'alternate' : 'front';
+      front.inert = alternate;
+      front.setAttribute('aria-hidden', String(alternate));
+      back.setAttribute('aria-hidden', String(!alternate));
+      button.setAttribute('aria-pressed', String(alternate));
+      button.setAttribute('aria-label', `Show ${alternate ? 'walkthrough' : 'alternate'} ${project} view`);
+      demos.filter(state => tile.contains(state.video)).forEach(state => state.update());
+    };
+    tile.addEventListener('pointerenter', event => {
+      if (event.pointerType !== 'mouse' || !window.matchMedia('(hover: hover)').matches) return;
+      // Entering directly on the manual switch should perform only its click action.
+      if (event.clientY >= button.getBoundingClientRect().top) return;
+      hovering = true;
+      update();
+    });
+    tile.addEventListener('pointerleave', () => {
+      hovering = false;
+      if (lockedView === false) lockedView = null;
+      update();
+    });
+    projectLink.addEventListener('focus', () => { focused = true; update(); });
+    projectLink.addEventListener('blur', () => { focused = false; update(); });
+    button.addEventListener('click', () => {
+      lockedView = tile.dataset.view !== 'alternate';
+      update();
+    });
+  });
 
   document.querySelectorAll('[data-preview-target]').forEach(button => {
     button.addEventListener('click', () => {

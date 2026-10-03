@@ -1,4 +1,4 @@
-:root{--tile:#f7f7f9;--tile-ink:#151515;--tile-muted:#929294}
+:root{--tile:#f1ecff;--tile-ink:#262536;--tile-muted:#606779;--blue:#6258c8;--blue-deep:#4f459f;--blue-soft:#ede8ff;--line:#dfd9e8;--surface:#f3eefc}
 body{color:var(--tile-ink);font-family:Arial,Helvetica,sans-serif}
 .site-nav{top:40px;margin:40px auto 0;padding:4px;gap:0;height:54px;background:rgba(255,255,255,.88);border:1px solid #ececed;box-shadow:0 4px 8px #0000000a;backdrop-filter:blur(20px)}
 .site-nav a{width:112px;padding:12px 20px;font-size:14px;line-height:20px;color:#969698;font-weight:500;gap:8px}
@@ -164,3 +164,79 @@ body{color:var(--tile-ink);font-family:Arial,Helvetica,sans-serif}
 @media(max-width:370px){.site-nav a,.site-nav a:nth-child(4){padding-inline:8px;font-size:11px}.format-main{width:calc(100% - 24px)}.mosaic-tile{padding:24px}.mosaic-project{padding:0}.education-icon{width:46px;height:46px;right:20px;top:22px;font-size:10px}.education-tile h2{font-size:26px}.gallery-project{padding:24px;min-height:530px}.gallery-arrow{width:39px;height:39px;font-size:26px;border-width:2px}.gallery-project h2{font-size:25px}.gallery-project header p{font-size:16px}.profile-header h2{font-size:15px}.app-icon{width:44px;height:44px;flex-basis:44px;font-size:17px}.email-composer{padding-left:12px}.message-incoming .avatar{display:none}}
 @media(min-width:701px) and (max-width:1279px){.experience-mosaic>.career-tile{grid-row:span 3}}
 @media(prefers-reduced-motion:reduce){.tile-media,.tile-caption,.demo-caption{transition:none}.mosaic-project:hover .tile-media,.mosaic-project:focus-within .tile-media{transform:none}}
+
+/* A warm canvas with a different color for each kind of tile. */
+body{background:#fffdf9}
+.site-nav{border-color:#e9e1ed;box-shadow:0 5px 16px #67519a0c}
+.site-nav a{color:#707082}
+.site-nav a[aria-current]{background:#eae3ff;color:#4a3b87}
+.site-nav a:nth-child(3)::before{background:#e67b58}
+.format-main .look-around{color:#797489}
+.intro-tile,.about-bio,.career-tile{background:#fff0dc}
+.video-tile,.experience-project,.gallery-video-search{background:#e0eaff}
+.spotify-tile,.gallery-spotifybook{background:#def1e4}
+.profile-tile{background:#eae2ff}
+.role-tile{background:#ffe5d9}
+.hobby-tile{background:#fbe1ec}
+.stock-tile,.gallery-stock-trader{background:#e6e5ff}
+.education-tile{background:#ffebce}
+.home-contact-tile,.message-tile{background:#dbf0ef}
+.benchmark-tile{background:#eee1f7}
+.lab-tile{background:#e1ebfa}
+.teaching-tile{background:#e1f2e6}
+.email-tile{background:#fff0dc}
+.linkedin-tile{background:#e0eaff}
+.tile-rule{background:#34334b24}
+.tile-pill,.gallery-arrow,.tile-open{border-color:#34334b26;background:#ffffff55;color:#535366}
+.preview-tab{border-color:#413e5129;color:#555568}
+.preview-tab[aria-pressed=true]{background:#fffaf6;border-color:#453c652b;color:#403351}
+.hobby-dot{background:#68567840}
+.hobby-dot[aria-pressed=true]{background:#8f5394}
+.education-icon{background:#ffffffc4}
+.education-icon img{display:block;width:30px;height:44px;object-fit:contain}
+.brand-badge{display:inline-flex;align-items:center;justify-content:center;width:64px;height:52px;flex:0 0 64px;border-radius:13px;background:white;box-shadow:0 3px 10px #6a4c3210}
+.brand-amazon{background:#232f3e}
+.brand-badge img{display:block;width:50px;height:36px;object-fit:contain}
+.brand-uiuc img{width:26px;height:38px}
+.role-summary{display:flex;align-items:center;gap:14px}
+.role-summary>div{min-width:0}
+.role-tile .preview-panel h3{font-size:21px}
+.career-tile .experience-row h3{display:flex;align-items:center;gap:12px}
+.career-tile .brand-badge{width:52px;height:46px;flex-basis:52px}
+.career-tile .brand-amazon img{width:43px;height:32px}
+.career-tile .brand-uiuc img{width:24px;height:34px}
+.message-incoming p{background:#fffaf4}
+.message-incoming p:before{border-right-color:#fffaf4}
+.email-composer{background:#ffffff80;border-color:#476d6f33}
+.email-composer input::placeholder{color:#747989}
+.email-composer button{background:var(--blue)}
+.case-demo{background:#e6eaff}
+.pipeline-step{background:#f0e8fc}
+.metric-grid>div{background:#e7f3ef}
+::selection{background:#d6cbff;color:#382564}
+
+/* Two real interface views, kept straight, with an accessible manual switch. */
+.mosaic-project .tile-media{perspective:1200px;transform:none;inset:32px 32px 68px}
+.mosaic-project:hover .tile-media,.mosaic-project:focus-within .tile-media{transform:none}
+.preview-flipper{position:relative;width:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,.7,.2,1)}
+.flip-front,.flip-back{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flip-front{position:relative}
+.flip-back{position:absolute;inset:0;transform:rotateY(180deg);border:1px solid #28364c20;border-radius:14px;overflow:hidden;background:white;box-shadow:0 14px 28px #18243424}
+.flip-back img{display:block;width:100%;height:100%;object-fit:contain}
+.flip-back>span{position:absolute;bottom:0;left:0;right:0;padding:9px 12px;background:#ffffffed;color:#50556b;font-size:10px;line-height:1.4}
+[data-flip-preview][data-view=alternate] .preview-flipper{transform:rotateY(180deg)}
+.mosaic-project .demo-frame{transform:none;max-height:none}
+.mosaic-project .demo-frame video{max-height:none;object-fit:contain!important;object-position:center}
+.video-tile .preview-flipper,.experience-project .preview-flipper{width:min(100%,340px)}
+.spotify-tile .tile-media{inset:28px 24px 68px;align-items:center}
+.spotify-tile .preview-flipper{width:min(100%,250px)}
+.spotify-tile .demo-frame{width:100%;border:5px solid #253632;border-radius:24px}
+.spotify-tile .flip-back{border:5px solid #253632;border-radius:24px}
+.stock-tile .tile-media{inset:48px 32px 76px}
+.mosaic-project .demo-caption{display:none}
+.switch-preview{position:absolute;bottom:16px;right:16px;z-index:5;border:1px solid #35304e30;border-radius:99px;padding:8px 12px;min-height:36px;background:#ffffffb8;color:#49415c;font-size:11px;line-height:18px;transition:background .2s}
+.switch-preview:hover,.switch-preview[aria-pressed=true]{background:white}
+.tile-caption{opacity:1;right:150px;font-size:11px}
+@media(max-width:700px){.role-summary{gap:12px}.role-tile .preview-panel h3{font-size:20px}.role-tile{min-height:340px}.mosaic-project .tile-media{inset:30px 24px 68px}.spotify-tile .tile-media{inset:24px 24px 68px}.stock-tile .tile-media{inset:40px 24px 68px}}
+@media(max-width:370px){.brand-badge{width:52px;height:46px;flex-basis:52px}.brand-amazon img{width:43px}.role-tile .preview-panel h3{font-size:18px}.career-tile .experience-row h3{font-size:18px}.career-tile .brand-badge{width:42px;height:40px;flex-basis:42px}.career-tile .brand-amazon img{width:35px}.career-tile .brand-uiuc img{width:20px;height:30px}.education-icon img{width:24px;height:34px}.tile-caption{font-size:10px;left:58px;right:130px}.switch-preview{font-size:10px;padding-inline:10px}}
+@media(prefers-reduced-motion:reduce){.preview-flipper{transition:none;transform:none!important}.flip-back{transform:none;opacity:0}.flip-front{opacity:1}[data-flip-preview][data-view=alternate] .flip-front{opacity:0}[data-flip-preview][data-view=alternate] .flip-back{opacity:1}}
