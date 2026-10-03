@@ -13,7 +13,11 @@ From this directory, run `python -m http.server 8766 --bind 127.0.0.1` and open 
 3. In the repository's **Settings → Pages**, choose **GitHub Actions** as the source.
 4. Push to `main` or run the **Deploy portfolio to GitHub Pages** workflow manually.
 
-For a root personal site, name the repository `ryanchan339.github.io`. For a project site, any chosen repository name works: local links and media paths are relative. This copy has not been pushed or published.
+Published portfolio: https://ryanchan339.github.io/
+
+Source repository: https://github.com/ryanchan339/ryanchan339.github.io
+
+Updates pushed to `main` deploy automatically through GitHub Actions. Local links and media paths are relative.
 
 The workflow follows GitHub's documented configure/upload/deploy pattern: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
 
