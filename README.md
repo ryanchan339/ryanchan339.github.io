@@ -33,7 +33,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 - `projects/*.html`: project explanations and source links.
 - `styles.css`: layout, typography, colors, and responsive behavior.
 - `format.css`: Marco-style tile grid, floating pill, gallery, and message-style Contact layout.
-- `glass.css`: opaque pastel gradients, reflective edges, light shadows, whole-tile actions, and hover expansion for tiles without flippable screens. It uses no background blur.
+- `glass.css`: solid pastel fills, subtle borders, light shadows, whole-tile actions, and hover expansion for tiles without flippable screens. It uses no background blur.
 - `site.js`: project flips, interactive preview switching, email actions, legacy section-link redirects, and demo playback.
 - `assets/*.jpg`, `assets/*.png`: still preview posters.
 - `assets/*.mp4`: 16-second silent walkthrough loops, encoded as H.264 with fast-start metadata.
@@ -60,4 +60,4 @@ Source projects:
 
 ## Included decisions
 
-Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, and a floating Home / About / Work / Experience / Contact pill. Solid panels and controls use cool blue, lavender, and mint gradients, reflective borders, and light shadows to suggest glass without background blur or a fixed background. The Work dot and navigation helper prompts are removed. The grid fits the viewport and becomes two columns or one column on smaller screens. Tiles expand slightly on mouse hover or keyboard focus, while flippable project screens rotate instead. Each exposes a native link or interest-cycling button across its body. Amazon and UIUC logo badges identify the roles and education. Ryan's content, original three projects, supplied About text, and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.
+Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, and a floating Home / About / Work / Experience / Contact pill. Solid pastel panels use blue, lavender, mint, peach, pink, and amber fills over a flat neutral canvas. Controls have opaque fills, subtle borders, and light shadows, without gradients or background blur. The Work dot and navigation helper prompts are removed. The grid fits the viewport and becomes two columns or one column on smaller screens. Tiles expand slightly on mouse hover or keyboard focus, while flippable project screens rotate instead. Each exposes a native link or interest-cycling button across its body. Amazon and UIUC logo badges identify the roles and education. Ryan's content, original three projects, supplied About text, and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.
