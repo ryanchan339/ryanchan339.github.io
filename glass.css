@@ -97,20 +97,30 @@ body{
   .format-main{margin-top:30px}
 }
 
-/* Lift the featured tile without changing the grid or hiding the walkthrough. */
-.home-mosaic .video-tile{transform-origin:center;transition:transform .24s cubic-bezier(.2,.75,.25,1)}
-.home-mosaic .video-tile .tile-caption{display:flex;align-items:center;gap:16px}
-.home-mosaic .video-tile .project-cta{color:#405aa0;font-weight:600;white-space:nowrap;opacity:0;transform:translateX(-5px);transition:opacity .2s,transform .2s}
-.home-mosaic .video-tile .tile-open{color:#405aa0;transition:transform .2s}
+/* Native stretched links keep whole tiles clickable and controls independent. */
+.mosaic-tile{transform-origin:center;transition:transform .24s cubic-bezier(.2,.75,.25,1)}
+.mosaic-tile a[data-tile-link]:not(.tile-project-link){position:static}
+.mosaic-tile a[data-tile-link]:not(.tile-project-link)::after{content:"";position:absolute;inset:0;z-index:2;border-radius:inherit}
+.mosaic-tile :is(a,button,input,select,textarea,form):not([data-tile-link]):not(.demo-toggle):not(.switch-preview){position:relative;z-index:6}
+.mosaic-tile .demo-toggle,.mosaic-tile .switch-preview{z-index:6}
+.tile-surface-action{position:absolute;inset:0;z-index:2;width:100%;height:100%;padding:0;border:0;border-radius:inherit;background:transparent;color:#405aa0;cursor:pointer}
+.tile-click-hint{position:absolute;top:24px;right:24px;font-size:10px;opacity:0;transition:opacity .2s}
+.mosaic-project .tile-caption{display:flex;align-items:center;gap:16px}
+.mosaic-project .project-cta{color:#405aa0;font-weight:600;white-space:nowrap;opacity:0;transform:translateX(-5px);transition:opacity .2s,transform .2s}
+.mosaic-project .tile-open{color:#405aa0;transition:transform .2s}
+.spotify-tile .project-cta{display:none}
+.experience-row[id]{scroll-margin-top:112px}
 @media(hover:hover) and (pointer:fine){
-  .home-mosaic .video-tile:hover{z-index:8;transform:translateY(-4px) scale(1.018);border-color:#d7e2ff;box-shadow:0 12px 30px #354e7a24,inset 0 1px 0 #fff}
-  .home-mosaic .video-tile:hover .project-cta{opacity:1;transform:none}
-  .home-mosaic .video-tile:hover .tile-open{transform:translate(2px,-2px)}
+  .mosaic-tile:hover{z-index:8;transform:translateY(-4px) scale(1.018);border-color:#d7e2ff;box-shadow:0 12px 30px #354e7a24,inset 0 1px 0 #fff}
+  .mosaic-tile:hover .project-cta{opacity:1;transform:none}
+  .mosaic-tile:hover .tile-open{transform:translate(2px,-2px)}
+  .mosaic-tile:hover .tile-click-hint{opacity:1}
 }
-.home-mosaic .video-tile:has(.tile-project-link:focus-visible){z-index:8;transform:translateY(-4px) scale(1.018);border-color:#bacbf0}
-.home-mosaic .video-tile:has(.tile-project-link:focus-visible) .project-cta{opacity:1;transform:none}
-@media(max-width:700px){.home-mosaic .video-tile .project-cta{display:none}}
+.mosaic-tile:has(:focus-visible){z-index:8;transform:translateY(-4px) scale(1.018);border-color:#bacbf0}
+.mosaic-tile:has(:focus-visible) .project-cta{opacity:1;transform:none}
+.mosaic-tile:has(:focus-visible) .tile-click-hint{opacity:1}
+@media(max-width:700px){.mosaic-project .project-cta{display:none}}
 @media(prefers-reduced-motion:reduce){
-  .home-mosaic .video-tile,.home-mosaic .video-tile .project-cta,.home-mosaic .video-tile .tile-open{transition:none}
-  .home-mosaic .video-tile:hover,.home-mosaic .video-tile:has(.tile-project-link:focus-visible),.home-mosaic .video-tile:hover .tile-open{transform:none}
+  .mosaic-tile,.project-cta,.tile-open,.tile-click-hint{transition:none}
+  .mosaic-tile:hover,.mosaic-tile:has(:focus-visible),.mosaic-tile:hover .tile-open{transform:none}
 }
