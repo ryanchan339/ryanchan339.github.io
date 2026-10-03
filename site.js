@@ -1,7 +1,8 @@
 (() => {
   const legacyPages = { '#work': 'work.html', '#experience': 'experience.html', '#contact': 'contact.html' };
   if (document.querySelector('[data-home]') && legacyPages[location.hash]) {
-    location.replace(legacyPages[location.hash]);
+    const release = document.querySelector('meta[name="portfolio-release"]')?.content;
+    location.replace(legacyPages[location.hash] + (release ? `?v=${release}` : ''));
     return;
   }
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');

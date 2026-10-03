@@ -19,6 +19,8 @@ Source repository: https://github.com/ryanchan339/ryanchan339.github.io
 
 Updates pushed to `main` deploy automatically through GitHub Actions. Local links and media paths are relative.
 
+Page, CSS, and JavaScript links include a release token to keep browser caches from mixing versions. Refresh that token across the HTML when publishing changed page or style files.
+
 The workflow follows GitHub's documented configure/upload/deploy pattern: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
 
 ## Edit
