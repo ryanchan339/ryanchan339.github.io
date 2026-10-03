@@ -50,11 +50,12 @@
     const back = tile.querySelector('.flip-back');
     const projectLink = tile.querySelector('.tile-project-link');
     const project = tile.querySelector('video').dataset.project;
+    const autoFlip = tile.dataset.hoverPreview !== 'expand';
     let hovering = false;
     let focused = false;
     let lockedView = null;
     const update = () => {
-      const alternate = lockedView === null ? hovering || focused : lockedView;
+      const alternate = lockedView === null ? autoFlip && (hovering || focused) : lockedView;
       tile.dataset.view = alternate ? 'alternate' : 'front';
       front.inert = alternate;
       front.setAttribute('aria-hidden', String(alternate));
@@ -64,7 +65,7 @@
       demos.filter(state => tile.contains(state.video)).forEach(state => state.update());
     };
     tile.addEventListener('pointerenter', event => {
-      if (event.pointerType !== 'mouse' || !window.matchMedia('(hover: hover)').matches) return;
+      if (!autoFlip || event.pointerType !== 'mouse' || !window.matchMedia('(hover: hover)').matches) return;
       // Entering directly on the manual switch should perform only its click action.
       if (event.clientY >= button.getBoundingClientRect().top) return;
       hovering = true;

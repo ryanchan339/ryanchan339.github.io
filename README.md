@@ -19,7 +19,7 @@ Source repository: https://github.com/ryanchan339/ryanchan339.github.io
 
 Updates pushed to `main` deploy automatically through GitHub Actions. Local links and media paths are relative.
 
-Page, CSS, and JavaScript links include a release token to keep browser caches from mixing versions. Refresh that token across the HTML when publishing changed page or style files.
+Page, CSS, JavaScript, and media links include a release token to keep browser caches from mixing versions. Refresh that token across the HTML when publishing changed page, style, or media files.
 
 The workflow follows GitHub's documented configure/upload/deploy pattern: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
 
@@ -33,7 +33,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 - `projects/*.html`: project explanations and source links.
 - `styles.css`: layout, typography, colors, and responsive behavior.
 - `format.css`: Marco-style tile grid, floating pill, gallery, and message-style Contact layout.
-- `glass.css`: translucent panels, frosted navigation and controls, cool background gradients, reflective edges, and transparency fallbacks.
+- `glass.css`: opaque pastel gradients, reflective edges, light shadows, and the Home page's featured-project hover expansion. It uses no background blur.
 - `site.js`: project flips, interactive preview switching, email actions, legacy section-link redirects, and demo playback.
 - `assets/*.jpg`, `assets/*.png`: still preview posters.
 - `assets/*.mp4`: 16-second silent walkthrough loops, encoded as H.264 with fast-start metadata.
@@ -44,7 +44,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 - Stock Trader captures the original dashboard with committed report data generated September 11, 2026. The footage preserves its distinctions between backtests, walk-forward evaluations, and paper trading. It is a historical snapshot, not live data.
 - SpotifyBook captures the original templates with a curated sample of real songs by Olivia Rodrigo, Drake, Bruno Mars, Steve Lacy, and Frank Sinatra. Track thumbnails and artist icons use their album artwork from the Apple music catalog. Ordering is sample data, not personal listening history. No account is authenticated and no playlist is created during the capture. Catalog and artwork sources are listed in `assets/spotifybook-sample-sources.json`.
 - The tall Home tile uses a separate portrait SpotifyBook walkthrough captured from the same original templates at mobile size.
-- Project tiles flip to a second captured interface state on mouse hover or project-link focus. The Switch view button supports touch and keyboard use. Videos pause while the alternate view is visible, and reduced-motion preferences use an instant view change.
+- Project tiles flip to a second captured interface state on mouse hover or project-link focus. On Home, Video Search instead expands slightly and reveals a View project cue, keeping its walkthrough visible. Its Switch view button still opens the alternate capture. All manual switches support touch and keyboard use. Videos pause while the alternate view is visible, and reduced-motion preferences disable expansion and use an instant view change.
 - Video Search previews use the tile's full inner width, with a taller grid row to show the complete interface. Outside coding has Previous/Next arrows that cycle through the four interests, alongside the direct-selection dots and a screen-reader announcement.
 - Amazon's white wordmark and orange smile are sourced from the [About Amazon footer](https://www.aboutamazon.com/). Illinois's full-color Block I is sourced from the [official brand web resources](https://web.brand.illinois.edu/logos/), using https://cdn.brand.illinois.edu/logos/block-i.svg. Both are stored locally as SVGs; the original artwork is retained.
 - The MP4s are edited walkthroughs assembled from four captured interface states each, with short transitions. No soundtrack is included.
@@ -59,4 +59,4 @@ Source projects:
 
 ## Included decisions
 
-Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, and a floating Home / About / Work / Experience / Contact pill. Liquid-glass panels and controls sit over cool blue, lavender, and mint gradients, with colored tints, frosted backgrounds, reflective borders, and soft shadows. Opaque fallbacks support browsers without backdrop filters and reduced-transparency preferences. The Work dot and navigation helper prompts are removed. The grid fits the viewport and becomes two columns or one column on smaller screens. Straight project previews flip to alternate interface captures. Amazon and UIUC logo badges identify the roles and education. Ryan's content, original three projects, supplied About text, and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.
+Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, and a floating Home / About / Work / Experience / Contact pill. Solid panels and controls use cool blue, lavender, and mint gradients, reflective borders, and light shadows to suggest glass without background blur or a fixed background. The Work dot and navigation helper prompts are removed. The grid fits the viewport and becomes two columns or one column on smaller screens. Home's Video Search tile expands slightly on mouse hover or keyboard focus, without moving nearby content. Other project previews flip to alternate interface captures. Amazon and UIUC logo badges identify the roles and education. Ryan's content, original three projects, supplied About text, and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.

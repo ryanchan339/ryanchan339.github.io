@@ -10,7 +10,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offse
 ::selection{background:#dae6f4;color:#203956}
 .skip-link{position:fixed;top:-100px;left:20px;z-index:100;background:var(--blue-deep);color:white;padding:12px 20px;border-radius:10px}
 .skip-link:focus{top:16px}
-.site-nav{position:sticky;top:20px;z-index:30;width:max-content;max-width:calc(100% - 32px);margin:28px auto 0;padding:5px;display:flex;gap:3px;border:1px solid var(--line);border-radius:99px;background:rgba(255,255,255,.94);box-shadow:0 5px 16px rgba(23,35,54,.055);backdrop-filter:blur(16px)}
+.site-nav{position:sticky;top:20px;z-index:30;width:max-content;max-width:calc(100% - 32px);margin:28px auto 0;padding:5px;display:flex;gap:3px;border:1px solid var(--line);border-radius:99px;background:rgba(255,255,255,.94);box-shadow:0 5px 16px rgba(23,35,54,.055)}
 .site-nav a{display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 23px;border-radius:99px;font-size:14px;color:var(--muted);font-weight:500;transition:background .2s,color .2s}
 .site-nav a:hover{color:var(--ink);background:var(--surface)}
 .site-nav a[aria-current]{color:var(--blue-deep);background:var(--blue-soft)}
@@ -41,7 +41,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offse
 .spotify-stage{background:linear-gradient(180deg,transparent,#edf1ee)}
 .demo-frame{position:relative;overflow:hidden;border:1px solid rgba(23,35,54,.08);border-radius:12px;background:#11161e;box-shadow:0 16px 35px rgba(27,43,65,.13)}
 .demo-frame video{width:100%;height:auto;aspect-ratio:16/9;display:block;object-fit:cover;background:#11161e}
-.demo-toggle{position:absolute;right:12px;bottom:12px;display:flex;align-items:center;gap:6px;min-height:34px;padding:5px 12px;border:1px solid rgba(255,255,255,.25);border-radius:99px;background:rgba(20,28,41,.9);color:#fff;font-size:11px;backdrop-filter:blur(8px)}
+.demo-toggle{position:absolute;right:12px;bottom:12px;display:flex;align-items:center;gap:6px;min-height:34px;padding:5px 12px;border:1px solid rgba(255,255,255,.25);border-radius:99px;background:rgba(20,28,41,.9);color:#fff;font-size:11px}
 .demo-toggle:hover{background:var(--blue-deep)}
 .demo-toggle:disabled{cursor:default;opacity:.65}
 .demo-caption{display:flex;justify-content:space-between;gap:12px;margin:13px 1px 0;font-size:11px;line-height:1.5;color:var(--muted)}
