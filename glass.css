@@ -99,6 +99,7 @@ body{
 
 /* Native stretched links keep whole tiles clickable and controls independent. */
 .mosaic-tile{transform-origin:center;transition:transform .24s cubic-bezier(.2,.75,.25,1)}
+.mosaic-tile[data-flip-preview]{transition:none}
 .mosaic-tile a[data-tile-link]:not(.tile-project-link){position:static}
 .mosaic-tile a[data-tile-link]:not(.tile-project-link)::after{content:"";position:absolute;inset:0;z-index:2;border-radius:inherit}
 .mosaic-tile :is(a,button,input,select,textarea,form):not([data-tile-link]):not(.demo-toggle):not(.switch-preview){position:relative;z-index:6}
@@ -111,16 +112,18 @@ body{
 .spotify-tile .project-cta{display:none}
 .experience-row[id]{scroll-margin-top:112px}
 @media(hover:hover) and (pointer:fine){
-  .mosaic-tile:hover{z-index:8;transform:translateY(-4px) scale(1.018);border-color:#d7e2ff;box-shadow:0 12px 30px #354e7a24,inset 0 1px 0 #fff}
+  .mosaic-tile:hover{z-index:8;border-color:#d7e2ff;box-shadow:0 12px 30px #354e7a24,inset 0 1px 0 #fff}
+  .mosaic-tile:not([data-flip-preview]):hover{transform:translateY(-4px) scale(1.018)}
   .mosaic-tile:hover .project-cta{opacity:1;transform:none}
   .mosaic-tile:hover .tile-open{transform:translate(2px,-2px)}
   .mosaic-tile:hover .tile-click-hint{opacity:1}
 }
-.mosaic-tile:has(:focus-visible){z-index:8;transform:translateY(-4px) scale(1.018);border-color:#bacbf0}
+.mosaic-tile:has(:focus-visible){z-index:8;border-color:#bacbf0}
+.mosaic-tile:not([data-flip-preview]):has(:focus-visible){transform:translateY(-4px) scale(1.018)}
 .mosaic-tile:has(:focus-visible) .project-cta{opacity:1;transform:none}
 .mosaic-tile:has(:focus-visible) .tile-click-hint{opacity:1}
 @media(max-width:700px){.mosaic-project .project-cta{display:none}}
 @media(prefers-reduced-motion:reduce){
   .mosaic-tile,.project-cta,.tile-open,.tile-click-hint{transition:none}
-  .mosaic-tile:hover,.mosaic-tile:has(:focus-visible),.mosaic-tile:hover .tile-open{transform:none}
+  .mosaic-tile:not([data-flip-preview]):hover,.mosaic-tile:not([data-flip-preview]):has(:focus-visible),.mosaic-tile:hover .tile-open{transform:none}
 }
