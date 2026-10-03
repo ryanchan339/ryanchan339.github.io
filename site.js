@@ -1,6 +1,6 @@
 (() => {
   const legacyPages = { '#work': 'work.html', '#experience': 'experience.html', '#contact': 'contact.html' };
-  if (document.querySelector('.home-overview') && legacyPages[location.hash]) {
+  if (document.querySelector('[data-home]') && legacyPages[location.hash]) {
     location.replace(legacyPages[location.hash]);
     return;
   }
@@ -64,6 +64,13 @@
       } catch (_) {
         status.textContent = 'Use the email link to get in touch.';
       }
+    });
+  });
+  document.querySelectorAll('[data-email-draft]').forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const message = form.querySelector('[name="message"]').value;
+      location.href = `mailto:ryanchan339@gmail.com?subject=${encodeURIComponent('Hello Ryan')}&body=${encodeURIComponent(message)}`;
     });
   });
 })();

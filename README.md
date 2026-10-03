@@ -23,15 +23,16 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 
 ## Edit
 
-- `index.html`: interactive project and experience previews, with About and Contact summaries.
+- `index.html`: mixed-size project, introduction, experience, education, interests, and contact tiles.
 - `about.html`: Ryan's introduction and education.
 - `work.html`: all three project showcases and demos.
 - `experience.html`: professional, research, and teaching experience.
 - `contact.html`: email, LinkedIn, GitHub, and copy-email action.
 - `projects/*.html`: project explanations and source links.
 - `styles.css`: layout, typography, colors, and responsive behavior.
+- `format.css`: Marco-style tile grid, floating pill, gallery, and message-style Contact layout.
 - `site.js`: interactive preview switching, copy-email actions, legacy section-link redirects, and demo playback.
-- `assets/*.jpg`: still preview posters.
+- `assets/*.jpg`, `assets/*.png`: still preview posters.
 - `assets/*.mp4`: 16-second silent walkthrough loops, encoded as H.264 with fast-start metadata.
 
 ## Media and content provenance
@@ -39,6 +40,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 - Video Search captures a preview of the original interface with sample library data, fixed illustrative results, and generated lecture frames. It does not record a new inference run or a real video seek.
 - Stock Trader captures the original dashboard with committed report data generated September 11, 2026. The footage preserves its distinctions between backtests, walk-forward evaluations, and paper trading. It is a historical snapshot, not live data.
 - SpotifyBook captures the original templates using fictitious tracks, artists, and generated cover art. No account is authenticated and no playlist is created during the capture.
+- The tall Home tile uses a separate portrait SpotifyBook walkthrough captured from the same original templates at mobile size.
 - The MP4s are edited walkthroughs assembled from four captured interface states each, with short transitions. No soundtrack is included.
 - Homepage loops load only when visible, pause when offscreen or the page is hidden, and have user-operated pause controls. Reduced-motion preferences show still posters until the visitor explicitly starts a demo.
 - Experience and education use Ryan's supplied résumé as background. Descriptions are rewritten, and GPA, the phone number, and the private NFL project are excluded.
@@ -51,4 +53,4 @@ Source projects:
 
 ## Included decisions
 
-Recruiter-focused; light background; muted blue accent; floating Home / About / Work / Experience / Contact pill; name-only introduction on Home; no portrait or headline; interactive Home overview; Video Search featured on Work; original three projects; separate project detail pages; contact by email, LinkedIn, and GitHub; no phone number or GPA.
+Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, a floating Home / About / Work / Experience / Contact pill, and neutral typography. The grid fits the viewport and becomes two columns or one column on smaller screens. Ryan's content, original three projects, supplied About text, muted blue accent, and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.
