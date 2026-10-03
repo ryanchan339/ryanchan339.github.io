@@ -108,8 +108,61 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offse
 .not-found{padding:100px 0 80px;max-width:600px}
 .not-found h1{font-size:64px;font-weight:500;letter-spacing:-.05em;margin:0}
 .not-found p{color:var(--muted)}
+[hidden]{display:none!important}
+.page-main{min-height:calc(100vh - 110px);display:flex;flex-direction:column}
+.page-main>.site-footer{margin-top:auto;padding-top:26px}
+.page-main>section:last-of-type,.page-main>.home-overview,.page-main>.about-actions,.page-main>.text-link{margin-bottom:64px}
+.page-heading{padding:68px 0 54px}
+.page-heading h1{font-size:clamp(48px,7vw,84px);line-height:1.1;font-weight:500;letter-spacing:-.06em;margin:0}
+.experience-list{max-width:840px;width:100%;margin-left:auto}
+.page-main>.text-link{align-self:flex-end;margin-top:32px}
+.text-link{font-size:14px;color:var(--blue-deep)}
+.text-link:hover{text-decoration:underline;text-underline-offset:5px}
+.about-intro{max-width:650px;margin:8px 0 12px 280px}
+.about-intro h2{font-size:30px;font-weight:500;letter-spacing:-.035em;margin:0 0 16px}
+.about-intro p{font-size:20px;line-height:1.7;color:var(--muted);margin:0}
+.about-intro p+p{margin-top:20px}
+.about-actions{display:flex;flex-wrap:wrap;gap:24px;margin:32px 0 0 280px}
+.contact-page{padding:26px 0 100px;margin-left:280px}
+.copy-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:26px}
+.copy-email{font-size:12px;padding:9px 16px;border:1px solid var(--line);border-radius:99px;background:var(--white);color:var(--blue-deep);min-height:40px}
+.copy-email:hover{border-color:var(--blue);background:var(--blue-soft)}
+.copy-status{font-size:12px;color:var(--blue-deep)}
+.home-overview{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px}
+.overview-card{padding:28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);min-width:0}
+.overview-work{grid-row:span 2;background:var(--blue-soft)}
+.overview-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
+.overview-header h2{font-size:13px;font-weight:500;color:var(--muted);margin:0}
+.overview-header>a{color:var(--blue-deep);font-size:12px}
+.overview-header>a:hover{text-decoration:underline;text-underline-offset:4px}
+.preview-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
+.preview-tab{padding:8px 11px;border:1px solid transparent;border-radius:99px;background:transparent;font-size:11px;color:var(--muted);min-height:38px}
+.preview-tab:hover{background:rgba(255,255,255,.7);color:var(--blue-deep)}
+.preview-tab[aria-pressed=true]{background:var(--white);border-color:#d8e1ed;color:var(--blue-deep)}
+.preview-panel h3{font-size:26px;line-height:1.25;font-weight:500;letter-spacing:-.035em;margin:0}
+.preview-panel h3 a:hover{color:var(--blue-deep)}
+.preview-description{font-size:14px;line-height:1.7;color:var(--muted);margin:10px 0 22px;display:block}
+.preview-date{font-size:12px;line-height:1.6;color:var(--muted);display:block;margin-top:8px}
+.overview-work .demo-caption{flex-wrap:wrap;font-size:10px}
+.overview-work .demo-frame{margin-top:28px}
+.about-preview{display:block}
+.about-preview h3{font-size:28px;font-weight:500;letter-spacing:-.04em;line-height:1.25;margin:14px 0}
+.about-preview:hover h3{color:var(--blue-deep)}
+.about-preview .preview-description{margin-bottom:0;font-size:12px}
+.overview-experience .preview-tabs{margin-bottom:18px}
+.overview-experience .preview-panel h3{font-size:20px;letter-spacing:-.025em}
+.overview-experience .preview-description{font-size:13px;margin-bottom:0}
+.overview-contact{grid-column:1/-1;background:var(--white)}
+.overview-contact .overview-header{margin-bottom:12px}
+.home-contact-links{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px}
+.home-contact-links>a{font-size:22px;letter-spacing:-.025em;color:var(--blue-deep);overflow-wrap:anywhere}
+.home-contact-links>a:hover{text-decoration:underline;text-underline-offset:5px}
+.home-contact-links .copy-row{margin-top:0}
 @media(min-width:1600px){:root{--max:1200px}.identity{padding-top:82px}}
 @media(max-width:850px){.container{width:calc(100% - 48px)}.editorial-section,.education{grid-template-columns:170px 1fr;gap:32px}.project-header{padding:24px 24px 0}.featured .project-stage{padding:28px 32px 18px}.project-stage{padding:24px 16px 15px}.project-bottom{padding:15px 24px 23px}.project-heading h3{font-size:25px}.project-heading p{font-size:14px}.demo-caption{flex-wrap:wrap}.case-body{grid-template-columns:160px 1fr;gap:32px}.pipeline{gap:8px}.pipeline-step{padding:14px}}
 @media(max-width:620px){html{scroll-padding-top:95px}.container{width:calc(100% - 36px)}.site-nav{top:14px;margin-top:20px}.site-nav a{padding:9px 20px;font-size:13px;min-height:42px}.identity{padding:50px 0 40px}.identity h1{font-size:64px}.section-bar{margin-bottom:18px}.work-grid{grid-template-columns:1fr;gap:20px}.project-card{border-radius:22px}.project-header{padding:25px 24px 0}.featured .project-heading h3,.project-heading h3{font-size:28px}.project-heading p{font-size:14px}.project-arrow{width:39px;height:39px}.featured .project-stage,.project-stage{padding:24px 16px 17px}.demo-frame{border-radius:8px}.project-rule{margin-top:22px}.demo-toggle{right:7px;bottom:7px;min-height:31px;padding:5px 9px;font-size:10px}.project-bottom{padding:12px 24px 23px;font-size:11px}.demo-caption{font-size:10px;gap:4px}.editorial-section{grid-template-columns:1fr;gap:28px;margin-top:55px;padding-top:40px}.section-intro h2{font-size:27px}.experience-row{gap:7px 12px}.experience-row h3{font-size:20px}.experience-row .date{font-size:10px;white-space:normal;max-width:112px}.experience-role{font-size:13px}.experience-row .location{font-size:10px}.experience-row .description{font-size:14px;margin-top:9px}.education{grid-template-columns:1fr;gap:16px;margin-top:34px;padding-top:29px}.education h3{font-size:18px}.contact-heading{font-size:36px}.email-link{font-size:23px}.contact{padding-bottom:10px}.social-links{margin-top:22px}.site-footer{margin-top:34px;padding-bottom:28px}.back-link{margin-top:36px}.case-hero{padding:24px 0 28px}.case-summary{font-size:17px}.case-meta{gap:14px 24px}.case-demo{padding:14px;border-radius:18px;margin-bottom:30px}.case-demo .demo-caption{font-size:10px;gap:5px}.case-body{grid-template-columns:1fr;gap:16px;margin-top:38px}.case-content h2{font-size:24px}.case-content p{font-size:15px}.pipeline{grid-template-columns:1fr}.pipeline-step{padding:18px}.metric-grid{gap:10px}.metric-grid dd{font-size:25px}.metric-grid dt{font-size:10px}.next-project{margin-top:48px;padding-top:29px}.next-project strong{font-size:23px}}
 @media(max-width:360px){.identity h1{font-size:55px}.site-nav a{padding-inline:16px}.project-header{padding-inline:19px}.project-bottom{padding-inline:19px}.email-link{font-size:21px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}.project-card:hover{transform:none}}
+@media(max-width:850px){.home-overview{grid-template-columns:1fr 1fr}.overview-card{padding:22px}.overview-work{grid-column:1/-1;grid-row:auto}.about-intro,.about-actions{margin-left:202px}.contact-page{margin-left:202px}.experience-list{max-width:none}}
+@media(max-width:620px){.site-nav{gap:2px;padding:4px}.site-nav a{font-size:12px;padding:9px 11px;gap:5px}.page-heading{padding:50px 0 40px}.page-heading h1{font-size:52px}.home-overview{grid-template-columns:1fr;gap:18px}.overview-work,.overview-contact{grid-column:auto}.overview-card{padding:24px;border-radius:22px}.overview-work .demo-frame{margin-top:22px}.about-intro,.about-actions{margin-left:0}.about-intro p{font-size:18px}.contact-page{margin-left:0;padding-top:8px;padding-bottom:70px}.page-main>section:last-of-type,.page-main>.home-overview,.page-main>.about-actions,.page-main>.text-link{margin-bottom:42px}.home-contact-links>a{font-size:21px}.preview-tabs{margin-bottom:20px}.overview-work .preview-description{min-height:0}.page-main>.text-link{align-self:flex-start}}
+@media(max-width:360px){.site-nav a{font-size:11.5px;padding-inline:7px}.page-heading h1{font-size:46px}.overview-card{padding:20px}.preview-tab{padding-inline:9px;font-size:10.5px}.home-contact-links>a{font-size:18px}}

@@ -1,6 +1,6 @@
 # Ryan Chan portfolio
 
-A static portfolio with a homepage and three project detail pages. Plain HTML, CSS, and JavaScript; no package installation or build step is required.
+A static portfolio with five main pages—Home, About, Work, Experience, and Contact—and three project detail pages. Plain HTML, CSS, and JavaScript; no package installation or build step is required.
 
 ## Preview
 
@@ -23,10 +23,14 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 
 ## Edit
 
-- `index.html`: homepage copy, experience, education, and contact.
+- `index.html`: interactive project and experience previews, with About and Contact summaries.
+- `about.html`: Ryan's introduction and education.
+- `work.html`: all three project showcases and demos.
+- `experience.html`: professional, research, and teaching experience.
+- `contact.html`: email, LinkedIn, GitHub, and copy-email action.
 - `projects/*.html`: project explanations and source links.
 - `styles.css`: layout, typography, colors, and responsive behavior.
-- `site.js`: section navigation and demo playback.
+- `site.js`: interactive preview switching, copy-email actions, legacy section-link redirects, and demo playback.
 - `assets/*.jpg`: still preview posters.
 - `assets/*.mp4`: 16-second silent walkthrough loops, encoded as H.264 with fast-start metadata.
 
@@ -47,4 +51,4 @@ Source projects:
 
 ## Included decisions
 
-Recruiter-focused; light background; muted blue accent; floating Work / Experience / Contact pill; name-only introduction; no portrait or headline; Video Search featured; original three projects; separate project pages; contact by email, LinkedIn, and GitHub; no phone number.
+Recruiter-focused; light background; muted blue accent; floating Home / About / Work / Experience / Contact pill; name-only introduction on Home; no portrait or headline; interactive Home overview; Video Search featured on Work; original three projects; separate project detail pages; contact by email, LinkedIn, and GitHub; no phone number or GPA.

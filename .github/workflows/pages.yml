@@ -26,7 +26,7 @@ jobs:
       - name: Stage public site files
         run: |
           mkdir _site
-          cp index.html 404.html styles.css site.js .nojekyll _site/
+          cp *.html styles.css site.js .nojekyll _site/
           cp -R projects assets _site/
       - name: Upload site
         uses: actions/upload-pages-artifact@v4

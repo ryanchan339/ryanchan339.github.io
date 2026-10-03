@@ -1,4 +1,9 @@
 (() => {
+  const legacyPages = { '#work': 'work.html', '#experience': 'experience.html', '#contact': 'contact.html' };
+  if (document.querySelector('.home-overview') && legacyPages[location.hash]) {
+    location.replace(legacyPages[location.hash]);
+    return;
+  }
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const demos = [...document.querySelectorAll('[data-demo]')].map(frame => {
     const video = frame.querySelector('video');
@@ -37,21 +42,28 @@
   document.addEventListener('visibilitychange', () => demos.forEach(state => state.update()));
   motion.addEventListener('change', () => demos.forEach(state => { state.userStarted = false; state.update(); }));
 
-  const links = [...document.querySelectorAll('.site-nav a[data-section]')];
-  const sections = [...document.querySelectorAll('main > section[id]')];
-  const setActive = id => links.forEach(link => {
-    if (link.dataset.section === id) link.setAttribute('aria-current', 'location');
-    else link.removeAttribute('aria-current');
+  document.querySelectorAll('[data-preview-target]').forEach(button => {
+    button.addEventListener('click', () => {
+      const group = button.dataset.previewGroup;
+      document.querySelectorAll('[data-preview-target]').forEach(tab => {
+        if (tab.dataset.previewGroup === group) tab.setAttribute('aria-pressed', String(tab === button));
+      });
+      document.querySelectorAll('[data-preview-panel]').forEach(panel => {
+        if (panel.dataset.previewPanel !== group) return;
+        panel.hidden = panel.id !== button.dataset.previewTarget;
+        if (panel.hidden) panel.querySelectorAll('video').forEach(video => video.pause());
+      });
+    });
   });
-  if (sections.length) {
-    let scheduled = false;
-    const updateNavigation = () => {
-      const current = sections.filter(section => section.getBoundingClientRect().top <= 180).at(-1);
-      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
-      setActive(atBottom ? sections.at(-1).id : current ? current.id : 'work'); scheduled = false;
-    };
-    window.addEventListener('scroll', () => { if (!scheduled) { scheduled = true; requestAnimationFrame(updateNavigation); } }, { passive: true });
-    links.forEach(link => link.addEventListener('click', () => setActive(link.dataset.section)));
-    updateNavigation();
-  }
+  document.querySelectorAll('[data-copy-email]').forEach(button => {
+    button.addEventListener('click', async () => {
+      const status = button.parentElement.querySelector('.copy-status');
+      try {
+        await navigator.clipboard.writeText(button.dataset.copyEmail);
+        status.textContent = 'Email copied';
+      } catch (_) {
+        status.textContent = 'Use the email link to get in touch.';
+      }
+    });
+  });
 })();
