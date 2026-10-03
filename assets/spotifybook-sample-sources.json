@@ -1,0 +1,40 @@
+{
+  "description": "Real songs and album artwork; curated sample order, not personal listening history. Artist icons use album covers.",
+  "catalog": [
+    {
+      "name": "vampire",
+      "artist": "Olivia Rodrigo",
+      "album": "GUTS (spilled)",
+      "source": "https://music.apple.com/us/album/vampire/1736994853?i=1736995100&uo=4",
+      "artworkSource": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/08/9e/07/089e0799-b405-9e69-b648-e6a19df9879c/24UMGIM30485.rgb.jpg/300x300bb.jpg"
+    },
+    {
+      "name": "Passionfruit",
+      "artist": "Drake",
+      "album": "More Life",
+      "source": "https://music.apple.com/us/album/passionfruit/1440891750?i=1440892167&uo=4",
+      "artworkSource": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/18/9d/b8/189db80b-bfa8-89d1-1514-5fcb7e5cf8f4/00602557611526.rgb.jpg/300x300bb.jpg"
+    },
+    {
+      "name": "That's What I Like",
+      "artist": "Bruno Mars",
+      "album": "24K Magic",
+      "source": "https://music.apple.com/us/album/thats-what-i-like/1161503945?i=1161504043&uo=4",
+      "artworkSource": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/e3/47/a0/e347a0cc-87ce-5d05-d560-176c7d48f66e/075679904119.jpg/300x300bb.jpg"
+    },
+    {
+      "name": "Bad Habit",
+      "artist": "Steve Lacy",
+      "album": "Gemini Rights",
+      "source": "https://music.apple.com/us/album/bad-habit/6788150539?i=6788150545&uo=4",
+      "artworkSource": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/41/cf/77/41cf7744-535f-3679-0ca6-c1b8d3f98c8f/196874557266.jpg/300x300bb.jpg"
+    },
+    {
+      "name": "Fly Me to the Moon",
+      "artist": "Frank Sinatra",
+      "album": "A Man and His Music",
+      "source": "https://music.apple.com/us/album/fly-me-to-the-moon/1443165749?i=1443167444&uo=4",
+      "artworkSource": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/6c/8c/bd/6c8cbdd2-14c2-7e8d-f2ad-06634ce4a9ce/00602537565191.rgb.jpg/300x300bb.jpg"
+    }
+  ]
+}
