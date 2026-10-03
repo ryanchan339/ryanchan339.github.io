@@ -31,6 +31,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 - `projects/*.html`: project explanations and source links.
 - `styles.css`: layout, typography, colors, and responsive behavior.
 - `format.css`: Marco-style tile grid, floating pill, gallery, and message-style Contact layout.
+- `glass.css`: translucent panels, frosted navigation and controls, cool background gradients, reflective edges, and transparency fallbacks.
 - `site.js`: project flips, interactive preview switching, email actions, legacy section-link redirects, and demo playback.
 - `assets/*.jpg`, `assets/*.png`: still preview posters.
 - `assets/*.mp4`: 16-second silent walkthrough loops, encoded as H.264 with fast-start metadata.
@@ -56,4 +57,4 @@ Source projects:
 
 ## Included decisions
 
-Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, and a floating Home / About / Work / Experience / Contact pill. A warm off-white canvas and blue, lavender, peach, mint, and pink tiles give each area a distinct color. The grid fits the viewport and becomes two columns or one column on smaller screens. Straight project previews flip to alternate interface captures. Amazon and UIUC logo badges identify the roles and education. Ryan's content, original three projects, supplied About text, and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.
+Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, and a floating Home / About / Work / Experience / Contact pill. Liquid-glass panels and controls sit over cool blue, lavender, and mint gradients, with colored tints, frosted backgrounds, reflective borders, and soft shadows. Opaque fallbacks support browsers without backdrop filters and reduced-transparency preferences. The Work dot and navigation helper prompts are removed. The grid fits the viewport and becomes two columns or one column on smaller screens. Straight project previews flip to alternate interface captures. Amazon and UIUC logo badges identify the roles and education. Ryan's content, original three projects, supplied About text, and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.
