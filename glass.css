@@ -178,3 +178,22 @@ body{
   .identity-card-arrow{display:none}
 }
 @media(prefers-reduced-motion:reduce){.identity-affiliation,.identity-card-arrow,.identity-socials a{transition:none}}
+
+/* Contact accents belong to the message UI and the LinkedIn card. */
+.format-contact .message-tile{--tile-color:#fff}
+.format-contact .message-incoming p{background:#e9e9eb;color:#000;box-shadow:none}
+.format-contact .message-incoming p:before{border-right-color:#e9e9eb}
+.format-contact .message-reply{background:#0070eb;color:#fff;box-shadow:none}
+.format-contact .message-reply:hover{background:#0062ce}
+.format-contact .email-composer{background:#fff;border-color:#d1d1d6}
+.format-contact .email-composer:focus-within{border-color:#0070eb;box-shadow:0 0 0 3px #0070eb18}
+.format-contact .email-composer button{background:#007aff;color:white}
+.format-contact .email-composer button:hover{background:#0062ce}
+.format-contact .message-tile :is(a,button):focus-visible{outline-color:#0070eb}
+.format-contact .linkedin-tile{--tile-color:#f0f6fc;border-color:#d5e3f2}
+.format-contact .linkedin-tile:hover{border-color:#a6c6e6}
+.format-contact .linkedin-icon{background:#0a66c2;color:#fff}
+.format-contact .linkedin-tile .avatar{background:#dce9f7;color:#0a66c2}
+.format-contact .linkedin-tile .tile-pill{background:#0a66c2;border-color:#0a66c2;color:#fff;box-shadow:none}
+.format-contact .linkedin-tile .tile-pill:hover{background:#004182;border-color:#004182}
+.format-contact .linkedin-tile a:focus-visible{outline-color:#0a66c2}
