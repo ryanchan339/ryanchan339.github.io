@@ -81,23 +81,48 @@
   const demos = [...document.querySelectorAll('[data-demo]')].map(frame => {
     const video = frame.querySelector('video');
     const button = frame.querySelector('.demo-toggle');
-    const state = { video, button, visible: false, userPaused: false, userStarted: false, failed: false };
+    const card = frame.closest('[data-hover-demo]');
+    const state = { video, button, visible: false, hovering: false, focused: false, userPaused: false, userStarted: false, failed: false };
     const label = () => {
       button.textContent = video.paused ? '▶ Play demo' : 'Ⅱ Pause';
       button.setAttribute('aria-label', `${video.paused ? 'Play' : 'Pause'} ${video.dataset.project} demo`);
       button.setAttribute('aria-pressed', String(!video.paused));
     };
-    state.update = async () => {
+    const wantsPlayback = () => {
       const alternateVisible = video.closest('[data-flip-preview]')?.dataset.view === 'alternate';
-      const shouldPlay = state.visible && !alternateVisible && !document.hidden && !state.userPaused && !state.failed && (!motion.matches || state.userStarted);
-      if (!shouldPlay) { video.pause(); label(); return; }
+      const engaged = !card || state.hovering || state.focused || state.userStarted;
+      return engaged && state.visible && !alternateVisible && !document.hidden && !state.userPaused && !state.failed && (!motion.matches || state.userStarted);
+    };
+    state.update = async () => {
+      if (!wantsPlayback()) { video.pause(); label(); return; }
       if (!video.dataset.loaded) {
         video.querySelectorAll('source[data-src]').forEach(source => { source.src = source.dataset.src; });
         video.dataset.loaded = 'true'; video.load();
       }
       video.muted = true;
-      try { await video.play(); } catch (_) { label(); }
+      try {
+        await video.play();
+        // Loading a clip can finish after the visitor has already moved away.
+        if (!wantsPlayback()) video.pause();
+      } catch (_) { label(); }
     };
+    if (card) {
+      card.addEventListener('pointerenter', event => {
+        if (event.pointerType === 'touch') return;
+        state.hovering = true;
+        state.update();
+      });
+      card.addEventListener('pointerleave', () => { state.hovering = false; state.update(); });
+      card.addEventListener('focusin', event => {
+        if (!event.target.closest('a')) return;
+        state.focused = true;
+        state.update();
+      });
+      card.addEventListener('focusout', () => queueMicrotask(() => {
+        state.focused = card.contains(document.activeElement) && document.activeElement.matches('a');
+        state.update();
+      }));
+    }
     button.addEventListener('click', () => {
       if (video.paused) { state.userPaused = false; state.userStarted = true; state.update(); }
       else { state.userPaused = true; state.update(); }
@@ -122,7 +147,7 @@
     const back = tile.querySelector('.flip-back');
     const projectLink = tile.querySelector('.tile-project-link');
     const project = tile.querySelector('video').dataset.project;
-    const autoFlip = tile.dataset.hoverPreview !== 'expand';
+    const autoFlip = tile.dataset.hoverPreview === 'flip';
     let hovering = false;
     let focused = false;
     let lockedView = null;
