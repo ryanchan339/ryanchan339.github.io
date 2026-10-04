@@ -6,6 +6,52 @@
     return;
   }
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll('[data-coding-demo]').forEach(tile => {
+    const button = tile.querySelector('[data-code-toggle]');
+    let visible = false;
+    let phase = 'running';
+    const update = () => {
+      const paused = !visible || document.hidden || phase !== 'running';
+      tile.dataset.codePaused = String(paused);
+      button.hidden = motion.matches;
+      button.textContent = phase === 'complete' ? '↻ Replay' : phase === 'paused' ? '▶ Resume' : 'Ⅱ Pause';
+      button.setAttribute('aria-label', `${phase === 'complete' ? 'Replay' : phase === 'paused' ? 'Resume' : 'Pause'} coding animation`);
+    };
+    const replay = () => {
+      if (motion.matches) return;
+      phase = 'running';
+      tile.removeAttribute('data-code-active');
+      update();
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (!motion.matches) tile.setAttribute('data-code-active', '');
+      }));
+    };
+    if (!motion.matches) tile.setAttribute('data-code-active', '');
+    const visibility = new IntersectionObserver(entries => {
+      visible = entries[0].intersectionRatio >= 0.2;
+      update();
+    }, { threshold: 0.2 });
+    visibility.observe(tile);
+    button.addEventListener('click', () => {
+      if (phase === 'complete') { replay(); return; }
+      phase = phase === 'running' ? 'paused' : 'running';
+      update();
+    });
+    tile.addEventListener('pointerenter', event => {
+      if (event.pointerType !== 'touch' && phase === 'complete') replay();
+    });
+    tile.addEventListener('animationend', event => {
+      if (!event.target.matches('.coding-output-second') || event.animationName !== 'coding-result') return;
+      phase = 'complete';
+      update();
+    });
+    document.addEventListener('visibilitychange', update);
+    motion.addEventListener('change', () => {
+      if (motion.matches) { phase = 'complete'; tile.removeAttribute('data-code-active'); update(); }
+      else replay();
+    });
+    update();
+  });
   const nav = document.querySelector('.site-nav');
   if (nav?.querySelector('.nav-glider')) {
     const links = [...nav.querySelectorAll('a')];

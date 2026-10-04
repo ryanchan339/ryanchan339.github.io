@@ -83,3 +83,53 @@
   .motion-matches small{display:none}
 }
 @media(prefers-reduced-motion:reduce){[data-motion-active] .preview-motion{display:none;animation:none}[data-motion-active] .preview-motion *{animation:none}}
+
+/* Experience: a short, illustrative Python editor and terminal session. */
+.coding-tile{grid-column:3/5;grid-row:1/2;--tile-color:#f1f1f2;padding:24px;display:flex;flex-direction:column;gap:16px;min-height:420px}
+.coding-heading,.coding-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.coding-heading h2{font-size:20px;font-weight:600;letter-spacing:-.04em;margin:0}
+.coding-heading>span{font-size:11px;color:#626366;white-space:nowrap}
+.coding-editor{overflow:hidden;border:1px solid #2d3139;border-radius:15px;background:#171b22;color:#e4e7ed;box-shadow:0 7px 18px #00000010}
+.coding-editor-bar{display:flex;align-items:center;gap:12px;height:38px;padding:0 16px;border-bottom:1px solid #30343d;color:#a7adb9;font:11px/1.4 Consolas,'Courier New',monospace}
+.coding-window-dots{display:flex;gap:5px}
+.coding-window-dots i{width:6px;height:6px;border-radius:50%;background:#68707d}
+.coding-indicator{width:5px;height:5px;border-radius:50%;background:#89c9a7;margin-left:auto}
+.coding-source{margin:0;padding:18px 16px;white-space:normal;font:13px/1.85 Consolas,'Courier New',monospace}
+.coding-line{display:grid;grid-template-columns:15px minmax(0,1fr);gap:13px}
+.coding-line-number{color:#77808e;text-align:right;user-select:none}
+.coding-line-text{display:block;width:max-content;max-width:100%;white-space:pre}
+.syntax-keyword{color:#c5a2ed}
+.syntax-function{color:#8cbeed}
+.syntax-builtin{color:#eed09f}
+.coding-terminal{padding:12px 16px 16px;background:#11151b;border-top:1px solid #30343d}
+.coding-terminal-title{display:block;color:#a7adb9;font:10px/1.4 Consolas,'Courier New',monospace;margin-bottom:9px;letter-spacing:.04em}
+.coding-terminal pre{margin:0;font:11px/1.7 Consolas,'Courier New',monospace;white-space:normal}
+.coding-command,.coding-output{display:block;width:max-content;max-width:100%;white-space:pre}
+.coding-command{color:#b9c2d0}
+.coding-output{color:#a4dcb7}
+.coding-footer{margin-top:auto;font-size:10px;color:#626366}
+.coding-control{position:static;border:1px solid #dcdcdf;border-radius:99px;padding:7px 13px;min-height:33px;background:#fff;color:#242424;font:11px/1.4 Arial,sans-serif;cursor:pointer}
+.coding-control::after{content:'';position:absolute;inset:0;z-index:2;border-radius:inherit}
+.coding-tile:has(.coding-control:focus-visible){outline:2px solid #626366;outline-offset:3px}
+[data-code-active] .coding-line-text{animation:coding-type .32s steps(var(--typing-steps),end) var(--typing-delay) both}
+[data-code-active] .coding-command{animation:coding-type .32s steps(31,end) 2.4s both}
+[data-code-active] .coding-output{animation:coding-result .18s 2.8s both}
+[data-code-active] .coding-command-second{animation-delay:3.1s}
+[data-code-active] .coding-output-second{animation-delay:3.5s}
+[data-code-active] .coding-indicator{animation:coding-indicator .4s steps(2,end) 8}
+[data-code-paused=true] :is(.coding-line-text,.coding-command,.coding-output,.coding-indicator){animation-play-state:paused}
+@keyframes coding-type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+@keyframes coding-result{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes coding-indicator{to{opacity:.25}}
+@media(max-width:1279px){.experience-mosaic>.coding-tile{grid-column:1/-1;grid-row:auto}}
+@media(max-width:700px){
+  .coding-tile{padding:20px;gap:14px;min-height:0}
+  .coding-heading h2{font-size:19px}
+  .coding-editor-bar{padding-inline:12px}
+  .coding-source{padding:16px 12px;font-size:10px;line-height:2}
+  .coding-line{grid-template-columns:12px minmax(0,1fr);gap:8px}
+  .coding-terminal{padding:12px}
+  .coding-terminal pre{font-size:10px}
+}
+@media(max-width:370px){.coding-tile{padding:16px}.coding-source{font-size:9px}.coding-terminal pre{font-size:9px}}
+@media(prefers-reduced-motion:reduce){[data-code-active] :is(.coding-line-text,.coding-command,.coding-output,.coding-indicator){animation:none}}
