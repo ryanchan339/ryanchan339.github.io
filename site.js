@@ -83,6 +83,8 @@
     const button = frame.querySelector('.demo-toggle');
     const card = frame.closest('[data-hover-demo]');
     const state = { video, button, visible: false, hovering: false, focused: false, userPaused: false, userStarted: false, failed: false };
+    // Card clips move between screens sooner; detail-page recordings keep their pace.
+    if (card) { video.defaultPlaybackRate = 2; video.playbackRate = 2; }
     const label = () => {
       button.textContent = video.paused ? '▶ Play demo' : 'Ⅱ Pause';
       button.setAttribute('aria-label', `${video.paused ? 'Play' : 'Pause'} ${video.dataset.project} demo`);
@@ -94,12 +96,14 @@
       return engaged && state.visible && !alternateVisible && !document.hidden && !state.userPaused && !state.failed && (!motion.matches || state.userStarted);
     };
     state.update = async () => {
+      frame.toggleAttribute('data-motion-active', Boolean(card && wantsPlayback() && !motion.matches));
       if (!wantsPlayback()) { video.pause(); label(); return; }
       if (!video.dataset.loaded) {
         video.querySelectorAll('source[data-src]').forEach(source => { source.src = source.dataset.src; });
         video.dataset.loaded = 'true'; video.load();
       }
       video.muted = true;
+      if (card) video.playbackRate = 2;
       try {
         await video.play();
         // Loading a clip can finish after the visitor has already moved away.
@@ -129,7 +133,7 @@
     });
     video.addEventListener('play', label);
     video.addEventListener('pause', label);
-    video.addEventListener('error', () => { state.failed = true; video.removeAttribute('src'); video.querySelectorAll('source').forEach(s => s.removeAttribute('src')); video.load(); button.textContent = 'Still preview'; button.disabled = true; button.setAttribute('aria-label','Still preview shown; video unavailable'); });
+    video.addEventListener('error', () => { state.failed = true; frame.removeAttribute('data-motion-active'); video.removeAttribute('src'); video.querySelectorAll('source').forEach(s => s.removeAttribute('src')); video.load(); button.textContent = 'Still preview'; button.disabled = true; button.setAttribute('aria-label','Still preview shown; video unavailable'); });
     label(); return state;
   });
   const observer = new IntersectionObserver(entries => entries.forEach(entry => {
