@@ -6,6 +6,78 @@
     return;
   }
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const nav = document.querySelector('.site-nav');
+  if (nav?.querySelector('.nav-glider')) {
+    const links = [...nav.querySelectorAll('a')];
+    const current = nav.querySelector('[aria-current="page"]') || links[0];
+    const glider = nav.querySelector('.nav-glider');
+    const labels = glider.querySelector('.nav-glider-labels');
+    const measureLabels = () => {
+      [...labels.children].forEach((label, index) => {
+        const link = links[index];
+        label.style.left = `${link.offsetLeft}px`;
+        label.style.top = `${link.offsetTop}px`;
+        label.style.width = `${link.offsetWidth}px`;
+        label.style.height = `${link.offsetHeight}px`;
+        label.style.font = getComputedStyle(link).font;
+      });
+    };
+    let hovered = null;
+    let focused = null;
+    let target = current;
+    let activationOrigin = null;
+    const movePill = (link, instant = false) => {
+      target = link;
+      if (instant) { glider.style.transition = 'none'; labels.style.transition = 'none'; }
+      glider.style.width = `${link.offsetWidth}px`;
+      glider.style.height = `${link.offsetHeight}px`;
+      glider.style.transform = `translate3d(${link.offsetLeft}px, ${link.offsetTop}px, 0)`;
+      labels.style.transform = `translate3d(${-link.offsetLeft}px, ${-link.offsetTop}px, 0)`;
+      links.forEach(item => item.toggleAttribute('data-pill-target', item === link));
+      if (instant) requestAnimationFrame(() => { glider.style.transition = ''; labels.style.transition = ''; });
+    };
+    let initial = current;
+    try {
+      const previous = JSON.parse(sessionStorage.getItem('portfolio-nav-pill'));
+      sessionStorage.removeItem('portfolio-nav-pill');
+      if (previous?.path === location.pathname && Date.now() - previous.time < 5000 && links[previous.from]) {
+        initial = links[previous.from];
+      }
+    } catch (_) { /* Navigation works when session storage is unavailable. */ }
+    measureLabels();
+    movePill(initial, true);
+    nav.setAttribute('data-glider-ready', '');
+    requestAnimationFrame(() => requestAnimationFrame(() => movePill(current)));
+    links.forEach(link => {
+      link.addEventListener('pointerenter', event => {
+        if (event.pointerType === 'touch') return;
+        hovered = link;
+        movePill(link);
+      });
+      link.addEventListener('focus', () => { focused = link; movePill(link); });
+      link.addEventListener('blur', () => {
+        focused = null;
+        queueMicrotask(() => movePill(focused || hovered || current));
+      });
+      link.addEventListener('pointerdown', () => { activationOrigin = links.indexOf(target); movePill(link); });
+      link.addEventListener('click', event => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) { activationOrigin = null; return; }
+        try {
+          sessionStorage.setItem('portfolio-nav-pill', JSON.stringify({
+            from: activationOrigin ?? links.indexOf(target), path: new URL(link.href).pathname, time: Date.now()
+          }));
+        } catch (_) { /* Native links remain usable without storage. */ }
+        activationOrigin = null;
+        movePill(link);
+      });
+    });
+    nav.addEventListener('pointerleave', () => { hovered = null; movePill(focused || current); });
+    new ResizeObserver(() => { measureLabels(); movePill(target, true); }).observe(nav);
+    motion.addEventListener('change', () => movePill(target, true));
+    window.addEventListener('pageshow', event => {
+      if (event.persisted) { hovered = null; focused = null; activationOrigin = null; movePill(current, true); }
+    });
+  }
   const demos = [...document.querySelectorAll('[data-demo]')].map(frame => {
     const video = frame.querySelector('video');
     const button = frame.querySelector('.demo-toggle');
