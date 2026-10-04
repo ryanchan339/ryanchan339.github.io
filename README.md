@@ -25,7 +25,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 
 ## Edit
 
-- `index.html`: mixed-size project, introduction, experience, education, interests, and contact tiles.
+- `index.html`: mixed-size project, introduction, experience, education, interests, and contact tiles. The introduction uses Ryan's name, LinkedIn/GitHub buttons, and four linked logo cards for Amazon, UIUC, ADAPT Lab, and CS 124 with short role labels.
 - `about.html`: Ryan's introduction and education.
 - `work.html`: all three project showcases and demos.
 - `experience.html`: professional, research, and teaching experience.
@@ -44,6 +44,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 - Stock Trader captures the original dashboard with committed report data generated September 11, 2026. The footage preserves its distinctions between backtests, walk-forward evaluations, and paper trading. It is a historical snapshot, not live data.
 - SpotifyBook captures the original templates with a curated sample of real songs by Olivia Rodrigo, Drake, Bruno Mars, Steve Lacy, and Frank Sinatra. Track thumbnails and artist icons use their album artwork from the Apple music catalog. Ordering is sample data, not personal listening history. No account is authenticated and no playlist is created during the capture. Catalog and artwork sources are listed in `assets/spotifybook-sample-sources.json`.
 - The tall Home tile uses a separate portrait SpotifyBook walkthrough captured from the same original templates at mobile size.
+- The Home introduction is visual rather than prose. Its affiliation cards open the relevant education or experience page; the About arrow opens Ryan's full introduction. Social buttons use inline SVG marks and open the supplied LinkedIn and GitHub profiles.
 - Mosaic tiles expand slightly on mouse hover or keyboard focus. Flippable project screens rotate to their alternate capture instead of expanding. Native links stretch across each tile while buttons, other links, and forms remain independently usable. The Switch view button also opens the alternate capture on touch or keyboard. Videos pause while the alternate view is visible. Reduced-motion preferences disable expansion and use an instant view change.
 - Clicking the body of Outside coding cycles to the next interest. The Previous/Next arrows and direct-selection dots remain usable. Research and teaching tiles jump to their corresponding experience entries; other tiles open their relevant page, GitHub, LinkedIn, or email action.
 - Video Search previews use the tile's full inner width, with a taller grid row to show the complete interface. Outside coding has Previous/Next arrows that cycle through the four interests, alongside the direct-selection dots and a screen-reader announcement.
