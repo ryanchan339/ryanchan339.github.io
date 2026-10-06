@@ -6,6 +6,27 @@
     return;
   }
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll('[data-accelerator-demo]').forEach(tile => {
+    const button = tile.querySelector('[data-accelerator-toggle]');
+    let visible = false;
+    let userPaused = false;
+    const update = () => {
+      tile.dataset.acceleratorPaused = String(!visible || document.hidden || userPaused || motion.matches);
+      tile.toggleAttribute('data-accelerator-active', !motion.matches);
+      button.hidden = motion.matches;
+      button.textContent = userPaused ? '▶ Play' : 'Ⅱ Pause';
+      button.setAttribute('aria-label', `${userPaused ? 'Play' : 'Pause'} transformer acceleration animation`);
+      button.setAttribute('aria-pressed', String(userPaused));
+    };
+    new IntersectionObserver(entries => {
+      visible = entries[0].intersectionRatio >= 0.2;
+      update();
+    }, { threshold: 0.2 }).observe(tile);
+    button.addEventListener('click', () => { userPaused = !userPaused; update(); });
+    document.addEventListener('visibilitychange', update);
+    motion.addEventListener('change', update);
+    update();
+  });
   document.querySelectorAll('[data-coding-demo]').forEach(tile => {
     const button = tile.querySelector('[data-code-toggle]');
     let visible = false;

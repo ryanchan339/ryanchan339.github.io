@@ -27,14 +27,14 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 
 - `index.html`: mixed-size project, introduction, experience, education, interests, and contact tiles. The introduction uses Ryan's name, LinkedIn/GitHub buttons, two linked logo cards for Amazon and UIUC, and the supplied San Francisco sunset photograph.
 - `work.html`: all three project showcases and demos.
-- `experience.html`: professional, research, and teaching experience, plus an illustrative Python Two Sum editor and terminal animation.
+- `experience.html`: professional, research, and teaching experience, plus illustrative Python Two Sum and transformer acceleration animations.
 - `contact.html`: email, LinkedIn, GitHub, and copy-email action.
 - `projects/*.html`: project explanations and source links.
 - `styles.css`: layout, typography, colors, and responsive behavior.
 - `format.css`: Marco-style tile grid, floating pill, gallery, and message-style Contact layout.
 - `glass.css`: white and cool-gray fills, black controls, subtle borders, light shadows, whole-tile actions, and hover expansion for tiles without flippable screens. It uses no background blur.
 - `site.js`: sliding navigation, hover and keyboard-focus demo playback, immediate preview activation, manual project flips, interactive preview switching, email actions, and legacy section-link redirects.
-- `preview-motion.css`: short project-specific CSS/SVG openings, which begin immediately and fade into the interface recording after 2.4 seconds, plus the Experience coding animation. No background blur or animation timer loop is used.
+- `preview-motion.css`: short project-specific CSS/SVG openings, which begin immediately and fade into the interface recording after 2.4 seconds, plus the Experience coding and accelerator animations. No background blur or animation timer loop is used.
 - `assets/*.jpg`, `assets/*.png`: still preview posters.
 - `assets/*.mp4`: 16-second silent walkthrough loops, encoded as H.264 with fast-start metadata.
 
@@ -67,5 +67,7 @@ Source projects:
 Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, and a floating Home / Work / Experience / Contact pill. The palette follows [onur.design](https://www.onur.design/): a white canvas, black typography and active controls, cool-gray panels, and subtle gray borders. Secondary text uses a darker gray to keep smaller labels readable. Controls have opaque fills, subtle borders, and light shadows, without gradients or background blur. The Work dot and navigation helper prompts are removed. The grid fits the viewport and becomes two columns or one column on smaller screens. Tiles expand slightly on mouse hover or keyboard focus; project cards play interface previews, with manual flips available through Switch view. Each exposes a native link or interest-cycling button across its body. Amazon and UIUC logo badges identify the roles and education. Ryan's content, original three projects and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.
 
 The Experience page replaces its Video Search tile with an illustrative Python Two Sum animation using two nested for loops, checking each distinct pair with j starting at i + 1. The displayed calls return [0, 1] for both [2, 7, 11, 15] with target 9 and [3, 3] with target 6. The terminal is a scripted visual preview, not a browser Python runtime. It starts when visible, supports whole-tile Pause/Resume and hover replay after completion, pauses offscreen or in hidden tabs, and shows the complete code and output under reduced motion.
+
+The transformer acceleration tile illustrates computation with a diagonal wave across an 8×8 display grid and a repeating GEMM → Softmax → Output sequence. It is an abstract preview, not a simulation of hardware timing. It animates while visible, has a separate Pause/Play control, pauses offscreen and in hidden tabs, and remains static under reduced motion. The tile's research link still opens the ADAPT Lab experience entry.
 
 The About page has been removed. Navigation contains Home, Work, Experience, and Contact. All former internal About links now lead to Experience or its education tile; the education tile links to the university website. No published page links to the removed page.

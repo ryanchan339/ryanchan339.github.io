@@ -133,3 +133,24 @@
 }
 @media(max-width:370px){.coding-tile{padding:16px}.coding-source{font-size:9px}.coding-terminal pre{font-size:9px}}
 @media(prefers-reduced-motion:reduce){[data-code-active] :is(.coding-line-text,.coding-command,.coding-output,.coding-indicator){animation:none}}
+
+/* A lightweight diagonal compute wave and three-stage attention flow. */
+.lab-tile[data-accelerator-demo]{display:flex;flex-direction:column}
+.accelerator-visual{margin:12px 0 0}
+.accelerator-visual .chip-visual{grid-template-columns:repeat(8,10px);gap:4px;width:108px;margin:0 auto 10px}
+.accelerator-visual .chip-visual i{width:10px;height:10px;background:#c4c4c8;transform:scale(.8)}
+.accelerator-visual .chip-visual i:nth-child(3n){background:#55565a}
+.accelerator-stages{display:flex;align-items:center;justify-content:center;gap:5px;font:9px/1.5 Consolas,'Courier New',monospace;color:#76767a}
+.accelerator-stages span{border:1px solid #d8d8dc;border-radius:5px;padding:3px 5px;background:#e7e7e9;color:#55565a}
+.accelerator-stages i{font-style:normal}
+.lab-tile[data-accelerator-demo] h2{margin-top:12px}
+.accelerator-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:auto;padding-top:10px}
+.accelerator-footer .intro-more{font-size:10px;white-space:nowrap}
+.accelerator-toggle{border:1px solid #d5d5d8;border-radius:99px;padding:5px 9px;min-height:28px;background:#fff;color:#242424;font:10px/1.5 Arial,sans-serif;cursor:pointer;white-space:nowrap}
+.accelerator-toggle:hover{background:#e7e7e9}
+[data-accelerator-active] .chip-visual i{animation:accelerator-wave 2.4s ease-in-out var(--cell-delay) infinite}
+[data-accelerator-active] .accelerator-stages span{animation:accelerator-stage 3s ease-in-out var(--stage-delay) infinite}
+[data-accelerator-paused=true] :is(.chip-visual i,.accelerator-stages span){animation-play-state:paused}
+@keyframes accelerator-wave{0%,45%,100%{opacity:.4;transform:scale(.8)}15%,25%{opacity:1;transform:scale(1.18)}}
+@keyframes accelerator-stage{0%,30%{background:#242529;color:#fff;border-color:#242529}40%,100%{background:#e7e7e9;color:#55565a;border-color:#d8d8dc}}
+@media(prefers-reduced-motion:reduce){[data-accelerator-active] :is(.chip-visual i,.accelerator-stages span){animation:none}}
