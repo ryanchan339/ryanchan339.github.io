@@ -154,3 +154,15 @@
 @keyframes accelerator-wave{0%,45%,100%{opacity:.4;transform:scale(.8)}15%,25%{opacity:1;transform:scale(1.18)}}
 @keyframes accelerator-stage{0%,30%{background:#242529;color:#fff;border-color:#242529}40%,100%{background:#e7e7e9;color:#55565a;border-color:#d8d8dc}}
 @media(prefers-reduced-motion:reduce){[data-accelerator-active] :is(.chip-visual i,.accelerator-stages span){animation:none}}
+
+/* Pointer swipes preserve vertical scrolling and share the arrow/dot controls. */
+.hobby-viewport{flex:1;min-height:170px;display:grid;align-items:center;margin:auto 0}
+.hobby-topline{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;min-height:28px}
+.hobby-autoplay{border:1px solid #d5d5d8;border-radius:50%;height:28px;width:28px;padding:0;background:#fff;color:#242424;font:11px/1 Arial,sans-serif;cursor:pointer}
+.hobby-autoplay:hover{background:#e1e1e4}
+.hobby-tile[data-swipe-ready]{touch-action:pan-y pinch-zoom}
+[data-swipe-ready] .hobby-viewport{position:relative;overflow:hidden}
+[data-swipe-ready] .hobby-panel{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;margin:0;user-select:none}
+[data-swipe-ready] .tile-surface-action{cursor:grab}
+[data-swipe-ready] .tile-click-hint{display:none}
+[data-swiping] .tile-surface-action{cursor:grabbing}
