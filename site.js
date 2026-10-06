@@ -284,7 +284,7 @@
       timer = null;
       const keyboardFocus = tile.contains(document.activeElement) && document.activeElement.matches(':focus-visible');
       if (!visible || document.hidden || motion.matches || hovering || gesture || autoplayPaused || keyboardFocus) return;
-      timer = setTimeout(() => select(current + 1, 1, 0, false), 5000);
+      timer = setTimeout(() => select(current + 1, 1, 0, false), 2000);
     };
     const wrap = index => (index + tabs.length) % tabs.length;
     const stopAnimations = () => { animations.forEach(animation => animation.cancel()); animations = []; };
