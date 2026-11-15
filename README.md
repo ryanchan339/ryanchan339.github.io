@@ -12,7 +12,7 @@ Pushes to `main` deploy through `.github/workflows/pages.yml`. The workflow stag
 
 ## Content
 
-- `index.html`: card-based overview with profile and education at the top, experience and projects side by side, and a grouped skills card. Organization logos are local SVGs. Resume and contact links are in the profile card.
+- `index.html`: work-first overview with a persistent profile rail (education, toolkit, resume, and contact links) and a unified feed of industry, research, and personal work. On mobile, the expanded background blocks follow the selected work. Organization logos are local SVGs.
 - `experience.html`, `work.html`, `contact.html`: standalone views for existing links.
 - `projects/`: project writeups, technical decisions, results, and limitations.
 - `assets/Ryan-Chan-Resume.pdf`: one-page resume compiled from Ryan's supplied LaTeX, with Swift and TypeScript bolded.
@@ -36,7 +36,7 @@ Set `UMAMI_WEBSITE_ID` in `site.js` to the Website ID from a user-owned Umami Cl
 
 Until configured, the site makes no analytics requests. After configuration:
 
-- Page views and fixed-label link clicks (resume, projects, GitHub, LinkedIn, email) are counted. A resume event measures a link click, not completed delivery of the PDF.
+- Page views and fixed-label link clicks (resume, industry/research work, projects, GitHub, LinkedIn, email) are counted. A resume event measures a link click, not completed delivery of the PDF.
 - No application-specific tagged URLs are added.
 - The tracker is limited to `ryanchan339.github.io` and uses manual page/event tracking to avoid duplicate counts.
 - No analytics cookies are set. A documented `before-send` hook strips query strings, fragments, event properties, and visitor IDs; referrers are reduced to origins.
@@ -55,4 +55,4 @@ Review the homepage and project pages at desktop, tablet, and narrow mobile widt
 
 ## Visual design
 
-The layout uses warm ivory, forest green, peach, and lilac surfaces with consistent card spacing. Design references included Brittany Chiang (https://brittanychiang.com/), Maggie Appleton (https://maggieappleton.com/), and Josh Comeau (https://www.joshwcomeau.com/); the implementation and content are original. Amazon and Illinois marks use the existing local SVG assets.
+The homepage organizes content as a profile rail and selected-work feed, using restrained sage, lilac, and blue surfaces. References came from Figma’s portfolio examples (https://www.figma.com/resource-library/portfolio-website-examples/), especially Perry Wang’s Work/Info hierarchy (https://perryw-2023.webflow.io/) and Pratibha Joshi’s compact professional context and project gallery (https://www.pratibhajoshi.com/). Detail pages retain the longer technical descriptions. The implementation and content are original. Amazon and Illinois marks use the existing local SVG assets.
