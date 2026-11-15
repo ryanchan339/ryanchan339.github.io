@@ -2,7 +2,7 @@
   "use strict";
 
   // Public Umami Website ID. Never put account credentials or API keys here.
-  const UMAMI_WEBSITE_ID = "";
+  const UMAMI_WEBSITE_ID = "d5bc1167-e8ba-4327-a104-96c2923a382a";
   const UMAMI_SCRIPT_URL = "https://cloud.umami.is/script.js";
   const SITE_HOSTNAME = "ryanchan339.github.io";
   const OPT_OUT_KEY = "ryan-portfolio-analytics-opt-out";
