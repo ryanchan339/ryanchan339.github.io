@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f8f9f7" />
+    <meta name="theme-color" content="#f7f8fa" />
     <title>NFL QB Analytics — Ryan Chan</title>
     <meta
       name="description"
@@ -20,7 +20,7 @@
       href="https://ryanchan339.github.io/projects/nfl-qb-analytics.html"
     />
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="../styles.css?v=20261115" />
+    <link rel="stylesheet" href="../styles.css?v=20261115-compact" />
     <script src="../site.js?v=20261115-umami-live" defer></script>
   </head>
   <body id="top">
@@ -33,7 +33,7 @@
         <nav class="header-nav" aria-label="Main navigation">
           <a href="../index.html#experience">Experience</a>
           <a href="../index.html#projects">Projects</a>
-          <a href="../index.html#about">About</a>
+          <a href="../index.html#about">Education &amp; skills</a>
           <a
             class="nav-resume"
             href="../assets/Ryan-Chan-Resume.pdf"
@@ -65,13 +65,11 @@
         </div>
       </header>
       <section class="project-section">
-        <h2>Turn football statistics into a queryable application</h2>
+        <h2>Overview</h2>
         <div class="project-section-content">
           <p>
-            I built a full-stack application for comparing NFL quarterbacks
-            across more than 20 statistics. The project connects a normalized
-            relational data model with database-driven rankings, custom
-            statistical queries, and a React interface.
+            Built a React application for comparing quarterbacks, ranking
+            players, and querying more than 20 statistics.
           </p>
         </div>
       </section>
@@ -87,13 +85,12 @@
         </div>
       </div>
       <section class="project-section">
-        <h2>A relational core with an API boundary</h2>
+        <h2>Architecture</h2>
         <div class="project-section-content">
           <p>
-            I designed the MySQL schema to organize quarterback statistics and
-            implemented stored procedures for ranking queries. A Flask and
-            SQLAlchemy backend exposes the data through REST endpoints,
-            connecting to Google Cloud SQL with the Google Cloud SQL Connector.
+            A Flask and SQLAlchemy API serves data from normalized MySQL tables
+            and ranking procedures. The Google Cloud SQL Connector connects the
+            backend to its hosted database.
           </p>
           <div class="architecture" aria-label="System flow">
             <div>React interface</div>
@@ -109,37 +106,30 @@
         <div class="project-section-content">
           <ul class="detail-list">
             <li>
-              <strong>Database design.</strong> Designed and implemented a
-              normalized MySQL schema supporting more than 20 quarterback
-              statistics.
+              <strong>Schema.</strong> Designed normalized MySQL tables for
+              20+ quarterback statistics.
             </li>
             <li>
-              <strong>Database-side queries.</strong> Developed more than seven
-              stored procedures for quarterback rankings, reducing the amount of
-              query logic handled by the backend.
+              <strong>Queries.</strong> Wrote 7+ ranking procedures to move query
+              logic into the database.
             </li>
             <li>
-              <strong>API implementation.</strong> Built 19 REST routes for
-              database-driven analytics, authentication, and custom statistical
-              queries.
+              <strong>API.</strong> Built 19 REST routes for analytics,
+              authentication, and custom queries.
             </li>
             <li>
-              <strong>Cloud integration.</strong> Connected Flask and SQLAlchemy
-              to the hosted MySQL database through the Google Cloud SQL
-              Connector.
+              <strong>Cloud.</strong> Integrated Flask and SQLAlchemy with
+              Google Cloud SQL.
             </li>
           </ul>
         </div>
       </section>
       <section class="project-section">
-        <h2>What the project demonstrates</h2>
+        <h2>Engineering focus</h2>
         <div class="project-section-content">
           <p>
-            This project brought together schema design, SQL, API development,
-            and cloud connectivity in one application. The central engineering
-            task was translating comparison and ranking questions into database
-            queries, then exposing useful results to the frontend through a
-            defined service layer.
+            Translating player comparisons into SQL queries and exposing the
+            results through a REST API.
           </p>
         </div>
       </section>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f8f9f7" />
+    <meta name="theme-color" content="#f7f8fa" />
     <title>Semantic Video Search — Ryan Chan</title>
     <meta
       name="description"
@@ -20,7 +20,7 @@
       href="https://ryanchan339.github.io/projects/video-search.html"
     />
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="../styles.css?v=20261115" />
+    <link rel="stylesheet" href="../styles.css?v=20261115-compact" />
     <script src="../site.js?v=20261115-umami-live" defer></script>
   </head>
   <body id="top">
@@ -33,7 +33,7 @@
         <nav class="header-nav" aria-label="Main navigation">
           <a href="../index.html#experience">Experience</a>
           <a href="../index.html#projects">Projects</a>
-          <a href="../index.html#about">About</a>
+          <a href="../index.html#about">Education &amp; skills</a>
           <a
             class="nav-resume"
             href="../assets/Ryan-Chan-Resume.pdf"
@@ -72,14 +72,12 @@
         </div>
       </header>
       <section class="project-section">
-        <h2>Find the moment, not just the file</h2>
+        <h2>Overview</h2>
         <div class="project-section-content">
           <p>
-            A filename cannot tell you where a scene appears, and a transcript
-            misses moments that are only visible on screen. I built a
-            local-first video search engine that accepts a natural-language
-            query and returns playable timestamps from both visual and spoken
-            content.
+            Built a local-first search engine that indexes video frames and
+            speech, then returns playable timestamps for natural-language
+            queries.
           </p>
         </div>
       </section>
@@ -98,14 +96,13 @@
         </div>
       </div>
       <section class="project-section">
-        <h2>Two search paths, one result list</h2>
+        <h2>Search pipeline</h2>
         <div class="project-section-content">
           <p>
-            The visual pipeline samples frames and creates SigLIP embeddings. A
-            separate pipeline transcribes speech with Whisper and embeds the
-            text. Queries search both indexes using cosine similarity;
-            standardized scores combine the results, and nearby duplicate hits
-            are removed.
+            SigLIP embeds sampled frames; Whisper transcribes speech for a
+            separate text index. Queries search both indexes with cosine
+            similarity. Standardized scores merge the results, and nearby
+            duplicates are removed.
           </p>
           <div class="architecture" aria-label="System flow">
             <div>Video → frames + transcript</div>
@@ -121,38 +118,34 @@
         <div class="project-section-content">
           <ul class="detail-list">
             <li>
-              <strong>Spend work where the scene changes.</strong> Scene-based
-              sampling reduced indexed frames by 42% on benchmark footage while
+              <strong>Scene sampling.</strong> Reduced indexed frames by 42% on
+              benchmark footage while
               retaining top-1 matches for the validated rabbit, butterfly, and
               apple queries.
             </li>
             <li>
-              <strong>Keep indexing out of the search flow.</strong> Background
-              indexing lets the interface support a growing library, with both
-              library-wide and per-video search.
+              <strong>Background indexing.</strong> Indexed videos outside the
+              search flow, supporting library-wide and per-video search.
             </li>
             <li>
-              <strong>Expose the ranking tradeoff.</strong> A control shifts
-              emphasis between spoken and visual matches when one source is more
-              useful.
+              <strong>Ranking control.</strong> Let users adjust the balance
+              between spoken and visual matches.
             </li>
           </ul>
         </div>
       </section>
       <section class="project-section">
-        <h2>Measure speed and quality separately</h2>
+        <h2>Benchmarks</h2>
         <div class="project-section-content">
           <p>
-            The larger SigLIP so400m configuration is the precision default;
-            base-224 offers a faster indexing mode. The project benchmark
-            measured 2.3 frames per second for so400m and 42 for base-224 on
-            Apple Silicon. These are hardware-specific throughput measurements,
-            not a universal speed claim.
+            SigLIP so400m is the precision default; base-224 is the faster mode.
+            On Apple Silicon, indexing measured 2.3 frames/sec for so400m and
+            42 for base-224. Throughput depends on hardware.
           </p>
           <p>
-            The frame-reduction result comes from a small set of validated
-            queries. It demonstrates useful savings on that footage, rather than
-            proving equal retrieval quality for every video.
+            The 42% frame reduction was measured on benchmark footage with a
+            small set of validated queries. It does not establish equal
+            retrieval quality across other videos.
           </p>
           <p>
             <a

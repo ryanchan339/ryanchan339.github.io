@@ -3,16 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f8f9f7" />
+    <meta name="theme-color" content="#f7f8fa" />
     <title>ML Stock Trader — Ryan Chan</title>
     <meta
       name="description"
-      content="An inspectable stock-ranking pipeline with feature engineering, walk-forward evaluation, and constrained portfolio automation."
+      content="A stock-ranking pipeline with feature engineering, walk-forward evaluation, and paper-trading automation."
     />
     <meta property="og:title" content="ML Stock Trader — Ryan Chan" />
     <meta
       property="og:description"
-      content="An inspectable stock-ranking pipeline with feature engineering, walk-forward evaluation, and constrained portfolio automation."
+      content="A stock-ranking pipeline with feature engineering, walk-forward evaluation, and paper-trading automation."
     />
     <meta property="og:type" content="website" />
     <link
@@ -20,7 +20,7 @@
       href="https://ryanchan339.github.io/projects/stock-trader.html"
     />
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="../styles.css?v=20261115" />
+    <link rel="stylesheet" href="../styles.css?v=20261115-compact" />
     <script src="../site.js?v=20261115-umami-live" defer></script>
   </head>
   <body id="top">
@@ -33,7 +33,7 @@
         <nav class="header-nav" aria-label="Main navigation">
           <a href="../index.html#experience">Experience</a>
           <a href="../index.html#projects">Projects</a>
-          <a href="../index.html#about">About</a>
+          <a href="../index.html#about">Education &amp; skills</a>
           <a
             class="nav-resume"
             href="../assets/Ryan-Chan-Resume.pdf"
@@ -51,8 +51,8 @@
         <p class="eyebrow">Personal project · April–May 2026</p>
         <h1>ML Stock Trader</h1>
         <p class="project-lead">
-          An inspectable stock-ranking pipeline with feature engineering,
-          walk-forward evaluation, and constrained portfolio automation.
+          A stock-ranking pipeline with feature engineering, walk-forward
+          evaluation, and paper-trading automation.
         </p>
         <div class="tag-list" aria-label="Technologies">
           <span>Python</span><span>Pandas</span><span>NumPy</span
@@ -72,13 +72,12 @@
         </div>
       </header>
       <section class="project-section">
-        <h2>Make the full research process inspectable</h2>
+        <h2>Overview</h2>
         <div class="project-section-content">
           <p>
-            A prediction score does not explain how a portfolio is built or
-            whether a model adds useful information. I built a pipeline that
-            connects market data, feature engineering, model evaluation,
-            portfolio constraints, and paper-trading workflows.
+            Built a pipeline to prepare market data, train and evaluate models,
+            rank equities, and generate constrained portfolios for paper
+            trading.
           </p>
         </div>
       </section>
@@ -95,14 +94,13 @@
         </div>
       </div>
       <section class="project-section">
-        <h2>From prices to a constrained portfolio</h2>
+        <h2>Pipeline</h2>
         <div class="project-section-content">
           <p>
-            The pipeline turns daily market history into momentum, volatility,
-            moving-average, RSI, and cross-sectional features. A
-            gradient-boosted classifier estimates relative performance against
-            SPY. Its ranking is blended with momentum before the top five stocks
-            become portfolio targets.
+            Daily prices become momentum, volatility, moving-average, RSI, and
+            cross-sectional features. A gradient-boosted classifier estimates
+            performance relative to SPY. Model scores and momentum determine
+            the top five portfolio targets.
           </p>
           <div class="architecture" aria-label="System flow">
             <div>Market data + features</div>
@@ -114,50 +112,44 @@
         </div>
       </section>
       <section class="project-section">
-        <h2>Automation with a reviewable boundary</h2>
+        <h2>Implementation</h2>
         <div class="project-section-content">
           <ul class="detail-list">
             <li>
-              <strong>Repeatable data preparation.</strong> Python, Pandas, and
-              NumPy generate the features used for training and portfolio
-              ranking.
+              <strong>Features.</strong> Python, Pandas, and NumPy prepare
+              training and ranking data.
             </li>
             <li>
-              <strong>Explicit allocation rules.</strong> The workflow selects
-              five stocks, rebalances every five trading days, caps each holding
-              at 15%, and caps total exposure at 75%.
+              <strong>Allocation.</strong> Select five stocks, rebalance every
+              five trading days, and cap each holding at 15% and total exposure
+              at 75%.
             </li>
             <li>
-              <strong>Separate planning from execution.</strong> A scheduled
-              workflow refreshes data, trains the model, and generates
-              recommendations and a dry-run order plan. Paper-order submission
-              is an explicit step through Alpaca.
+              <strong>Automation.</strong> A scheduled workflow refreshes data,
+              trains the model, and generates a dry-run order plan. Submitting
+              paper orders through Alpaca is a separate step.
             </li>
             <li>
-              <strong>Keep the outputs inspectable.</strong> The dashboard reads
-              committed reports so predictions, comparisons, and recorded
-              activity can be reviewed together.
+              <strong>Dashboard.</strong> Display predictions, comparisons, and
+              recorded activity from committed reports.
             </li>
           </ul>
         </div>
       </section>
       <section class="project-section">
-        <h2>What the evaluation showed</h2>
+        <h2>Evaluation</h2>
         <div class="project-section-content">
           <p>
-            The project compares backtests with momentum and low-volatility
-            baselines, then evaluates performance across five walk-forward
-            folds. The committed dashboard summary reports a mean ROC AUC of
-            about 0.506 and average excess return of roughly −0.7%. Those
-            results show the model’s limits even when a headline backtest looks
-            stronger.
+            Compared backtests with momentum and low-volatility baselines and
+            evaluated five walk-forward folds. The committed summary reports a
+            mean ROC AUC of about 0.506 and average excess return of roughly
+            −0.7%, showing limited predictive value.
           </p>
           <p>
-            The dashboard data was generated September 11, 2026. Walk-forward
-            and baseline reports can cover earlier periods than the headline
-            backtest, so their returns should not be treated as directly
-            comparable. Backtests, simulation, and paper-account results remain
-            distinct.
+            Dashboard data was generated September 11, 2026. Walk-forward and
+            baseline reports can cover different periods from the headline
+            backtest; returns are not directly comparable. Backtests,
+            simulations, and paper-account results are distinct.
           </p>
           <p>
             <a

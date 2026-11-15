@@ -12,7 +12,7 @@ Pushes to `main` deploy through `.github/workflows/pages.yml`. The workflow stag
 
 ## Content
 
-- `index.html`: introduction, experience, projects, education, about, and contact.
+- `index.html`: compact overview with experience and projects side by side on desktop, followed by education and skills. Resume and contact links are at the top.
 - `experience.html`, `work.html`, `contact.html`: standalone views for existing links.
 - `projects/`: project writeups, technical decisions, results, and limitations.
 - `assets/Ryan-Chan-Resume.pdf`: one-page resume compiled from Ryan's supplied LaTeX, with Swift and TypeScript bolded.

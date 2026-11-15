@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f8f9f7" />
+    <meta name="theme-color" content="#f7f8fa" />
     <title>The SpotifyBook — Ryan Chan</title>
     <meta
       name="description"
@@ -20,7 +20,7 @@
       href="https://ryanchan339.github.io/projects/spotifybook.html"
     />
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="../styles.css?v=20261115" />
+    <link rel="stylesheet" href="../styles.css?v=20261115-compact" />
     <script src="../site.js?v=20261115-umami-live" defer></script>
   </head>
   <body id="top">
@@ -33,7 +33,7 @@
         <nav class="header-nav" aria-label="Main navigation">
           <a href="../index.html#experience">Experience</a>
           <a href="../index.html#projects">Projects</a>
-          <a href="../index.html#about">About</a>
+          <a href="../index.html#about">Education &amp; skills</a>
           <a
             class="nav-resume"
             href="../assets/Ryan-Chan-Resume.pdf"
@@ -72,24 +72,21 @@
         </div>
       </header>
       <section class="project-section">
-        <h2>Make personal music data easier to explore</h2>
+        <h2>Overview</h2>
         <div class="project-section-content">
           <p>
-            Spotify’s listening data becomes more useful when you can move
-            between time ranges and browse it directly. I built a web
-            application that connects top-track and top-artist views with
-            playlist creation.
+            Built a web application for browsing top tracks and artists across
+            time ranges and creating playlists from selected tracks.
           </p>
         </div>
       </section>
       <section class="project-section">
-        <h2>An API-backed listening view</h2>
+        <h2>Authentication and data</h2>
         <div class="project-section-content">
           <p>
-            Spotify OAuth connects an authorized session to personal listening
-            data. Flask serves the pages and API routes, while JavaScript
-            updates the track and artist lists when the selected time range
-            changes.
+            Spotify OAuth authorizes access to listening data. Flask serves
+            pages and API routes; JavaScript updates track and artist lists when
+            the time range changes.
           </p>
           <div class="architecture" aria-label="System flow">
             <div>Authorize with Spotify</div>
@@ -101,23 +98,20 @@
         </div>
       </section>
       <section class="project-section">
-        <h2>Keep updates focused</h2>
+        <h2>Features</h2>
         <div class="project-section-content">
           <ul class="detail-list">
             <li>
-              <strong>Update only the changing content.</strong> The track list
-              refreshes through an API request instead of reloading the entire
-              page.
+              <strong>Partial updates.</strong> Refresh track lists through API
+              requests without reloading the page.
             </li>
             <li>
-              <strong>Separate browsing from actions.</strong> Navigation
-              separates tracks and artists, while the backend handles playlist
-              creation from selected tracks.
+              <strong>Playlists.</strong> Browse tracks and artists separately;
+              create playlists from selected tracks.
             </li>
             <li>
-              <strong>Offer public exploration.</strong> A public search view
-              provides another way to discover music without accessing personal
-              listening history.
+              <strong>Public search.</strong> Find music without accessing
+              personal listening history.
             </li>
           </ul>
         </div>
@@ -144,18 +138,16 @@
         </figcaption>
       </figure>
       <section class="project-section">
-        <h2>Preview and access notes</h2>
+        <h2>Demo notes</h2>
         <div class="project-section-content">
           <p>
-            The walkthrough uses the repository’s track and artist templates
-            with a curated selection of real songs and album artwork. Sample
-            ordering illustrates time-range updates and does not represent
-            anyone’s listening history. Artist icons use representative album
-            covers.
+            The walkthrough uses the app’s templates with curated songs and
+            artwork. The ordering is illustrative, not anyone’s listening
+            history. Artist icons use representative album covers.
           </p>
           <p>
-            The hosted application’s personal-data features require Spotify
-            access to be configured for the user.
+            Personal-data features require Spotify access to be configured for
+            the user.
           </p>
           <p>
             <a

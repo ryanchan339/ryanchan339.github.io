@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f8faf9" />
+    <meta name="theme-color" content="#f7f8fa" />
     <title>Projects — Ryan Chan</title>
     <meta
       name="description"
@@ -18,7 +18,7 @@
     <meta property="og:url" content="https://ryanchan339.github.io/work.html" />
     <link rel="canonical" href="https://ryanchan339.github.io/work.html" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=20261115" />
+    <link rel="stylesheet" href="styles.css?v=20261115-compact" />
     <script src="site.js?v=20261115-umami-live" defer></script>
   </head>
   <body id="top">
@@ -31,7 +31,7 @@
         <nav class="header-nav" aria-label="Main navigation">
           <a href="index.html#experience">Experience</a>
           <a href="index.html#projects">Projects</a>
-          <a href="index.html#about">About</a>
+          <a href="index.html#about">Education &amp; skills</a>
           <a
             class="nav-resume"
             href="assets/Ryan-Chan-Resume.pdf"
@@ -45,10 +45,6 @@
       <div class="page-heading">
         <span class="eyebrow">Selected personal projects</span>
         <h1>Projects</h1>
-        <p class="project-lead">
-          A closer look at the problems, technical decisions, and results behind
-          my work.
-        </p>
       </div>
       <div class="project-grid">
         <article class="project-card featured-project">
@@ -78,12 +74,8 @@
               >
             </h3>
             <p>
-              Search a video library by what appears on screen or what is said,
-              then jump straight to the matching moment.
-            </p>
-            <p class="project-contribution">
-              I built the indexing and retrieval pipeline with SigLIP frame
-              embeddings, speech transcription, and timestamped results.
+              Built a local video search pipeline with SigLIP frame embeddings,
+              speech transcription, and timestamped results.
             </p>
             <div class="project-evidence">
               <strong>42% fewer indexed frames</strong
@@ -97,7 +89,7 @@
               class="text-link"
               href="projects/video-search.html"
               data-track="project-video-search"
-              >Read the project <span aria-hidden="true">→</span></a
+              >Project details <span aria-hidden="true">→</span></a
             >
           </div>
         </article>
@@ -106,7 +98,7 @@
             class="database-preview"
             aria-label="Architecture: React interface, Flask API, and MySQL on Google Cloud"
           >
-            <span class="diagram-label">From interface to data</span>
+            <span class="diagram-label">Architecture</span>
             <div class="database-flow">
               <div>
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -140,12 +132,9 @@
               >
             </h3>
             <p>
-              A database-backed application for comparing NFL quarterbacks
-              across 20+ statistics.
-            </p>
-            <p class="project-contribution">
-              I designed the normalized schema, wrote ranking procedures, and
-              built the Flask API connected to Google Cloud SQL.
+              Built a quarterback comparison app for 20+ statistics, with a
+              normalized MySQL schema, ranking procedures, and a Flask API on
+              Google Cloud SQL.
             </p>
             <div class="project-evidence">
               <strong>19 REST API routes</strong
@@ -159,7 +148,7 @@
               class="text-link"
               href="projects/nfl-qb-analytics.html"
               data-track="project-nfl"
-              >Read the project <span aria-hidden="true">→</span></a
+              >Project details <span aria-hidden="true">→</span></a
             >
           </div>
         </article>
@@ -190,12 +179,9 @@
               >
             </h3>
             <p>
-              An end-to-end research pipeline for ranking equities and
-              generating constrained portfolio allocations.
-            </p>
-            <p class="project-contribution">
-              I built feature engineering, gradient-boosted ranking,
-              walk-forward evaluation, and automated paper-trading workflows.
+              Built an equity-ranking pipeline with feature engineering,
+              gradient-boosted models, walk-forward evaluation, and automated
+              paper trading.
             </p>
             <div class="project-evidence">
               <strong>5-fold walk-forward evaluation</strong
@@ -211,25 +197,24 @@
               class="text-link"
               href="projects/stock-trader.html"
               data-track="project-stock-trader"
-              >Read the project <span aria-hidden="true">→</span></a
+              >Project details <span aria-hidden="true">→</span></a
             >
           </div>
         </article>
       </div>
       <aside class="additional-project">
         <div>
-          <span class="eyebrow">Also built</span>
+          <span class="eyebrow">Additional project</span>
           <h3>The SpotifyBook</h3>
           <p>
-            A personalized music dashboard built around Spotify’s API and
-            listening data.
+            Spotify dashboard for top tracks, artists, and playlist creation.
           </p>
         </div>
         <a
           class="text-link"
           href="projects/spotifybook.html"
           data-track="project-spotifybook"
-          >Explore project <span aria-hidden="true">↗</span></a
+          >Project details <span aria-hidden="true">↗</span></a
         >
       </aside>
     </main>
