@@ -2,3 +2,5 @@ screenshots/
 _site/
 .DS_Store
 Thumbs.db
+
+.playwright-cli/
