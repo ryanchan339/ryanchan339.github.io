@@ -25,7 +25,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 
 ## Edit
 
-- `index.html`: introduction and resume/contact links, education summary, three visible experience cards, selected projects, and grouped technical skills.
+- `index.html`: introduction and resume/contact links, education summary, three visible experience rows, selected project rows, and grouped technical skills.
 - `home.css`: the straightforward homepage layout, using the existing white and cool-gray palette.
 - `work.html`: four project showcases, with three recorded demos and an NFL application architecture summary.
 - `experience.html`: professional, research, and teaching experience, plus illustrative Python Two Sum and transformer acceleration animations.
@@ -86,4 +86,8 @@ The original design now includes the current Swift/iOS and TypeScript/Bedrock ex
 
 ## Straightforward homepage
 
-Home now follows one reading order: introduction and education, experience, selected projects, then technical skills. All three roles are visible without tabs. Three equally sized project cards use static previews, with SpotifyBook and the recorded demos reachable through All projects. The standalone benchmark and hobby slideshow are removed from Home. Other page content, original interactions, and analytics are retained.
+Home now follows one reading order: introduction and education, experience, selected projects, then technical skills. All three roles are visible without tabs. Three full-width rounded project rows use static previews, with SpotifyBook and the recorded demos reachable through All projects. The standalone benchmark and hobby slideshow are removed from Home. Other page content, original interactions, and analytics are retained.
+
+## Rounded row layout
+
+Education, each experience, each selected project, and each skill group now occupy separate full-width rounded rows on Home. Project thumbnails sit beside descriptions on desktop; row contents stack on small screens. Existing details, links, and analytics are retained.
