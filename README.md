@@ -12,7 +12,7 @@ Pushes to `main` deploy through `.github/workflows/pages.yml`. The workflow stag
 
 ## Content
 
-- `index.html`: compact overview with experience and projects side by side on desktop, followed by education and skills. Resume and contact links are at the top.
+- `index.html`: card-based overview with profile and education at the top, experience and projects side by side, and a grouped skills card. Organization logos are local SVGs. Resume and contact links are in the profile card.
 - `experience.html`, `work.html`, `contact.html`: standalone views for existing links.
 - `projects/`: project writeups, technical decisions, results, and limitations.
 - `assets/Ryan-Chan-Resume.pdf`: one-page resume compiled from Ryan's supplied LaTeX, with Swift and TypeScript bolded.
@@ -52,3 +52,7 @@ Uses documented tracker configuration and functions: https://umami.is/docs/track
 ## Verification
 
 Review the homepage and project pages at desktop, tablet, and narrow mobile widths. Verify the resume PDF, local links/anchors, native video controls, keyboard focus, reduced motion, and privacy preference. Analytics requests should include a page path or fixed event label, never URL query strings or entered text. Use an intercepted count endpoint when testing to avoid polluting real statistics.
+
+## Visual design
+
+The layout uses warm ivory, forest green, peach, and lilac surfaces with consistent card spacing. Design references included Brittany Chiang (https://brittanychiang.com/), Maggie Appleton (https://maggieappleton.com/), and Josh Comeau (https://www.joshwcomeau.com/); the implementation and content are original. Amazon and Illinois marks use the existing local SVG assets.
