@@ -12,11 +12,12 @@ Pushes to `main` deploy through `.github/workflows/pages.yml`. The workflow stag
 
 ## Content
 
-- `index.html`: work-first overview with a persistent profile rail (education, toolkit, resume, and contact links) and a unified feed of industry, research, and personal work. On mobile, the expanded background blocks follow the selected work. Organization logos are local SVGs.
+- `index.html`: full-width introduction with current role and education, a selected project gallery, a linear experience section, then education and tools. Organization logos are local SVGs.
 - `experience.html`, `work.html`, `contact.html`: standalone views for existing links.
 - `projects/`: project writeups, technical decisions, results, and limitations.
 - `assets/Ryan-Chan-Resume.pdf`: one-page resume compiled from Ryan's supplied LaTeX, with Swift and TypeScript bolded.
-- `styles.css`: shared responsive design and reduced-motion handling.
+- `styles.css`: shared shell, dark homepage, responsive design, and reduced-motion handling.
+- `details.css`: matching dark styles for the project, experience, contact, and privacy pages.
 - `site.js`: optional Umami Cloud integration and per-browser analytics preferences.
 - `privacy.html`: analytics disclosure and opt-out.
 
@@ -55,4 +56,6 @@ Review the homepage and project pages at desktop, tablet, and narrow mobile widt
 
 ## Visual design
 
-The homepage organizes content as a profile rail and selected-work feed, using restrained sage, lilac, and blue surfaces. References came from Figma’s portfolio examples (https://www.figma.com/resource-library/portfolio-website-examples/), especially Perry Wang’s Work/Info hierarchy (https://perryw-2023.webflow.io/) and Pratibha Joshi’s compact professional context and project gallery (https://www.pratibhajoshi.com/). Detail pages retain the longer technical descriptions. The implementation and content are original. Amazon and Illinois marks use the existing local SVG assets.
+The visual direction draws from Sinan Tokmak’s portfolio in Figma’s examples (https://www.figma.com/resource-library/portfolio-website-examples/ and https://sinantokmak.framer.website/): charcoal `#292F36`, deep section backgrounds `#1A1E23`, turquoise `#12F7D6`, and Ubuntu / IBM Plex Mono typography. The layout uses a full-width header and introduction, image-led project gallery, linear experience rows, and a background section. The implementation and content are original; organization logos use existing local SVGs.
+
+Fonts are self-hosted as Latin WOFF2 files in `assets/fonts/` (about 53 KB total). Ubuntu’s UFL and copyright notices and IBM Plex Mono’s OFL are retained alongside the files. No external font requests are made.
