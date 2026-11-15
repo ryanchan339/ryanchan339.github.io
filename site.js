@@ -1,10 +1,11 @@
 (() => {
   "use strict";
 
-  // Public GoatCounter endpoint. No credentials or visitor identity are stored here.
-  const ANALYTICS_ENDPOINT = "";
+  // Public Umami Website ID. Never put account credentials or API keys here.
+  const UMAMI_WEBSITE_ID = "";
+  const UMAMI_SCRIPT_URL = "https://cloud.umami.is/script.js";
+  const SITE_HOSTNAME = "ryanchan339.github.io";
   const OPT_OUT_KEY = "ryan-portfolio-analytics-opt-out";
-  const localHosts = new Set(["localhost", "127.0.0.1", "[::1]"]);
   let optedOut = false;
   try {
     optedOut = localStorage.getItem(OPT_OUT_KEY) === "1";
@@ -16,23 +17,14 @@
     navigator.doNotTrack === "1" ||
     window.doNotTrack === "1";
   const localPreview =
-    localHosts.has(location.hostname) || location.protocol === "file:";
+    location.hostname !== SITE_HOSTNAME || location.protocol === "file:";
   const canCount =
-    Boolean(ANALYTICS_ENDPOINT) && !optedOut && !privacySignal && !localPreview;
-
-  // Only fixed, authored labels become click events. Never record form input or query strings.
-  document.querySelectorAll("[data-track]").forEach((link) => {
-    link.setAttribute("data-goatcounter-click", link.dataset.track);
-    link.setAttribute(
-      "data-goatcounter-title",
-      link.textContent.trim().replace(/\s+/g, " "),
-    );
-  });
+    Boolean(UMAMI_WEBSITE_ID) && !optedOut && !privacySignal && !localPreview;
 
   const status = document.querySelector("[data-analytics-status]");
   const toggle = document.querySelector("[data-analytics-toggle]");
   if (status) {
-    status.textContent = !ANALYTICS_ENDPOINT
+    status.textContent = !UMAMI_WEBSITE_ID
       ? "Analytics is not active until a dashboard is connected."
       : privacySignal
         ? "Analytics is off because your browser sends a privacy preference."
@@ -43,7 +35,7 @@
             : "Anonymous analytics is enabled. You can turn it off in this browser.";
   }
   if (toggle) {
-    toggle.hidden = !ANALYTICS_ENDPOINT || privacySignal || localPreview;
+    toggle.hidden = !UMAMI_WEBSITE_ID || privacySignal || localPreview;
     toggle.textContent = optedOut
       ? "Allow analytics in this browser"
       : "Turn off analytics in this browser";
@@ -60,37 +52,64 @@
   }
 
   if (canCount) {
-    // Initialize manually so query strings never leave the page. The upstream
-    // tracker includes a separate query field even with a custom page path.
-    window.goatcounter = { no_onload: true, path: () => location.pathname };
+    // Use Umami's documented before-send hook to allow only traffic statistics.
+    // No query strings, user identifiers, form input, replay, or error reporting.
+    window.portfolioBeforeSend = (type, payload) => {
+      if (type !== "event") return false;
+      const eventName = payload.name;
+      if (
+        eventName !== undefined &&
+        !/^[a-z0-9][a-z0-9-]{0,49}$/.test(eventName)
+      )
+        return false;
+      let referrer = "";
+      try {
+        referrer = document.referrer ? new URL(document.referrer).origin : "";
+      } catch {
+        /* Invalid or unavailable referrer. */
+      }
+      return {
+        website: UMAMI_WEBSITE_ID,
+        hostname: location.hostname,
+        url: location.pathname,
+        title: document.title,
+        referrer,
+        language: navigator.language,
+        screen: payload.screen,
+        ...(eventName === undefined ? {} : { name: eventName }),
+      };
+    };
+
     const script = document.createElement("script");
-    script.src = "https://gc.zgo.at/count.js";
-    script.dataset.goatcounter = ANALYTICS_ENDPOINT;
+    script.src = UMAMI_SCRIPT_URL;
+    script.dataset.websiteId = UMAMI_WEBSITE_ID;
+    script.dataset.domains = SITE_HOSTNAME;
+    script.dataset.autoTrack = "false";
+    script.dataset.doNotTrack = "true";
+    script.dataset.excludeSearch = "true";
+    script.dataset.excludeHash = "true";
+    script.dataset.beforeSend = "portfolioBeforeSend";
+    script.dataset.fetchCredentials = "omit";
     script.async = true;
     script.addEventListener("load", () => {
-      const counter = window.goatcounter;
-      if (
-        typeof counter.get_data !== "function" ||
-        typeof counter.count !== "function" ||
-        typeof counter.bind_events !== "function"
-      )
-        return;
-      const getData = counter.get_data;
-      counter.get_data = (options) => {
-        const data = getData(options);
-        delete data.q;
-        try {
-          data.r = data.r ? new URL(data.r).origin : "";
-        } catch {
-          data.r = "";
-        }
-        return data;
+      if (typeof window.umami?.track !== "function") return;
+      const track = (name) => {
+        Promise.resolve(window.umami.track(name)).catch(() => {
+          /* Analytics must not interfere with navigation. */
+        });
       };
-      counter.bind_events();
+      const trackLink = (event) => {
+        if (event.type === "auxclick" && event.button !== 1) return;
+        const link = event.target?.closest?.("[data-track]");
+        if (link) track(link.dataset.track);
+      };
+      document.addEventListener("click", trackLink);
+      document.addEventListener("auxclick", trackLink);
+
       const countPage = () => {
         if (document.visibilityState === "hidden") return;
         document.removeEventListener("visibilitychange", countPage);
-        counter.count();
+        track();
       };
       if (document.visibilityState === "hidden") {
         document.addEventListener("visibilitychange", countPage);

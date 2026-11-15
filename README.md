@@ -17,7 +17,7 @@ Pushes to `main` deploy through `.github/workflows/pages.yml`. The workflow stag
 - `projects/`: project writeups, technical decisions, results, and limitations.
 - `assets/Ryan-Chan-Resume.pdf`: one-page resume compiled from Ryan's supplied LaTeX, with Swift and TypeScript bolded.
 - `styles.css`: shared responsive design and reduced-motion handling.
-- `site.js`: optional GoatCounter integration and per-browser analytics preferences.
+- `site.js`: optional Umami Cloud integration and per-browser analytics preferences.
 - `privacy.html`: analytics disclosure and opt-out.
 
 When changing CSS or JavaScript, update the `?v=` cache token in the HTML files.
@@ -32,18 +32,22 @@ Existing media is retained from the original portfolio. SpotifyBook uses sample 
 
 ## Analytics
 
-Set `ANALYTICS_ENDPOINT` in `site.js` to the user-owned GoatCounter count endpoint (`https://ACCOUNT.goatcounter.com/count`). The endpoint is public, not a credential. No password or API key belongs in this repository.
+Set `UMAMI_WEBSITE_ID` in `site.js` to the Website ID from a user-owned Umami Cloud account. The default script is `https://cloud.umami.is/script.js`. The website ID is public, not a credential. No password or API key belongs in this repository.
 
 Until configured, the site makes no analytics requests. After configuration:
 
-- Page views and fixed-label link clicks (resume, projects, GitHub, LinkedIn, email) are counted.
+- Page views and fixed-label link clicks (resume, projects, GitHub, LinkedIn, email) are counted. A resume event measures a link click, not completed delivery of the PDF.
 - No application-specific tagged URLs are added.
-- No analytics cookies are set. Query strings are removed, and referrers are reduced to origins before counting.
+- The tracker is limited to `ryanchan339.github.io` and uses manual page/event tracking to avoid duplicate counts.
+- No analytics cookies are set. A documented `before-send` hook strips query strings, fragments, event properties, and visitor IDs; referrers are reduced to origins.
+- No session replay, performance reporting, error capture, or visitor identification is enabled.
 - Global Privacy Control, Do Not Track, local previews, and the per-browser opt-out prevent loading the tracker.
 - The privacy page exposes the opt-out. The preference uses one localStorage entry.
-- The hosted dashboard can stay private. Visitor identities and confirmed employers are not available from this integration.
+- Keep Umami Share URLs disabled if the dashboard should stay private. This integration never enables a Share URL.
 
-The upstream tracker is initialized manually. Its `get_data` result is filtered before page or event requests are enabled. If its expected API is unavailable, counting does not start. Recheck this behavior if GoatCounter changes its client API.
+The standard analytics records do not expose visitor IP addresses. The hosted provider still processes network information and may keep operational or security logs; see its privacy policy. Cookie-free analytics should not be described as zero data processing.
+
+Uses documented tracker configuration and functions: https://umami.is/docs/tracker-configuration and https://umami.is/docs/tracker-functions. The free Hobby plan's limits are provider-controlled; check https://umami.is/pricing for current limits.
 
 ## Verification
 
