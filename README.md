@@ -25,8 +25,8 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 
 ## Edit
 
-- `index.html`: introduction and resume/contact links, education summary, three visible experience rows, selected project rows, and grouped technical skills.
-- `home.css`: the straightforward homepage layout, using the existing white and cool-gray palette.
+- `index.html`: introduction and resume/social links, followed by three grouped panels for education, experience, and projects.
+- `home.css`: the homepage layout, with translucent glass surfaces, static blue/lavender background washes, and accessible opaque fallbacks.
 - `work.html`: four project showcases, with three recorded demos and an NFL application architecture summary.
 - `experience.html`: professional, research, and teaching experience, plus illustrative Python Two Sum and transformer acceleration animations.
 - `contact.html`: email, LinkedIn, GitHub, and copy-email action.
@@ -84,10 +84,8 @@ Analytics loads only on `ryanchan339.github.io`; local previews, Do Not Track, G
 
 The original design now includes the current Swift/iOS and TypeScript/Bedrock experience, research and teaching outcomes, GPA and coursework, and technical skills. Project writeups use the current résumé measurements. The Stock Trader recording remains an older dashboard snapshot and is labeled separately from the updated reported results.
 
-## Straightforward homepage
+## Glass homepage panels
 
-Home now follows one reading order: introduction and education, experience, selected projects, then technical skills. All three roles are visible without tabs. Three full-width rounded project rows use static previews, with SpotifyBook and the recorded demos reachable through All projects. The standalone benchmark and hobby slideshow are removed from Home. Other page content, original interactions, and analytics are retained.
+Home follows one reading order: introduction, resume/social links, Education, Experience, and Projects. The last three sections each occupy one rounded glass panel; roles and projects are separated by subtle rules within their panel. The standalone skills section is removed. All three roles are visible without tabs. Project thumbnails sit beside descriptions on desktop and stack on small screens, with SpotifyBook and recorded demos reachable through All projects.
 
-## Rounded row layout
-
-Education, each experience, each selected project, and each skill group now occupy separate full-width rounded rows on Home. Project thumbnails sit beside descriptions on desktop; row contents stack on small screens. Existing details, links, and analytics are retained.
+Translucent white surfaces sit over static blue/lavender washes, with bright inset borders and soft shadows. Only the three panels and floating navigation use background blur. Reduced-transparency, increased-contrast, forced-color, and unsupported-blur environments receive opaque fallbacks. Other pages, existing links, and analytics are retained.
