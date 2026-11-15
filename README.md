@@ -1,61 +1,80 @@
-# Ryan Chan · Portfolio
+# Ryan Chan portfolio
 
-A responsive static portfolio for software engineering work, research, and selected personal projects. Built with semantic HTML, CSS, and a small analytics script. No runtime framework or build dependencies.
+A static portfolio with four main pages—Home, Work, Experience, and Contact—and three project detail pages. Plain HTML, CSS, and JavaScript; no package installation or build step is required.
 
-Live site: https://ryanchan339.github.io/
+## Preview
 
-## Preview and publish
+From this directory, run `python -m http.server 8766 --bind 127.0.0.1` and open `http://127.0.0.1:8766/`.
 
-Run `python3 -m http.server 8766 --bind 127.0.0.1` in this directory, then visit `http://127.0.0.1:8766/`.
+## Publish on GitHub Pages
 
-Pushes to `main` deploy through `.github/workflows/pages.yml`. The workflow stages the HTML, CSS, JavaScript, `projects/`, and `assets/`, then publishes to GitHub Pages. Local links use relative paths. The custom 404 uses root-relative paths so it works below nested URLs.
+1. Put the contents of this directory, including `.github/` and `.nojekyll`, at the root of the chosen GitHub repository.
+2. Use the `main` branch, or change the branch in `.github/workflows/pages.yml` to match your repository.
+3. In the repository's **Settings → Pages**, choose **GitHub Actions** as the source.
+4. Push to `main` or run the **Deploy portfolio to GitHub Pages** workflow manually.
 
-## Content
+Published portfolio: https://ryanchan339.github.io/
 
-- `index.html`: full-width introduction with current role and education, a selected project gallery, a linear experience section, then education and tools. Organization logos are local SVGs.
-- `experience.html`, `work.html`, `contact.html`: standalone views for existing links.
-- `projects/`: project writeups, technical decisions, results, and limitations.
-- `assets/Ryan-Chan-Resume.pdf`: one-page resume compiled from Ryan's supplied LaTeX, with Swift and TypeScript bolded.
-- `styles.css`: shared shell, dark homepage, responsive design, and reduced-motion handling.
-- `details.css`: matching dark styles for the project, experience, contact, and privacy pages.
-- `site.js`: optional Umami Cloud integration and per-browser analytics preferences.
-- `privacy.html`: analytics disclosure and opt-out.
+Source repository: https://github.com/ryanchan339/ryanchan339.github.io
 
-When changing CSS or JavaScript, update the `?v=` cache token in the HTML files.
+Updates pushed to `main` deploy automatically through GitHub Actions. Local links and media paths are relative.
 
-### Evidence and media
+Page, CSS, JavaScript, and media links include a release token to keep browser caches from mixing versions. Refresh that token across the HTML when publishing changed page, style, or media files.
 
-Professional descriptions use Ryan's resume and avoid nonpublic product names. Public project source links are included where available; NFL QB Analytics does not expose a private repository.
+The workflow follows GitHub's documented configure/upload/deploy pattern: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
 
-Video Search's sampling and throughput numbers are limited to its benchmark footage and hardware. Its walkthrough is an illustrative interface capture with sample results, not a recorded inference run. Stock Trader separates its dated backtest from five-fold walk-forward results; the saved dashboard shows approximately 0.506 ROC AUC and −0.7% average excess return. The page describes the evaluation limits rather than treating a backtest as evidence of live performance.
+## Edit
 
-Existing media is retained from the original portfolio. SpotifyBook uses sample listening data and album artwork; sources are in `assets/spotifybook-sample-sources.json`. Its capture does not authenticate an account or create a playlist. Videos play only through native controls, never automatically.
+- `index.html`: mixed-size project, introduction, experience, education, interests, and contact tiles. The introduction uses Ryan's name, LinkedIn/GitHub buttons, two linked logo cards for Amazon and UIUC, and the supplied San Francisco sunset photograph.
+- `work.html`: all three project showcases and demos.
+- `experience.html`: professional, research, and teaching experience, plus illustrative Python Two Sum and transformer acceleration animations.
+- `contact.html`: email, LinkedIn, GitHub, and copy-email action.
+- `projects/*.html`: project explanations and source links.
+- `styles.css`: layout, typography, colors, and responsive behavior.
+- `format.css`: Marco-style tile grid, floating pill, gallery, and message-style Contact layout.
+- `glass.css`: white and cool-gray fills, black controls, subtle borders, light shadows, whole-tile actions, and hover expansion for tiles without flippable screens. It uses no background blur.
+- `site.js`: sliding navigation, hover and keyboard-focus demo playback, immediate preview activation, manual project flips, interactive preview switching, email actions, and legacy section-link redirects.
+- `preview-motion.css`: short project-specific CSS/SVG openings, which begin immediately and fade into the interface recording after 2.4 seconds, plus the Experience coding and accelerator animations. No background blur or frame timer loop is used. Outside coding uses native slide animations and a two-second autoplay timeout.
+- `assets/*.jpg`, `assets/*.png`: still preview posters.
+- `assets/*.mp4`: 16-second silent walkthrough loops, encoded as H.264 with fast-start metadata.
 
-## Analytics
+## Media and content provenance
 
-Set `UMAMI_WEBSITE_ID` in `site.js` to the Website ID from a user-owned Umami Cloud account. The default script is `https://cloud.umami.is/script.js`. The website ID is public, not a credential. No password or API key belongs in this repository.
+- Video Search captures a preview of the original interface with sample library data, fixed illustrative results, and generated lecture frames. It does not record a new inference run or a real video seek.
+- Stock Trader captures the original dashboard with committed report data generated September 11, 2026. The footage preserves its distinctions between backtests, walk-forward evaluations, and paper trading. It is a historical snapshot, not live data.
+- SpotifyBook captures the original templates with a curated sample of real songs by Olivia Rodrigo, Drake, Bruno Mars, Steve Lacy, and Frank Sinatra. Track thumbnails and artist icons use their album artwork from the Apple music catalog. Ordering is sample data, not personal listening history. No account is authenticated and no playlist is created during the capture. Catalog and artwork sources are listed in `assets/spotifybook-sample-sources.json`. The opening animation reuses the same five locally stored album covers in `assets/spotify-cover-*.jpg`.
+- The tall Home tile uses a separate portrait SpotifyBook walkthrough captured from the same original templates at mobile size.
+- The Home introduction is visual rather than prose. Its heading arrow opens Experience; affiliation cards link to the Amazon role or education tile on Experience. Social buttons use inline SVG marks and open the supplied LinkedIn and GitHub profiles.
+- The floating navigation uses one black pill that glides and resizes to the hovered or keyboard-focused tab, then returns to the current page when the pointer leaves. Clicks keep native page navigation and modifier-key behavior; touch selection can continue its movement on the destination page. Labels stay readable as the pill passes under them. Mobile resizing recalculates its position, and reduced-motion settings use instant changes. Without JavaScript, the current-page tab retains its static pill.
+- Home uses Ryan’s supplied `SF Skyline Linkedin.jpg` as `assets/san-francisco-sunset.jpg`, showing San Francisco and the Bay Bridge at sunset. The JPEG is copied unchanged, with a location caption and image description. The removed About page’s Central Park photograph is no longer included. No photographer or license is inferred for the supplied image.
+- Contact adds a white message surface, gray incoming bubble, blue outgoing action and send arrow, plus LinkedIn blue for the profile icon and connect button. The message colors reference [Apple's iMessage treatment](https://support.apple.com/en-us/104972); the LinkedIn card follows its [blue/white brand treatment](https://brand.linkedin.com/in-logo). Other pages retain the neutral palette.
+- Mosaic tiles expand slightly on mouse hover or keyboard focus. Project cards play their silent interface demos on hover or when a project link receives keyboard focus. The Switch view button rotates mosaic project screens to their alternate capture; videos pause while that view is visible. Native links stretch across each tile while buttons, other links, and forms remain independently usable. Reduced-motion preferences disable expansion and use an instant view change.
+- Outside coding slides to the next interest every two seconds while visible. Visitors can swipe on touch screens, drag with a mouse, click the tile, or use the Previous/Next arrows, dots, and keyboard arrow keys. Autoplay pauses on hover, keyboard focus, during gestures, offscreen, in hidden tabs, or with the Pause button; reduced motion disables autoplay and sliding transitions. Vertical touch scrolling and pinch zoom remain available. Research and teaching tiles jump to their corresponding experience entries; other tiles open their relevant page, GitHub, LinkedIn, or email action.
+- Video Search previews use the tile's full inner width, with a taller grid row to show the complete interface. Outside coding has Previous/Next arrows that cycle through the four interests, alongside the direct-selection dots and a screen-reader announcement.
+- Amazon's white wordmark and orange smile are sourced from the [About Amazon footer](https://www.aboutamazon.com/). Illinois's full-color Block I is sourced from the [official brand web resources](https://web.brand.illinois.edu/logos/), using https://cdn.brand.illinois.edu/logos/block-i.svg. Both are stored locally as SVGs; the original artwork is retained.
+- The MP4s are edited walkthroughs assembled from four captured interface states each, with short transitions. No soundtrack is included.
+- Project cards on Home and Work begin with still posters. Clips load when visible and hovered, keyboard-focused, or explicitly started; hover playback pauses when the pointer and focus leave. Explicit Play keeps playback enabled until Pause, and a manual pause is respected on subsequent hovers. Clips also pause offscreen or when the page is hidden. Touch visitors can use the Play button. Reduced-motion preferences show still posters until the visitor explicitly starts a demo. Project detail pages retain visible-only playback. Each activation also starts a 2.4-second illustrative opening: a typed search query, scanner and staggered results; a schematic stock chart drawing with allocation steps; or moving sample music rows and a silent equalizer. These simplified illustrations are not live searches, financial results, or audio playback. Underlying card recordings run at 2× speed; detail-page recordings keep their original pace. Openings are hidden from assistive technology, do not intercept clicks, stop on pause/exit/hidden pages, and are disabled for reduced motion.
+- Experience and education use Ryan's supplied résumé as background. Descriptions are rewritten, and GPA, the phone number, and the private NFL project are excluded.
 
-Until configured, the site makes no analytics requests. After configuration:
+Source projects:
 
-- Page views and fixed-label link clicks (resume, industry/research work, projects, GitHub, LinkedIn, email) are counted. A resume event measures a link click, not completed delivery of the PDF.
-- No application-specific tagged URLs are added.
-- The tracker is limited to `ryanchan339.github.io` and uses manual page/event tracking to avoid duplicate counts.
-- No analytics cookies are set. A documented `before-send` hook strips query strings, fragments, event properties, and visitor IDs; referrers are reduced to origins.
-- No session replay, performance reporting, error capture, or visitor identification is enabled.
-- Global Privacy Control, Do Not Track, local previews, and the per-browser opt-out prevent loading the tracker.
-- The privacy page exposes the opt-out. The preference uses one localStorage entry.
-- Keep Umami Share URLs disabled if the dashboard should stay private. This integration never enables a Share URL.
+- https://github.com/ryanchan339/video-search-bar
+- https://github.com/ryanchan339/Stock-Trader
+- https://github.com/ryanchan339/The-SpotifyBook
 
-The standard analytics records do not expose visitor IP addresses. The hosted provider still processes network information and may keep operational or security logs; see its privacy policy. Cookie-free analytics should not be described as zero data processing.
+## Included decisions
 
-Uses documented tracker configuration and functions: https://umami.is/docs/tracker-configuration and https://umami.is/docs/tracker-functions. The free Hobby plan's limits are provider-controlled; check https://umami.is/pricing for current limits.
+Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, and a floating Home / Work / Experience / Contact pill. The palette follows [onur.design](https://www.onur.design/): a white canvas, black typography and active controls, cool-gray panels, and subtle gray borders. Secondary text uses a darker gray to keep smaller labels readable. Controls have opaque fills, subtle borders, and light shadows, without gradients or background blur. The Work dot and navigation helper prompts are removed. The grid fits the viewport and becomes two columns or one column on smaller screens. Tiles expand slightly on mouse hover or keyboard focus; project cards play interface previews, with manual flips available through Switch view. Each exposes a native link or interest-cycling button across its body. Amazon and UIUC logo badges identify the roles and education. Ryan's content, original three projects and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.
 
-## Verification
+The Experience page replaces its Video Search tile with an illustrative Python Two Sum animation using two nested for loops, checking each distinct pair with j starting at i + 1. The displayed calls return [0, 1] for both [2, 7, 11, 15] with target 9 and [3, 3] with target 6. The terminal is a scripted visual preview, not a browser Python runtime. It starts when visible, supports whole-tile Pause/Resume and hover replay after completion, pauses offscreen or in hidden tabs, and shows the complete code and output under reduced motion.
 
-Review the homepage and project pages at desktop, tablet, and narrow mobile widths. Verify the resume PDF, local links/anchors, native video controls, keyboard focus, reduced motion, and privacy preference. Analytics requests should include a page path or fixed event label, never URL query strings or entered text. Use an intercepted count endpoint when testing to avoid polluting real statistics.
+The transformer acceleration tile illustrates computation with a diagonal wave across an 8×8 display grid and a repeating GEMM → Softmax → Output sequence. It is an abstract preview, not a simulation of hardware timing. It animates while visible, has a separate Pause/Play control, pauses offscreen and in hidden tabs, and remains static under reduced motion. The tile's research link still opens the ADAPT Lab experience entry.
 
-## Visual design
+The About page has been removed. Navigation contains Home, Work, Experience, and Contact. All former internal About links now lead to Experience or its education tile; the education tile links to the university website. No published page links to the removed page.
 
-The visual direction draws from Sinan Tokmak’s portfolio in Figma’s examples (https://www.figma.com/resource-library/portfolio-website-examples/ and https://sinantokmak.framer.website/): charcoal `#292F36`, deep section backgrounds `#1A1E23`, turquoise `#12F7D6`, and Ubuntu / IBM Plex Mono typography. The layout uses a full-width header and introduction, image-led project gallery, linear experience rows, and a background section. The implementation and content are original; organization logos use existing local SVGs.
 
-Fonts are self-hosted as Latin WOFF2 files in `assets/fonts/` (about 53 KB total). Ubuntu’s UFL and copyright notices and IBM Plex Mono’s OFL are retained alongside the files. No external font requests are made.
+## Original design restored
+
+The visual layout and interactive behavior are restored from commit `ecbccbe`, corresponding to the original `2990f6b94296` release. The current resume, privacy page, NFL writeup URL, and configured Umami analytics are retained. The tracker is appended to the original `site.js`, leaving its navigation, previews, tabs, and slideshow intact. Fixed-label links are marked with `data-track`.
+
+Analytics loads only on `ryanchan339.github.io`; local previews, Do Not Track, Global Privacy Control, and the privacy-page opt-out prevent loading. Page paths exclude query strings and fragments, referrers are origin-only, and form text is not tracked.

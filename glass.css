@@ -1,0 +1,220 @@
+:root{
+  --tile-ink:#000000;
+  --tile-muted:#626366;
+  --ink:#000000;
+  --muted:#626366;
+  --blue:#242424;
+  --blue-deep:#242424;
+  --line:#e2e2e3;
+  --blue-soft:#f1f1f2;
+  --surface:#f5f5f5;
+  --tile:#f3f3f4;
+  --tile-color:#f3f3f4;
+}
+
+body{
+  background:#ffffff;
+}
+
+.site-nav{
+  top:24px;
+  margin-top:28px;
+  height:56px;
+  background:#fff;
+  border:1px solid #e4e4e5;
+  box-shadow:0 4px 14px #00000008;
+}
+.site-nav a{color:#626366}
+.site-nav a::before{content:none;display:none}
+.site-nav a:hover{background:#f1f1f2;color:#000000}
+.site-nav a[aria-current]{
+  background:#000000;
+  color:#fff;
+  box-shadow:none;
+}
+.format-main{margin-top:44px}
+
+.intro-tile,.about-bio,.career-tile{--tile-color:#ffffff}
+.video-tile,.experience-project,.gallery-video-search{--tile-color:#f1f1f2}
+.spotify-tile,.gallery-spotifybook{--tile-color:#f3f3f4}
+.profile-tile{--tile-color:#f5f5f5}
+.role-tile{--tile-color:#f3f3f4}
+.hobby-tile{--tile-color:#eeeeef}
+.stock-tile,.gallery-stock-trader{--tile-color:#f1f1f2}
+.education-tile{--tile-color:#f5f5f5}
+.home-contact-tile,.message-tile{--tile-color:#eeeeef}
+.benchmark-tile{--tile-color:#f5f5f5}
+.lab-tile{--tile-color:#f1f1f2}
+.teaching-tile{--tile-color:#f5f5f5}
+.email-tile{--tile-color:#f5f5f5}
+.linkedin-tile{--tile-color:#f1f1f2}
+.case-demo{--tile-color:#f1f1f2}
+.pipeline-step{--tile-color:#f5f5f5}
+.metric-grid>div{--tile-color:#f1f1f2}
+
+.mosaic-tile,.case-demo,.pipeline-step,.metric-grid>div{
+  background:var(--tile-color);
+  border:1px solid #e4e4e5;
+  box-shadow:0 4px 14px #00000004;
+}
+.mosaic-tile{transition:none}
+.mosaic-tile:hover{
+  border-color:#c9c9cb;
+  box-shadow:0 8px 22px #0000000c;
+}
+.tile-rule{background:#dededf}
+.format-main>.site-footer{border-color:#dededf}
+.intro-more,.education-foot>a,.gallery-footer>a,.benchmark-tile>a,.contact-github{color:#242424}
+
+.tile-pill,.gallery-arrow,.tile-open,.switch-preview,.hobby-arrow,.copy-email{
+  background:#ffffff;
+  border:1px solid #dcdcdf;
+  box-shadow:0 2px 6px #00000004;
+  color:#242424;
+}
+.tile-pill:hover,.gallery-arrow:hover,.switch-preview:hover,.hobby-arrow:hover,.copy-email:hover{background:#fff;border-color:#fff}
+.switch-preview[aria-pressed=true]{background:#fff}
+.preview-tab{background:#e9e9eb;border-color:#dededf;color:#626366}
+.preview-tab:hover{background:#fff;color:#242424}
+.preview-tab[aria-pressed=true]{background:#242424;border-color:#242424;color:#fff;box-shadow:none}
+.hobby-dot{background:#bcbcc0}
+.hobby-dot[aria-pressed=true]{background:#242424}
+.chip-visual i{background:#bcbcc0}
+.email-icon,.linkedin-icon{background:#242424}
+.email-composer input::placeholder{color:#626366}
+.email-composer button:hover{background:#444444}
+.flip-back>span{color:#626366}
+.avatar{background:#e2e2e4;box-shadow:none;color:#626366}
+.education-icon,.brand-uiuc{background:#fff;box-shadow:0 2px 6px #00000006}
+.brand-amazon{box-shadow:0 3px 8px #0000000a}
+.app-icon{box-shadow:0 3px 8px #0000000a}
+.mosaic-project .demo-frame,.flip-back,.gallery-stage .demo-frame{box-shadow:0 8px 20px #00000012}
+.demo-toggle{background:#242424;border-color:#ffffff45}
+.demo-toggle:hover{background:#444444}
+.flip-back>span{background:#ffffff}
+.message-incoming p{background:#fff;box-shadow:0 2px 6px #00000004}
+.message-incoming p:before{border-right-color:#fff}
+.message-reply{background:#000000;box-shadow:0 3px 8px #00000008}
+.message-reply:hover{background:#333333}
+.email-composer{background:#fff;border:1px solid #dcdcdf;box-shadow:none}
+.email-composer:focus-within{border-color:#626366;box-shadow:0 0 0 3px #00000012}
+.email-paper{background:#fff;border-color:#dcdcdf;box-shadow:0 3px 10px #00000006}
+::selection{background:#d9d9dd;color:#000000}
+
+@media(max-width:700px){
+  .site-nav{top:16px;margin-top:20px;height:50px}
+  .format-main{margin-top:30px}
+}
+
+/* Native stretched links keep whole tiles clickable and controls independent. */
+.mosaic-tile{transform-origin:center;transition:transform .24s cubic-bezier(.2,.75,.25,1)}
+.mosaic-tile[data-flip-preview]{transition:none}
+.mosaic-tile a[data-tile-link]:not(.tile-project-link){position:static}
+.mosaic-tile a[data-tile-link]:not(.tile-project-link)::after{content:"";position:absolute;inset:0;z-index:2;border-radius:inherit}
+.mosaic-tile :is(a,button,input,select,textarea,form):not([data-tile-link]):not(.demo-toggle):not(.switch-preview){position:relative;z-index:6}
+.mosaic-tile .demo-toggle,.mosaic-tile .switch-preview{z-index:6}
+.tile-surface-action{position:absolute;inset:0;z-index:2;width:100%;height:100%;padding:0;border:0;border-radius:inherit;background:transparent;color:#242424;cursor:pointer}
+.tile-click-hint{position:absolute;top:24px;right:24px;font-size:10px;opacity:0;transition:opacity .2s}
+.mosaic-project .tile-caption{display:flex;align-items:center;gap:16px}
+.mosaic-project .project-cta{color:#242424;font-weight:600;white-space:nowrap;opacity:0;transform:translateX(-5px);transition:opacity .2s,transform .2s}
+.mosaic-project .tile-open{color:#242424;transition:transform .2s}
+.spotify-tile .project-cta{display:none}
+.experience-row[id]{scroll-margin-top:112px}
+@media(hover:hover) and (pointer:fine){
+  .mosaic-tile:hover{z-index:8;border-color:#c9c9cb;box-shadow:0 10px 26px #00000010}
+  .mosaic-tile:not([data-flip-preview]):hover{transform:translateY(-4px) scale(1.018)}
+  .mosaic-tile:hover .project-cta{opacity:1;transform:none}
+  .mosaic-tile:hover .tile-open{transform:translate(2px,-2px)}
+  .mosaic-tile:hover .tile-click-hint{opacity:1}
+}
+.mosaic-tile:has(:focus-visible){z-index:8;border-color:#626366}
+.mosaic-tile:not([data-flip-preview]):has(:focus-visible){transform:translateY(-4px) scale(1.018)}
+.mosaic-tile:has(:focus-visible) .project-cta{opacity:1;transform:none}
+.mosaic-tile:has(:focus-visible) .tile-click-hint{opacity:1}
+@media(max-width:700px){.mosaic-project .project-cta{display:none}}
+@media(prefers-reduced-motion:reduce){
+  .mosaic-tile,.project-cta,.tile-open,.tile-click-hint{transition:none}
+  .mosaic-tile:not([data-flip-preview]):hover,.mosaic-tile:not([data-flip-preview]):has(:focus-visible),.mosaic-tile:hover .tile-open{transform:none}
+}
+
+/* A visual identity card: affiliations first, direct social links below. */
+.identity-tile{display:flex;flex-direction:column;gap:32px;padding:36px}
+.identity-header{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.identity-tile h1{font-size:clamp(38px,4.7vw,68px);letter-spacing:-.065em;line-height:1.08;font-weight:600}
+.identity-experience{display:grid;place-items:center;width:48px;height:48px;flex:0 0 48px;border:1px solid #dededf;border-radius:50%;background:#fff;color:#242424}
+.identity-experience svg{width:22px;height:22px}
+.identity-affiliations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;flex:1;order:2}
+.identity-affiliation{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;min-width:0;min-height:170px;padding:24px 16px;border:1px solid #e4e4e5;border-radius:24px;background:#f5f5f5;text-align:center;transition:background .2s,border-color .2s}
+.identity-logo{display:grid;place-items:center;width:88px;height:76px;border-radius:19px;flex:0 0 76px;background:white;box-shadow:0 3px 8px #00000008}
+.identity-logo.brand-amazon{background:#232f3e}
+.identity-logo img{display:block;width:72px;height:56px;object-fit:contain}
+.identity-logo.brand-uiuc img{width:34px;height:50px}
+.identity-role{display:flex;flex-direction:column;gap:4px}
+.identity-role strong{font-size:20px;font-weight:600;letter-spacing:-.03em;line-height:1.2}
+.identity-role>span{font-size:12px;color:var(--tile-muted);line-height:1.5}
+.identity-card-arrow{position:absolute;top:16px;right:18px;color:#626366;font-size:16px;opacity:0;transition:opacity .2s}
+.identity-affiliation:hover,.identity-affiliation:focus-visible{background:#ededee;border-color:#c9c9cb}
+.identity-affiliation:hover .identity-card-arrow,.identity-affiliation:focus-visible .identity-card-arrow{opacity:1}
+.identity-socials{display:grid;grid-template-columns:1fr 1fr;gap:14px;order:1}
+.identity-socials a{display:flex;align-items:center;gap:12px;min-height:54px;padding:14px 18px;background:#000;color:white;border-radius:99px;font-size:14px;font-weight:500;transition:background .2s}
+.identity-socials a:hover{background:#333}
+.identity-socials svg{width:20px;height:20px;flex:0 0 20px}
+.identity-social-arrow{margin-left:auto;font-size:17px}
+@media(max-width:1279px) and (min-width:701px){.home-mosaic>.identity-tile{grid-row:auto}.identity-tile{gap:28px}.identity-affiliation{min-height:170px}.identity-affiliations{flex:none}}
+@media(max-width:700px){
+  .identity-tile{padding:26px;gap:26px}
+  .identity-tile h1{font-size:clamp(34px,9.5vw,48px)}
+  .identity-experience{width:40px;height:40px;flex-basis:40px}
+  .identity-affiliations{gap:10px;flex:none}
+  .identity-affiliation{padding:22px 8px;gap:16px;min-height:175px;border-radius:20px}
+  .identity-logo{width:70px;height:64px;flex-basis:64px;border-radius:16px}
+  .identity-logo img{width:58px;height:46px}
+  .identity-logo.brand-uiuc img{width:29px;height:43px}
+  .identity-role strong{font-size:18px}
+  .identity-role>span{font-size:11px}
+  .identity-socials{gap:10px}
+  .identity-socials a{padding:13px 14px;gap:8px;font-size:12px;min-height:48px}
+  .identity-socials svg{width:17px;height:17px;flex-basis:17px}
+  .identity-card-arrow{display:none}
+}
+@media(prefers-reduced-motion:reduce){.identity-affiliation,.identity-card-arrow,.identity-socials a{transition:none}}
+
+/* Contact accents belong to the message UI and the LinkedIn card. */
+.format-contact .message-tile{--tile-color:#fff}
+.format-contact .message-incoming p{background:#e9e9eb;color:#000;box-shadow:none}
+.format-contact .message-incoming p:before{border-right-color:#e9e9eb}
+.format-contact .message-reply{background:#0070eb;color:#fff;box-shadow:none}
+.format-contact .message-reply:hover{background:#0062ce}
+.format-contact .email-composer{background:#fff;border-color:#d1d1d6}
+.format-contact .email-composer:focus-within{border-color:#0070eb;box-shadow:0 0 0 3px #0070eb18}
+.format-contact .email-composer button{background:#007aff;color:white}
+.format-contact .email-composer button:hover{background:#0062ce}
+.format-contact .message-tile :is(a,button):focus-visible{outline-color:#0070eb}
+.format-contact .linkedin-tile{--tile-color:#f0f6fc;border-color:#d5e3f2}
+.format-contact .linkedin-tile:hover{border-color:#a6c6e6}
+.format-contact .linkedin-icon{background:#0a66c2;color:#fff}
+.format-contact .linkedin-tile .avatar{background:#dce9f7;color:#0a66c2}
+.format-contact .linkedin-tile .tile-pill{background:#0a66c2;border-color:#0a66c2;color:#fff;box-shadow:none}
+.format-contact .linkedin-tile .tile-pill:hover{background:#004182;border-color:#004182}
+.format-contact .linkedin-tile a:focus-visible{outline-color:#0a66c2}
+
+/* San Francisco photographs provide a personal visual break. */
+.identity-city-photo{grid-column:1/-1;align-self:end;margin:0;overflow:hidden;border:1px solid #e4e4e5;border-radius:24px;background:#f5f5f5}
+.identity-city-photo img,.about-city-photo img{display:block;width:100%;height:auto}
+.identity-city-photo figcaption,.about-city-photo figcaption{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 12px;padding:12px 14px;font-size:12px;line-height:1.5;color:#242424}
+.city-photo-credit{font-size:10px;color:#626366}
+.city-photo-credit a:hover{text-decoration:underline;text-underline-offset:3px}
+.about-bio-action{margin-top:12px}
+.about-city-photo{margin:0 0 28px;overflow:hidden;border:1px solid #e4e4e5;border-radius:22px;background:#f5f5f5}
+@media(max-width:700px){.identity-city-photo{border-radius:20px}.identity-city-photo figcaption,.about-city-photo figcaption{padding:10px 12px;font-size:11px}.city-photo-credit{font-size:9px}.about-city-photo{margin-bottom:24px;border-radius:20px}}
+
+/* One shared pill follows hover, keyboard focus, and page selection. */
+.nav-glider{display:none;position:absolute;top:0;left:0;overflow:hidden;pointer-events:none;border-radius:999px;background:#000;box-shadow:0 2px 5px #00000012;transition:transform .42s cubic-bezier(.2,.8,.2,1.06),width .3s cubic-bezier(.2,.8,.2,1),height .3s;z-index:2}
+.nav-glider-labels{position:absolute;top:0;left:0;transition:transform .42s cubic-bezier(.2,.8,.2,1.06)}
+.nav-glider-labels>span{position:absolute;display:flex;align-items:center;justify-content:center;white-space:nowrap;color:#fff}
+.site-nav[data-glider-ready] .nav-glider{display:block}
+.site-nav[data-glider-ready] a{position:relative;z-index:1;background:transparent;color:#626366;transition:color .18s}
+.site-nav[data-glider-ready] a:focus-visible{outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.nav-glider,.nav-glider-labels,.site-nav[data-glider-ready] a{transition:none}}
+
+.experience-education[id]{scroll-margin-top:112px}
