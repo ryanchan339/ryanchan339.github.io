@@ -1,6 +1,6 @@
 # Ryan Chan portfolio
 
-A static portfolio with four main pages—Home, Work, Experience, and Contact—and three project detail pages. Plain HTML, CSS, and JavaScript; no package installation or build step is required.
+A static portfolio with four main pages—Home, Work, Experience, and Contact—and four project detail pages. Plain HTML, CSS, and JavaScript; no package installation or build step is required.
 
 ## Preview
 
@@ -26,7 +26,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 ## Edit
 
 - `index.html`: mixed-size project, introduction, experience, education, interests, and contact tiles. The introduction uses Ryan's name, LinkedIn/GitHub buttons, two linked logo cards for Amazon and UIUC, and the supplied San Francisco sunset photograph.
-- `work.html`: all three project showcases and demos.
+- `work.html`: four project showcases, with three recorded demos and an NFL application architecture summary.
 - `experience.html`: professional, research, and teaching experience, plus illustrative Python Two Sum and transformer acceleration animations.
 - `contact.html`: email, LinkedIn, GitHub, and copy-email action.
 - `projects/*.html`: project explanations and source links.
@@ -54,7 +54,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 - Amazon's white wordmark and orange smile are sourced from the [About Amazon footer](https://www.aboutamazon.com/). Illinois's full-color Block I is sourced from the [official brand web resources](https://web.brand.illinois.edu/logos/), using https://cdn.brand.illinois.edu/logos/block-i.svg. Both are stored locally as SVGs; the original artwork is retained.
 - The MP4s are edited walkthroughs assembled from four captured interface states each, with short transitions. No soundtrack is included.
 - Project cards on Home and Work begin with still posters. Clips load when visible and hovered, keyboard-focused, or explicitly started; hover playback pauses when the pointer and focus leave. Explicit Play keeps playback enabled until Pause, and a manual pause is respected on subsequent hovers. Clips also pause offscreen or when the page is hidden. Touch visitors can use the Play button. Reduced-motion preferences show still posters until the visitor explicitly starts a demo. Project detail pages retain visible-only playback. Each activation also starts a 2.4-second illustrative opening: a typed search query, scanner and staggered results; a schematic stock chart drawing with allocation steps; or moving sample music rows and a silent equalizer. These simplified illustrations are not live searches, financial results, or audio playback. Underlying card recordings run at 2× speed; detail-page recordings keep their original pace. Openings are hidden from assistive technology, do not intercept clicks, stop on pause/exit/hidden pages, and are disabled for reduced motion.
-- Experience and education use Ryan's supplied résumé as background. Descriptions are rewritten, and GPA, the phone number, and the private NFL project are excluded.
+- Experience and education use Ryan's supplied résumé as background. The current résumé supplies experience details, project metrics, education, GPA, coursework, and grouped technical skills. The NFL project has a public writeup without a private repository link.
 
 Source projects:
 
@@ -64,7 +64,7 @@ Source projects:
 
 ## Included decisions
 
-Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, and a floating Home / Work / Experience / Contact pill. The palette follows [onur.design](https://www.onur.design/): a white canvas, black typography and active controls, cool-gray panels, and subtle gray borders. Secondary text uses a darker gray to keep smaller labels readable. Controls have opaque fills, subtle borders, and light shadows, without gradients or background blur. The Work dot and navigation helper prompts are removed. The grid fits the viewport and becomes two columns or one column on smaller screens. Tiles expand slightly on mouse hover or keyboard focus; project cards play interface previews, with manual flips available through Switch view. Each exposes a native link or interest-cycling button across its body. Amazon and UIUC logo badges identify the roles and education. Ryan's content, original three projects and separate project detail pages are retained. No personal portrait, phone number, or GPA. The Contact composer opens an email draft in the visitor's mail app.
+Marco.fyi-style four-column mosaic with mixed-size tiles, 16px gaps, 32px corners, and a floating Home / Work / Experience / Contact pill. The palette follows [onur.design](https://www.onur.design/): a white canvas, black typography and active controls, cool-gray panels, and subtle gray borders. Secondary text uses a darker gray to keep smaller labels readable. Controls have opaque fills, subtle borders, and light shadows, without gradients or background blur. The Work dot and navigation helper prompts are removed. The grid fits the viewport and becomes two columns or one column on smaller screens. Tiles expand slightly on mouse hover or keyboard focus; project cards play interface previews, with manual flips available through Switch view. Each exposes a native link or interest-cycling button across its body. Amazon and UIUC logo badges identify the roles and education. The original three projects and their demos are retained alongside the NFL project from the updated résumé. No personal portrait or phone number. The Contact composer opens an email draft in the visitor's mail app.
 
 The Experience page replaces its Video Search tile with an illustrative Python Two Sum animation using two nested for loops, checking each distinct pair with j starting at i + 1. The displayed calls return [0, 1] for both [2, 7, 11, 15] with target 9 and [3, 3] with target 6. The terminal is a scripted visual preview, not a browser Python runtime. It starts when visible, supports whole-tile Pause/Resume and hover replay after completion, pauses offscreen or in hidden tabs, and shows the complete code and output under reduced motion.
 
@@ -78,3 +78,7 @@ The About page has been removed. Navigation contains Home, Work, Experience, and
 The visual layout and interactive behavior are restored from commit `ecbccbe`, corresponding to the original `2990f6b94296` release. The current resume, privacy page, NFL writeup URL, and configured Umami analytics are retained. The tracker is appended to the original `site.js`, leaving its navigation, previews, tabs, and slideshow intact. Fixed-label links are marked with `data-track`.
 
 Analytics loads only on `ryanchan339.github.io`; local previews, Do Not Track, Global Privacy Control, and the privacy-page opt-out prevent loading. Page paths exclude query strings and fragments, referrers are origin-only, and form text is not tracked.
+
+## Résumé content update
+
+The original design now includes the current Swift/iOS and TypeScript/Bedrock experience, research and teaching outcomes, GPA and coursework, and technical skills. Project writeups use the current résumé measurements. The Stock Trader recording remains an older dashboard snapshot and is labeled separately from the updated reported results.

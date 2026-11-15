@@ -179,6 +179,36 @@ body{
 }
 @media(prefers-reduced-motion:reduce){.identity-affiliation,.identity-card-arrow,.identity-socials a{transition:none}}
 
+/* Resume details use the original tile palette and typography. */
+.home-profile>p{font-size:22px;line-height:1.4;margin:24px 0 10px}
+.profile-tools{font-size:13px;color:var(--tile-muted);margin-bottom:18px}
+.role-tile .preview-panel strong{font-weight:600;color:var(--tile-ink)}
+.experience-mosaic{grid-auto-rows:minmax(calc((100cqw - 48px)/4),auto)}
+.career-tile .experience-row .description+.description{margin-top:4px}
+.career-tile .description strong{font-weight:600;color:var(--tile-ink)}
+.resume-education h2{margin:25px 0 12px}
+.education-coursework{font-size:13px;line-height:1.65;color:var(--tile-muted);margin:0 0 18px}
+.skills-tile{margin-top:16px;scroll-margin-top:110px}
+.skills-tile h2{font-size:26px;font-weight:500;margin:0 0 24px}
+.skills-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:0}
+.skills-groups dt{font-size:14px;font-weight:600;margin-bottom:8px}
+.skills-groups dd{font-size:15px;line-height:1.8;color:var(--tile-muted);margin:0}
+.gallery-nfl{--tile-color:#f3f3f4}
+.nfl-architecture{display:grid;gap:10px}
+.nfl-architecture>div{padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.nfl-architecture span{display:block;font-size:11px;color:var(--tile-muted);margin-bottom:4px}
+.nfl-architecture strong{font-size:18px;font-weight:500}
+.nfl-architecture p{font-size:13px;color:var(--tile-muted);margin:5px 0 0}
+.gallery-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:24px 0 0}
+.gallery-metrics dd{margin:0;font-size:32px;line-height:1.2;letter-spacing:-.04em}
+.gallery-metrics dt{font-size:11px;color:var(--tile-muted);margin-top:5px}
+@media(max-width:1279px){.experience-mosaic{grid-auto-rows:minmax(328px,auto)}}
+@media(max-width:700px){
+  .experience-mosaic{grid-auto-rows:auto}
+  .skills-groups{grid-template-columns:1fr;gap:20px}
+  .resume-education h2{margin-top:24px}
+}
+
 /* Contact accents belong to the message UI and the LinkedIn card. */
 .format-contact .message-tile{--tile-color:#fff}
 .format-contact .message-incoming p{background:#e9e9eb;color:#000;box-shadow:none}
