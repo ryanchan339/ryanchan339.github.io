@@ -6,10 +6,9 @@
   if (!surfaces.length) return;
 
   const svgNS = 'http://www.w3.org/2000/svg';
-  // SVG backdrop displacement is enabled only in the tested Chromium renderer.
-  // Other browsers retain the clear CSS surface and polished edge treatment.
-  const supportsRefraction = navigator.userAgent.includes('Chrome/')
-    && window.CSS?.supports('backdrop-filter', 'url("#liquid-test")');
+  // Filter an aligned copy of the page's own decorative backdrop. Ordinary
+  // SVG filters also work in WebKit, without filtering foreground text.
+  const supportsRefraction = window.CSS?.supports('filter', 'url("#liquid-test")');
   const preferences = [
     window.matchMedia('(prefers-reduced-transparency: reduce)'),
     window.matchMedia('(prefers-contrast: more)'),
@@ -30,6 +29,9 @@
     const backdrop = document.createElement('div');
     backdrop.className = 'liquid-backdrop';
     backdrop.setAttribute('aria-hidden', 'true');
+    const scene = document.createElement('div');
+    scene.className = 'glass-scene';
+    backdrop.append(scene);
     panel.prepend(backdrop);
     const filter = document.createElementNS(svgNS, 'filter');
     filter.id = `liquid-refraction-${index}`;
@@ -41,17 +43,26 @@
     const image = document.createElementNS(svgNS, 'feImage');
     image.setAttribute('preserveAspectRatio', 'none');
     image.setAttribute('result', 'lens');
+    const soften = document.createElementNS(svgNS, 'feGaussianBlur');
+    soften.setAttribute('in', 'SourceGraphic');
+    soften.setAttribute('stdDeviation', '.75');
+    soften.setAttribute('result', 'scene');
     const displacement = document.createElementNS(svgNS, 'feDisplacementMap');
-    displacement.setAttribute('in', 'SourceGraphic');
+    displacement.setAttribute('in', 'scene');
     displacement.setAttribute('in2', 'lens');
     displacement.setAttribute('scale', '48');
     displacement.setAttribute('xChannelSelector', 'R');
     displacement.setAttribute('yChannelSelector', 'G');
-    filter.append(image, displacement);
+    filter.append(image, soften, displacement);
     definitions.append(filter);
     panel.style.setProperty('--refraction-filter', `url("#${filter.id}")`);
     return {panel, filter, image, kind, size: ''};
   });
+
+  function alignScene(panel, bounds, stretch = 0) {
+    panel.style.setProperty('--glass-scene-x', `${(-bounds.left - window.scrollX - panel.clientLeft).toFixed(2)}px`);
+    panel.style.setProperty('--glass-scene-y', `${(-bounds.top - window.scrollY - panel.clientTop - stretch).toFixed(2)}px`);
+  }
 
   function buildLens(width, height, radius, kind) {
     // Keep the optical map at CSS-pixel resolution so its hairline rim stays
@@ -65,8 +76,8 @@
     const rimPixels = context.createImageData(canvas.width, canvas.height);
     const halfWidth = width / 2;
     const halfHeight = height / 2;
-    const band = kind === 'control' ? Math.min(16, radius * .72) : Math.min(22, radius * .72);
-    const strength = kind === 'control' ? 10.5 : 12;
+    const band = kind === 'control' ? Math.min(16, radius * .72) : Math.min(18, radius * .6);
+    const strength = kind === 'control' ? 8 : 8.5;
     const refractiveIndex = 1.5;
     const maximumDeviation = Math.sqrt(refractiveIndex * refractiveIndex - 1);
 
@@ -140,6 +151,8 @@
       const width = Math.round(state.panel.clientWidth);
       const height = Math.round(state.panel.clientHeight);
       if (!width || !height) continue;
+      alignScene(state.panel, layoutBounds(state.panel),
+        parseFloat(state.panel.style.getPropertyValue('--glass-stretch-y')) || 0);
       const cssRadius = parseFloat(getComputedStyle(state.panel).borderTopLeftRadius) || 0;
       const radius = Math.max(0, Math.min(cssRadius, width / 2, height / 2));
       const size = `${width}:${height}:${radius}`;
@@ -190,8 +203,8 @@
   ];
   const motionEnabled = () => !document.hidden && !reducedMotion.matches
     && !preferences.some(query => query.matches);
-  const maximumGap = 34;
-  const maximumOffset = 140;
+  const maximumGap = 78;
+  const maximumOffset = 300;
   const gapSpring = {value: 0, velocity: 0};
   const anchorSpring = {value: 0, velocity: 0};
   let motionFrame = 0;
@@ -259,8 +272,8 @@
   function currentScrollSpeed(now) {
     // Leave a short hold between native scroll events, then release naturally
     // when scrolling stops instead of waiting for a separate scrollend event.
-    const staleTime = Math.max(0, now - lastScrollTime - 50);
-    return scrollSpeed * Math.exp(-staleTime / 110);
+    const staleTime = Math.max(0, now - lastScrollTime - 70);
+    return scrollSpeed * Math.exp(-staleTime / 160);
   }
 
   function renderMotion(now) {
@@ -275,10 +288,10 @@
       state, bounds: state.panel.dataset.glassKind === 'panel'
         ? panelBounds[panels.indexOf(state.panel)] : layoutBounds(state.panel)
     }));
-    const speedRatio = Math.max(0, Math.min(1, (currentScrollSpeed(now) - 100) / 1700));
+    const speedRatio = Math.max(0, Math.min(1, (currentScrollSpeed(now) - 80) / 1400));
     const targetGap = maximumGap * speedRatio * speedRatio * (3 - 2 * speedRatio);
     const targetAnchor = viewportAnchor(panelBounds);
-    springStep(gapSpring, targetGap, 20, elapsed);
+    springStep(gapSpring, targetGap, targetGap > gapSpring.value ? 20 : 14, elapsed);
     if (gapSpring.value < 0 || gapSpring.value > maximumGap) {
       gapSpring.value = Math.max(0, Math.min(maximumGap, gapSpring.value));
       gapSpring.velocity = 0;
@@ -306,6 +319,8 @@
     });
     measurements.forEach(({state, bounds}) => {
       if (!bounds.width || !bounds.height) return;
+      alignScene(state.panel, bounds, state.panel.dataset.glassKind === 'panel'
+        ? offsets[panels.indexOf(state.panel)] : 0);
       const progress = Math.max(-1, Math.min(1,
         (innerHeight / 2 - bounds.top - bounds.height / 2) * 2 / (innerHeight + bounds.height)));
       const pointer = finePointer.matches ? state.pointer : null;
@@ -315,6 +330,11 @@
       const isPanel = state.panel.dataset.glassKind === 'panel';
       const movesControl = pointer && !isPanel;
       const tiltsPanel = pointer && isPanel;
+      // Make expansion visible while keeping tall or narrow cards inside
+      // their available gutters and clear of neighboring rows.
+      const horizontalRoom = Math.max(0,
+        Math.min(bounds.left, innerWidth - bounds.left - bounds.width) - 8);
+      const hoverScale = 1 + Math.min(.035, horizontalRoom * 2 / bounds.width, 28 / bounds.height);
       state.panel.style.setProperty('--glass-light-x', `${x.toFixed(2)}%`);
       state.panel.style.setProperty('--glass-light-y', `${y.toFixed(2)}%`);
       state.panel.style.setProperty('--glass-scroll-y', `${(progress * 10).toFixed(2)}px`);
@@ -322,9 +342,9 @@
       state.panel.style.setProperty('--glass-pointer-x', `${(movesControl ? (x - 50) * .025 : 0).toFixed(2)}px`);
       state.panel.style.setProperty('--glass-pointer-y', `${(movesControl ? (y - 50) * .025 : 0).toFixed(2)}px`);
       state.panel.style.setProperty('--glass-float-y', '0px');
-      state.panel.style.setProperty('--glass-tilt-x', `${(tiltsPanel ? (50 - y) * .012 : 0).toFixed(3)}deg`);
-      state.panel.style.setProperty('--glass-tilt-y', `${(tiltsPanel ? (x - 50) * .012 : 0).toFixed(3)}deg`);
-      state.panel.style.setProperty('--glass-hover-scale', tiltsPanel ? '1.008' : '1');
+      state.panel.style.setProperty('--glass-tilt-x', `${(tiltsPanel ? (50 - y) * .02 : 0).toFixed(3)}deg`);
+      state.panel.style.setProperty('--glass-tilt-y', `${(tiltsPanel ? (x - 50) * .02 : 0).toFixed(3)}deg`);
+      state.panel.style.setProperty('--glass-hover-scale', tiltsPanel ? hoverScale.toFixed(4) : '1');
     });
     // The spring requests frames only while stretching or returning to rest.
     if (targetGap > 0 || gapSpring.value > 0) scheduleMotion();
