@@ -1,6 +1,9 @@
 (() => {
   const panels = [...document.querySelectorAll('.home-panel')];
-  if (!panels.length) return;
+  const controls = [...document.querySelectorAll('.home-page .site-nav, .home-page .home-button')];
+  // Keep the content-panel filter IDs stable as the control layer is added.
+  const surfaces = [...panels, ...controls];
+  if (!surfaces.length) return;
 
   const svgNS = 'http://www.w3.org/2000/svg';
   // SVG backdrop displacement is enabled only in the tested Chromium renderer.
@@ -21,7 +24,9 @@
   svg.append(definitions);
   document.body.append(svg);
 
-  const states = panels.map((panel, index) => {
+  const states = surfaces.map((panel, index) => {
+    const kind = panel.classList.contains('home-panel') ? 'panel' : 'control';
+    panel.dataset.glassKind = kind;
     const backdrop = document.createElement('div');
     backdrop.className = 'liquid-backdrop';
     backdrop.setAttribute('aria-hidden', 'true');
@@ -46,10 +51,10 @@
     filter.append(image, displacement);
     definitions.append(filter);
     panel.style.setProperty('--refraction-filter', `url("#${filter.id}")`);
-    return {panel, filter, image, size: ''};
+    return {panel, filter, image, kind, size: ''};
   });
 
-  function buildLens(width, height, radius) {
+  function buildLens(width, height, radius, kind) {
     // A low-resolution static map is sufficient for the curved edge band.
     const canvas = document.createElement('canvas');
     canvas.width = Math.max(1, Math.ceil(width * .6));
@@ -59,7 +64,10 @@
     const pixels = context.createImageData(canvas.width, canvas.height);
     const halfWidth = width / 2;
     const halfHeight = height / 2;
-    const band = Math.min(26, radius);
+    const band = kind === 'control' ? Math.min(16, radius * .72) : Math.min(22, radius * .55);
+    const strength = kind === 'control' ? 10.5 : 5.5;
+    const refractiveIndex = 1.5;
+    const maximumDeviation = Math.sqrt(refractiveIndex * refractiveIndex - 1);
 
     for (let y = 0; y < canvas.height; y++) {
       for (let x = 0; x < canvas.width; x++) {
@@ -86,7 +94,13 @@
           } else {
             ny = Math.sign(py);
           }
-          const bend = Math.sin(Math.PI * depth / band) * 14 / 48;
+          // A circular meniscus has a steep outer rim and settles to a flat
+          // center. Its refracted angle shapes the bend instead of a sine wave.
+          const t = depth / band;
+          const normalAngle = Math.acos(t);
+          const transmittedAngle = Math.asin(Math.sin(normalAngle) / refractiveIndex);
+          const deviation = Math.tan(normalAngle - transmittedAngle) / maximumDeviation;
+          const bend = deviation * (1 - t * t) * strength / 48;
           red -= nx * bend * 255;
           green -= ny * bend * 255;
         }
@@ -109,10 +123,11 @@
       const width = Math.round(state.panel.clientWidth);
       const height = Math.round(state.panel.clientHeight);
       if (!width || !height) continue;
-      const radius = parseFloat(getComputedStyle(state.panel).borderTopLeftRadius);
+      const cssRadius = parseFloat(getComputedStyle(state.panel).borderTopLeftRadius) || 0;
+      const radius = Math.max(0, Math.min(cssRadius, width / 2, height / 2));
       const size = `${width}:${height}:${radius}`;
       if (state.size !== size) {
-        const map = buildLens(width, height, radius);
+        const map = buildLens(width, height, radius, state.kind);
         if (!map) continue;
         state.filter.setAttribute('width', width);
         state.filter.setAttribute('height', height);
@@ -132,15 +147,18 @@
   };
   if (supportsRefraction && 'ResizeObserver' in window) {
     const observer = new ResizeObserver(scheduleUpdate);
-    panels.forEach(panel => observer.observe(panel));
+    surfaces.forEach(panel => observer.observe(panel));
   }
   preferences.forEach(query => query.addEventListener('change', scheduleUpdate));
   update();
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-  const motionStates = panels.map(panel => ({panel, visible: false, pointer: null}));
-  const motionProperties = ['--glass-light-x', '--glass-light-y', '--glass-scroll-y'];
+  const motionStates = surfaces.map(panel => ({panel, visible: false, pointer: null}));
+  const motionProperties = [
+    '--glass-light-x', '--glass-light-y', '--glass-scroll-y',
+    '--glass-light-angle', '--glass-pointer-x', '--glass-pointer-y'
+  ];
   const motionEnabled = () => !document.hidden && !reducedMotion.matches
     && !preferences.some(query => query.matches);
   let motionFrame = 0;
@@ -167,9 +185,14 @@
       const pointer = finePointer.matches ? state.pointer : null;
       const x = pointer ? Math.max(0, Math.min(100, (pointer.x - bounds.left) / bounds.width * 100)) : 20;
       const y = pointer ? Math.max(0, Math.min(100, (pointer.y - bounds.top) / bounds.height * 100)) : 40 + progress * 25;
+      const angle = pointer ? (Math.atan2(y - 50, x - 50) * 180 / Math.PI + 450) % 360 : 315 + progress * 12;
+      const respondsToPointer = pointer && state.panel.dataset.glassKind === 'control';
       state.panel.style.setProperty('--glass-light-x', `${x.toFixed(2)}%`);
       state.panel.style.setProperty('--glass-light-y', `${y.toFixed(2)}%`);
       state.panel.style.setProperty('--glass-scroll-y', `${(progress * 10).toFixed(2)}px`);
+      state.panel.style.setProperty('--glass-light-angle', `${angle.toFixed(2)}deg`);
+      state.panel.style.setProperty('--glass-pointer-x', `${(respondsToPointer ? (x - 50) * .025 : 0).toFixed(2)}px`);
+      state.panel.style.setProperty('--glass-pointer-y', `${(respondsToPointer ? (y - 50) * .025 : 0).toFixed(2)}px`);
     });
   }
 
