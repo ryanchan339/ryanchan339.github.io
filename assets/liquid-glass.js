@@ -31,20 +31,6 @@
     backdrop.className = 'liquid-backdrop';
     backdrop.setAttribute('aria-hidden', 'true');
     panel.prepend(backdrop);
-    if (kind === 'panel') {
-      // A restrained reflection of nearby content gives the lens something to
-      // bend on a flat page. Keep this below the refracting sibling and mask
-      // only the artwork, so foreground text stays clean and undistorted.
-      const artwork = panel.querySelector('video[poster], .home-company-logo img, .home-project-cover img');
-      const artworkURL = artwork?.getAttribute('poster') || artwork?.getAttribute('src');
-      const environment = document.createElement('div');
-      environment.className = 'glass-environment';
-      environment.setAttribute('aria-hidden', 'true');
-      if (artwork?.closest('.home-company-logo')) environment.dataset.artwork = 'logo';
-      if (artworkURL) environment.style.setProperty('--glass-artwork', `url(${JSON.stringify(artworkURL)})`);
-      panel.prepend(environment);
-    }
-
     const filter = document.createElementNS(svgNS, 'filter');
     filter.id = `liquid-refraction-${index}`;
     filter.setAttribute('filterUnits', 'userSpaceOnUse');
@@ -68,10 +54,11 @@
   });
 
   function buildLens(width, height, radius, kind) {
-    // A low-resolution static map is sufficient for the curved edge band.
+    // Keep the optical map at CSS-pixel resolution so its hairline rim stays
+    // crisp. It is cached per size and never regenerated during scrolling.
     const canvas = document.createElement('canvas');
-    canvas.width = Math.max(1, Math.ceil(width * .6));
-    canvas.height = Math.max(1, Math.ceil(height * .6));
+    canvas.width = Math.max(1, Math.ceil(width));
+    canvas.height = Math.max(1, Math.ceil(height));
     const context = canvas.getContext('2d');
     if (!context) return null;
     const pixels = context.createImageData(canvas.width, canvas.height);
@@ -119,18 +106,14 @@
           red -= nx * bend * 255;
           green -= ny * bend * 255;
 
-          // Light follows the rounded edge's surface normal. A narrow Fresnel
-          // reflection and a softer inner caustic supply depth without laying
-          // a milky white fill over the middle of the material.
-          const slope = Math.sqrt(Math.max(0, 1 - t * t));
+          // Reflection falls off within a pixel of the edge, independently
+          // from the wider refractive band. This avoids a padded inner glow.
           const facing = nx * -.45 + ny * -.65;
-          const diffuse = Math.max(0, facing * slope + t * .6);
-          const fresnel = Math.pow(1 - t, 5);
-          const specular = Math.pow(diffuse, 10) * .32 * Math.exp(-depth / 5);
-          const caustic = Math.exp(-Math.pow((t - .2) / .08, 2));
-          const light = fresnel * .38 + specular + caustic * Math.max(0, facing) * .07;
-          const shade = caustic * Math.max(0, -facing) * .065;
-          const alpha = Math.min(.55, light + shade);
+          const fresnel = Math.exp(-depth / .7);
+          const specular = Math.pow(Math.max(0, facing), 3) * Math.exp(-depth / 1.2);
+          const light = fresnel * .76 + specular * .16;
+          const shade = Math.max(0, -facing) * .07 * Math.exp(-Math.pow((depth - 1.1) / .55, 2));
+          const alpha = Math.min(.8, light + shade);
           const mix = alpha ? shade / (light + shade) : 0;
           rimPixels.data[offset] = Math.round(255 - mix * 172);
           rimPixels.data[offset + 1] = Math.round(255 - mix * 150);
