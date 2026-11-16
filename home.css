@@ -77,6 +77,7 @@
   border-color: #ffffff80;
   box-shadow: 0 5px 12px -5px #27303d36, inset 0 1px 0 #ffffffb3, inset 0 -1px 0 #3642521a;
 }
+.home-panel { background: transparent; }
 .liquid-filter-definitions { position: absolute; width: 0; height: 0; pointer-events: none; }
 .liquid-backdrop {
   position: absolute;
@@ -104,12 +105,14 @@
   inset: 0;
   background: #ffffff1a;
 }
+.home-panel .glass-scene::after { background: transparent; }
 [data-refractive] > .liquid-backdrop {
   background: transparent;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
 [data-refractive] .glass-scene { filter: var(--refraction-filter) blur(.3px) saturate(1.1); }
+.home-panel[data-refractive] .glass-scene { filter: var(--refraction-filter); }
 .home-panel > .liquid-backdrop,
 .home-button > .liquid-backdrop {
   -webkit-backdrop-filter: none;
@@ -127,6 +130,10 @@
   background-position: center var(--glass-scroll-y, 0px);
   opacity: calc(.75 + var(--glass-energy, 0) * .25);
   pointer-events: none;
+}
+.home-panel::before {
+  background: linear-gradient(180deg, #ffffff66, transparent 8px, transparent calc(100% - 8px), #ffffff33);
+  background-position: 0 0;
 }
 .home-panel::after,
 .home-button::after {

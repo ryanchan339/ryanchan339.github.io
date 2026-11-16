@@ -45,7 +45,8 @@
     image.setAttribute('result', 'lens');
     const soften = document.createElementNS(svgNS, 'feGaussianBlur');
     soften.setAttribute('in', 'SourceGraphic');
-    soften.setAttribute('stdDeviation', '.75');
+    // Large row centers stay clear; buttons keep their approved soft finish.
+    soften.setAttribute('stdDeviation', kind === 'panel' ? '0' : '.75');
     soften.setAttribute('result', 'scene');
     const displacement = document.createElementNS(svgNS, 'feDisplacementMap');
     displacement.setAttribute('in', 'scene');
