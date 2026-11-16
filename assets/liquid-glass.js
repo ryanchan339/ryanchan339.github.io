@@ -56,7 +56,7 @@
     filter.append(image, soften, displacement);
     definitions.append(filter);
     panel.style.setProperty('--refraction-filter', `url("#${filter.id}")`);
-    return {panel, filter, image, kind, size: ''};
+    return {panel, filter, image, size: ''};
   });
 
   function alignScene(panel, bounds, stretch = 0) {
@@ -64,8 +64,8 @@
     panel.style.setProperty('--glass-scene-y', `${(-bounds.top - window.scrollY - panel.clientTop - stretch).toFixed(2)}px`);
   }
 
-  function buildLens(width, height, radius, kind) {
-    // Keep the optical map at CSS-pixel resolution so its hairline rim stays
+  function buildLens(width, height, radius) {
+    // Keep the optical map at CSS-pixel resolution so its refracted edge stays
     // crisp. It is cached per size and never regenerated during scrolling.
     const canvas = document.createElement('canvas');
     canvas.width = Math.max(1, Math.ceil(width));
@@ -73,11 +73,10 @@
     const context = canvas.getContext('2d');
     if (!context) return null;
     const pixels = context.createImageData(canvas.width, canvas.height);
-    const rimPixels = context.createImageData(canvas.width, canvas.height);
     const halfWidth = width / 2;
     const halfHeight = height / 2;
-    const band = kind === 'control' ? Math.min(16, radius * .72) : Math.min(18, radius * .6);
-    const strength = kind === 'control' ? 8 : 8.5;
+    const band = Math.min(16, radius * .72);
+    const strength = 8;
     const refractiveIndex = 1.5;
     const maximumDeviation = Math.sqrt(refractiveIndex * refractiveIndex - 1);
 
@@ -116,20 +115,6 @@
           const bend = deviation * (1 - t * t) * strength / 48;
           red -= nx * bend * 255;
           green -= ny * bend * 255;
-
-          // Reflection falls off within a pixel of the edge, independently
-          // from the wider refractive band. This avoids a padded inner glow.
-          const facing = nx * -.45 + ny * -.65;
-          const fresnel = Math.exp(-depth / .7);
-          const specular = Math.pow(Math.max(0, facing), 3) * Math.exp(-depth / 1.2);
-          const light = fresnel * .76 + specular * .16;
-          const shade = Math.max(0, -facing) * .07 * Math.exp(-Math.pow((depth - 1.1) / .55, 2));
-          const alpha = Math.min(.8, light + shade);
-          const mix = alpha ? shade / (light + shade) : 0;
-          rimPixels.data[offset] = Math.round(255 - mix * 172);
-          rimPixels.data[offset + 1] = Math.round(255 - mix * 150);
-          rimPixels.data[offset + 2] = Math.round(255 - mix * 120);
-          rimPixels.data[offset + 3] = Math.round(alpha * 255);
         }
         pixels.data[offset] = red;
         pixels.data[offset + 1] = green;
@@ -138,9 +123,7 @@
       }
     }
     context.putImageData(pixels, 0, 0);
-    const displacement = canvas.toDataURL('image/png');
-    context.putImageData(rimPixels, 0, 0);
-    return {displacement, rim: canvas.toDataURL('image/png')};
+    return canvas.toDataURL('image/png');
   }
 
   function update() {
@@ -157,17 +140,13 @@
       const radius = Math.max(0, Math.min(cssRadius, width / 2, height / 2));
       const size = `${width}:${height}:${radius}`;
       if (state.size !== size) {
-        const map = buildLens(width, height, radius, state.kind);
+        const map = buildLens(width, height, radius);
         if (!map) continue;
         state.filter.setAttribute('width', width);
         state.filter.setAttribute('height', height);
         state.image.setAttribute('width', width);
         state.image.setAttribute('height', height);
-        state.image.setAttribute('href', map.displacement);
-        if (state.kind === 'panel') {
-          state.panel.style.setProperty('--glass-rim-image', `url("${map.rim}")`);
-          state.panel.setAttribute('data-glass-rim', '');
-        }
+        state.image.setAttribute('href', map);
         state.size = size;
       }
       if (supportsRefraction) state.panel.setAttribute('data-refractive', '');
