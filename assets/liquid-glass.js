@@ -31,6 +31,19 @@
     backdrop.className = 'liquid-backdrop';
     backdrop.setAttribute('aria-hidden', 'true');
     panel.prepend(backdrop);
+    if (kind === 'panel') {
+      // A restrained reflection of nearby content gives the lens something to
+      // bend on a flat page. Keep this below the refracting sibling and mask
+      // only the artwork, so foreground text stays clean and undistorted.
+      const artwork = panel.querySelector('video[poster], .home-company-logo img, .home-project-cover img');
+      const artworkURL = artwork?.getAttribute('poster') || artwork?.getAttribute('src');
+      const environment = document.createElement('div');
+      environment.className = 'glass-environment';
+      environment.setAttribute('aria-hidden', 'true');
+      if (artwork?.closest('.home-company-logo')) environment.dataset.artwork = 'logo';
+      if (artworkURL) environment.style.setProperty('--glass-artwork', `url(${JSON.stringify(artworkURL)})`);
+      panel.prepend(environment);
+    }
 
     const filter = document.createElementNS(svgNS, 'filter');
     filter.id = `liquid-refraction-${index}`;
@@ -62,6 +75,7 @@
     const context = canvas.getContext('2d');
     if (!context) return null;
     const pixels = context.createImageData(canvas.width, canvas.height);
+    const rimPixels = context.createImageData(canvas.width, canvas.height);
     const halfWidth = width / 2;
     const halfHeight = height / 2;
     const band = kind === 'control' ? Math.min(16, radius * .72) : Math.min(22, radius * .72);
@@ -82,6 +96,7 @@
         const depth = -distance;
         let red = 128;
         let green = 128;
+        const offset = (y * canvas.width + x) * 4;
 
         if (depth >= 0 && depth < band) {
           let nx = 0;
@@ -103,8 +118,25 @@
           const bend = deviation * (1 - t * t) * strength / 48;
           red -= nx * bend * 255;
           green -= ny * bend * 255;
+
+          // Light follows the rounded edge's surface normal. A narrow Fresnel
+          // reflection and a softer inner caustic supply depth without laying
+          // a milky white fill over the middle of the material.
+          const slope = Math.sqrt(Math.max(0, 1 - t * t));
+          const facing = nx * -.45 + ny * -.65;
+          const diffuse = Math.max(0, facing * slope + t * .6);
+          const fresnel = Math.pow(1 - t, 5);
+          const specular = Math.pow(diffuse, 10) * .32 * Math.exp(-depth / 5);
+          const caustic = Math.exp(-Math.pow((t - .2) / .08, 2));
+          const light = fresnel * .38 + specular + caustic * Math.max(0, facing) * .07;
+          const shade = caustic * Math.max(0, -facing) * .065;
+          const alpha = Math.min(.55, light + shade);
+          const mix = alpha ? shade / (light + shade) : 0;
+          rimPixels.data[offset] = Math.round(255 - mix * 172);
+          rimPixels.data[offset + 1] = Math.round(255 - mix * 150);
+          rimPixels.data[offset + 2] = Math.round(255 - mix * 120);
+          rimPixels.data[offset + 3] = Math.round(alpha * 255);
         }
-        const offset = (y * canvas.width + x) * 4;
         pixels.data[offset] = red;
         pixels.data[offset + 1] = green;
         pixels.data[offset + 2] = 128;
@@ -112,11 +144,13 @@
       }
     }
     context.putImageData(pixels, 0, 0);
-    return canvas.toDataURL('image/png');
+    const displacement = canvas.toDataURL('image/png');
+    context.putImageData(rimPixels, 0, 0);
+    return {displacement, rim: canvas.toDataURL('image/png')};
   }
 
   function update() {
-    const enabled = supportsRefraction && !preferences.some(query => query.matches);
+    const enabled = !preferences.some(query => query.matches);
     for (const state of states) {
       state.panel.removeAttribute('data-refractive');
       if (!enabled) continue;
@@ -133,10 +167,14 @@
         state.filter.setAttribute('height', height);
         state.image.setAttribute('width', width);
         state.image.setAttribute('height', height);
-        state.image.setAttribute('href', map);
+        state.image.setAttribute('href', map.displacement);
+        if (state.kind === 'panel') {
+          state.panel.style.setProperty('--glass-rim-image', `url("${map.rim}")`);
+          state.panel.setAttribute('data-glass-rim', '');
+        }
         state.size = size;
       }
-      state.panel.setAttribute('data-refractive', '');
+      if (supportsRefraction) state.panel.setAttribute('data-refractive', '');
     }
   }
 
@@ -145,7 +183,7 @@
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(update, 100);
   };
-  if (supportsRefraction && 'ResizeObserver' in window) {
+  if ('ResizeObserver' in window) {
     const observer = new ResizeObserver(scheduleUpdate);
     surfaces.forEach(panel => observer.observe(panel));
   }
@@ -155,22 +193,44 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   const motionStates = surfaces.map(panel => ({panel, visible: false, pointer: null}));
+  const sectionFollowers = [...document.querySelectorAll('.home-section')].map(section => ({
+    element: section.querySelector('.home-section-heading'),
+    index: panels.indexOf(section.querySelector('.home-panel'))
+  })).filter(item => item.element && item.index >= 0);
+  const footer = document.querySelector('.home-layout > .site-footer');
+  if (footer) sectionFollowers.push({element: footer, index: panels.length - 1});
   const motionProperties = [
     '--glass-light-x', '--glass-light-y', '--glass-scroll-y',
     '--glass-light-angle', '--glass-pointer-x', '--glass-pointer-y',
-    '--glass-float-y', '--glass-tilt-x', '--glass-tilt-y', '--glass-hover-scale'
+    '--glass-float-y', '--glass-stretch-y', '--glass-energy', '--glass-tilt-x',
+    '--glass-tilt-y', '--glass-hover-scale'
   ];
   const motionEnabled = () => !document.hidden && !reducedMotion.matches
     && !preferences.some(query => query.matches);
+  const maximumGap = 34;
+  const maximumOffset = 140;
+  const gapSpring = {value: 0, velocity: 0};
+  const anchorSpring = {value: 0, velocity: 0};
   let motionFrame = 0;
+  let lastFrameTime = 0;
+  let lastScrollY = window.scrollY;
+  let lastScrollTime = performance.now();
+  let scrollSpeed = 0;
 
   function resetMotion() {
     cancelAnimationFrame(motionFrame);
     motionFrame = 0;
+    lastFrameTime = 0;
+    lastScrollY = window.scrollY;
+    lastScrollTime = performance.now();
+    scrollSpeed = 0;
+    gapSpring.value = gapSpring.velocity = 0;
+    anchorSpring.value = anchorSpring.velocity = 0;
     motionStates.forEach(state => {
       state.pointer = null;
       motionProperties.forEach(property => state.panel.style.removeProperty(property));
     });
+    sectionFollowers.forEach(({element}) => element.style.removeProperty('--glass-stretch-y'));
   }
 
   function layoutBounds(panel) {
@@ -191,14 +251,76 @@
     };
   }
 
-  function renderMotion() {
+  function springStep(spring, target, frequency, elapsed) {
+    // Exact critically damped step: stable at different refresh rates and no
+    // overshoot when the target returns to zero.
+    const offset = spring.value - target;
+    const coefficient = spring.velocity + frequency * offset;
+    const decay = Math.exp(-frequency * elapsed);
+    spring.value = target + (offset + coefficient * elapsed) * decay;
+    spring.velocity = (spring.velocity - frequency * coefficient * elapsed) * decay;
+  }
+
+  function viewportAnchor(bounds) {
+    const anchorY = Math.min(120, innerHeight * .18);
+    if (!bounds.length || anchorY <= bounds[0].top) return 0;
+    for (let index = 0; index < bounds.length - 1; index++) {
+      if (anchorY < bounds[index + 1].top) {
+        return index + (anchorY - bounds[index].top)
+          / Math.max(1, bounds[index + 1].top - bounds[index].top);
+      }
+    }
+    return bounds.length - 1;
+  }
+
+  function currentScrollSpeed(now) {
+    // Leave a short hold between native scroll events, then release naturally
+    // when scrolling stops instead of waiting for a separate scrollend event.
+    const staleTime = Math.max(0, now - lastScrollTime - 50);
+    return scrollSpeed * Math.exp(-staleTime / 110);
+  }
+
+  function renderMotion(now) {
     motionFrame = 0;
     if (!motionEnabled()) return;
-    // Read untransformed bounds before writing styles. Only the rim lighting and
-    // bounded panel motion react to scrolling; refraction maps stay static.
+    const elapsed = lastFrameTime ? Math.max(0, Math.min(.05, (now - lastFrameTime) / 1000)) : 1 / 60;
+    lastFrameTime = now;
+    // Read untransformed bounds before writing styles. Scrolling changes only
+    // the spring spacing and rim light; it never regenerates a refraction map.
+    const panelBounds = panels.map(layoutBounds);
     const measurements = motionStates.filter(state => state.visible).map(state => ({
-      state, bounds: layoutBounds(state.panel)
+      state, bounds: state.panel.dataset.glassKind === 'panel'
+        ? panelBounds[panels.indexOf(state.panel)] : layoutBounds(state.panel)
     }));
+    const speedRatio = Math.max(0, Math.min(1, (currentScrollSpeed(now) - 100) / 1700));
+    const targetGap = maximumGap * speedRatio * speedRatio * (3 - 2 * speedRatio);
+    const targetAnchor = viewportAnchor(panelBounds);
+    springStep(gapSpring, targetGap, 20, elapsed);
+    if (gapSpring.value < 0 || gapSpring.value > maximumGap) {
+      gapSpring.value = Math.max(0, Math.min(maximumGap, gapSpring.value));
+      gapSpring.velocity = 0;
+    }
+    if (gapSpring.value < .02 && Math.abs(gapSpring.velocity) < .08 && targetGap === 0) {
+      gapSpring.value = gapSpring.velocity = 0;
+    }
+    if (gapSpring.value === 0) {
+      anchorSpring.value = targetAnchor;
+      anchorSpring.velocity = 0;
+    } else {
+      springStep(anchorSpring, targetAnchor, 16, elapsed);
+    }
+    const offsets = panels.map((panel, index) => {
+      // One nonnegative gap keeps offsets ordered through direction changes.
+      // Clamping distant cards bounds the movement without shrinking any gap.
+      const offset = Math.max(-maximumOffset, Math.min(maximumOffset,
+        (index - anchorSpring.value) * gapSpring.value));
+      panel.style.setProperty('--glass-stretch-y', `${offset.toFixed(2)}px`);
+      panel.style.setProperty('--glass-energy', (gapSpring.value / maximumGap).toFixed(4));
+      return offset;
+    });
+    sectionFollowers.forEach(({element, index}) => {
+      element.style.setProperty('--glass-stretch-y', `${offsets[index].toFixed(2)}px`);
+    });
     measurements.forEach(({state, bounds}) => {
       if (!bounds.width || !bounds.height) return;
       const progress = Math.max(-1, Math.min(1,
@@ -216,11 +338,14 @@
       state.panel.style.setProperty('--glass-light-angle', `${angle.toFixed(2)}deg`);
       state.panel.style.setProperty('--glass-pointer-x', `${(movesControl ? (x - 50) * .025 : 0).toFixed(2)}px`);
       state.panel.style.setProperty('--glass-pointer-y', `${(movesControl ? (y - 50) * .025 : 0).toFixed(2)}px`);
-      state.panel.style.setProperty('--glass-float-y', `${(isPanel ? -progress * 8 : 0).toFixed(2)}px`);
+      state.panel.style.setProperty('--glass-float-y', '0px');
       state.panel.style.setProperty('--glass-tilt-x', `${(tiltsPanel ? (50 - y) * .012 : 0).toFixed(3)}deg`);
       state.panel.style.setProperty('--glass-tilt-y', `${(tiltsPanel ? (x - 50) * .012 : 0).toFixed(3)}deg`);
       state.panel.style.setProperty('--glass-hover-scale', tiltsPanel ? '1.008' : '1');
     });
+    // The spring requests frames only while stretching or returning to rest.
+    if (targetGap > 0 || gapSpring.value > 0) scheduleMotion();
+    else lastFrameTime = 0;
   }
 
   function scheduleMotion() {
@@ -249,7 +374,20 @@
     state.panel.addEventListener('pointerleave', releasePointer, {passive: true});
     state.panel.addEventListener('pointercancel', releasePointer, {passive: true});
   });
-  window.addEventListener('scroll', scheduleMotion, {passive: true});
+  window.addEventListener('scroll', () => {
+    if (!motionEnabled()) return;
+    const now = performance.now();
+    const distance = Math.abs(window.scrollY - lastScrollY);
+    if (distance > 0) {
+      const sampleTime = Math.max(8, Math.min(64, now - lastScrollTime));
+      const sampleSpeed = Math.min(6000, distance * 1000 / sampleTime);
+      const blend = 1 - Math.exp(-sampleTime / 35);
+      scrollSpeed = currentScrollSpeed(now) * (1 - blend) + sampleSpeed * blend;
+      lastScrollTime = now;
+      lastScrollY = window.scrollY;
+    }
+    scheduleMotion();
+  }, {passive: true});
   window.addEventListener('resize', scheduleMotion, {passive: true});
   const syncMotion = () => {
     if (!motionEnabled()) resetMotion();
