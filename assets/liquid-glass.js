@@ -136,4 +136,80 @@
   }
   preferences.forEach(query => query.addEventListener('change', scheduleUpdate));
   update();
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const motionStates = panels.map(panel => ({panel, visible: false, pointer: null}));
+  const motionProperties = ['--glass-light-x', '--glass-light-y', '--glass-scroll-y'];
+  const motionEnabled = () => !document.hidden && !reducedMotion.matches
+    && !preferences.some(query => query.matches);
+  let motionFrame = 0;
+
+  function resetMotion() {
+    cancelAnimationFrame(motionFrame);
+    motionFrame = 0;
+    motionStates.forEach(state => {
+      state.pointer = null;
+      motionProperties.forEach(property => state.panel.style.removeProperty(property));
+    });
+  }
+
+  function renderMotion() {
+    motionFrame = 0;
+    if (!motionEnabled()) return;
+    // Read all visible bounds before writing styles; refraction maps stay static.
+    const measurements = motionStates.filter(state => state.visible).map(state => ({
+      state, bounds: state.panel.getBoundingClientRect()
+    }));
+    measurements.forEach(({state, bounds}) => {
+      const progress = Math.max(-1, Math.min(1,
+        (innerHeight / 2 - bounds.top - bounds.height / 2) * 2 / (innerHeight + bounds.height)));
+      const pointer = finePointer.matches ? state.pointer : null;
+      const x = pointer ? Math.max(0, Math.min(100, (pointer.x - bounds.left) / bounds.width * 100)) : 20;
+      const y = pointer ? Math.max(0, Math.min(100, (pointer.y - bounds.top) / bounds.height * 100)) : 40 + progress * 25;
+      state.panel.style.setProperty('--glass-light-x', `${x.toFixed(2)}%`);
+      state.panel.style.setProperty('--glass-light-y', `${y.toFixed(2)}%`);
+      state.panel.style.setProperty('--glass-scroll-y', `${(progress * 10).toFixed(2)}px`);
+    });
+  }
+
+  function scheduleMotion() {
+    if (motionEnabled() && !motionFrame) motionFrame = requestAnimationFrame(renderMotion);
+  }
+
+  const motionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const state = motionStates.find(item => item.panel === entry.target);
+      state.visible = entry.isIntersecting;
+      if (!state.visible) state.pointer = null;
+    });
+    scheduleMotion();
+  });
+  motionStates.forEach(state => {
+    motionObserver.observe(state.panel);
+    state.panel.addEventListener('pointermove', event => {
+      if (!motionEnabled() || !finePointer.matches || event.pointerType === 'touch') return;
+      state.pointer = {x: event.clientX, y: event.clientY};
+      scheduleMotion();
+    }, {passive: true});
+    const releasePointer = () => {
+      state.pointer = null;
+      scheduleMotion();
+    };
+    state.panel.addEventListener('pointerleave', releasePointer, {passive: true});
+    state.panel.addEventListener('pointercancel', releasePointer, {passive: true});
+  });
+  window.addEventListener('scroll', scheduleMotion, {passive: true});
+  window.addEventListener('resize', scheduleMotion, {passive: true});
+  const syncMotion = () => {
+    if (!motionEnabled()) resetMotion();
+    else scheduleMotion();
+  };
+  document.addEventListener('visibilitychange', syncMotion);
+  reducedMotion.addEventListener('change', syncMotion);
+  preferences.forEach(query => query.addEventListener('change', syncMotion));
+  finePointer.addEventListener('change', () => {
+    if (!finePointer.matches) motionStates.forEach(state => { state.pointer = null; });
+    scheduleMotion();
+  });
 })();

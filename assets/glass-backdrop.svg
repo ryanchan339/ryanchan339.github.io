@@ -15,7 +15,5 @@
     </filter>
   </defs>
   <path d="M-260 550C150 80 710 1040 1240 570C1510 330 1710 480 1880 720" stroke="url(#blue)" stroke-width="160" filter="url(#soft)"/>
-  <path d="M-260 550C150 80 710 1040 1240 570C1510 330 1710 480 1880 720" stroke="white" stroke-opacity=".48" stroke-width="3"/>
   <path d="M1820 1040C1270 870 1430 1690 770 1590C260 1510 410 2010-220 1870" stroke="url(#violet)" stroke-width="180" filter="url(#soft)"/>
-  <path d="M1820 1040C1270 870 1430 1690 770 1590C260 1510 410 2010-220 1870" stroke="white" stroke-opacity=".4" stroke-width="3"/>
 </svg>
