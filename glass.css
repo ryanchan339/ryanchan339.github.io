@@ -14,6 +14,7 @@
 
 body{
   background:#ffffff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
 }
 
 .site-nav{
@@ -24,7 +25,7 @@ body{
   border:1px solid #e4e4e5;
   box-shadow:0 4px 14px #00000008;
 }
-.site-nav a{color:#626366}
+.site-nav a{color:#465366;font-size:15px}
 .site-nav a::before{content:none;display:none}
 .site-nav a:hover{background:#f1f1f2;color:#000000}
 .site-nav a[aria-current]{
@@ -103,7 +104,11 @@ body{
 
 @media(max-width:700px){
   .site-nav{top:16px;margin-top:20px;height:50px}
+  .site-nav a,.site-nav a[href*="experience.html"]{font-size:14px;padding-inline:10px}
   .format-main{margin-top:30px}
+}
+@media(max-width:370px){
+  .site-nav a,.site-nav a[href*="experience.html"]{font-size:13px;padding-inline:8px}
 }
 
 /* Native stretched links keep whole tiles clickable and controls independent. */
@@ -184,8 +189,14 @@ body{
 .profile-tools{font-size:13px;color:var(--tile-muted);margin-bottom:18px}
 .role-tile .preview-panel strong{font-weight:600;color:var(--tile-ink)}
 .experience-mosaic{grid-auto-rows:minmax(calc((100cqw - 48px)/4),auto)}
-.career-tile .experience-row .description+.description{margin-top:4px}
-.career-tile .description strong{font-weight:600;color:var(--tile-ink)}
+.resume-bullets{margin:0;padding-left:1.2em;list-style:disc;color:var(--ink);font-size:17px;line-height:1.65;letter-spacing:normal}
+.resume-bullets li+li{margin-top:10px}
+.resume-bullets li::marker{color:#627084;font-size:.8em}
+.resume-bullets strong{font-weight:650;color:var(--ink)}
+.career-tile .resume-bullets{grid-column:1/-1;margin-top:12px;max-width:76ch}
+.career-tile .experience-row h3{font-size:23px;font-weight:650}
+.career-tile .experience-role{font-size:17px;font-weight:500;line-height:1.5}
+.career-tile .experience-row .date,.career-tile .experience-row .location{font-size:14px;color:#465366}
 .resume-education h2{margin:25px 0 12px}
 .education-coursework{font-size:13px;line-height:1.65;color:var(--tile-muted);margin:0 0 18px}
 .gallery-nfl{--tile-color:#f3f3f4}
@@ -201,6 +212,10 @@ body{
 @media(max-width:700px){
   .experience-mosaic{grid-auto-rows:auto}
   .resume-education h2{margin-top:24px}
+  .resume-bullets{font-size:16px}
+  .career-tile .experience-row h3{font-size:21px}
+  .career-tile .experience-role{font-size:16px}
+  .career-tile .experience-row .date,.career-tile .experience-row .location{font-size:13px}
 }
 
 /* Contact accents belong to the message UI and the LinkedIn card. */
