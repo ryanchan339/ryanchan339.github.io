@@ -1,7 +1,7 @@
 (() => {
   const panels = [...document.querySelectorAll('.home-panel')];
-  const controls = [...document.querySelectorAll('.home-page .site-nav, .home-page .home-button')];
-  // Keep the content-panel filter IDs stable as the control layer is added.
+  const controls = [...document.querySelectorAll('.home-page .home-button')];
+  // Individual information rows and the clear contact buttons share the lens.
   const surfaces = [...panels, ...controls];
   if (!surfaces.length) return;
 
@@ -64,8 +64,8 @@
     const pixels = context.createImageData(canvas.width, canvas.height);
     const halfWidth = width / 2;
     const halfHeight = height / 2;
-    const band = kind === 'control' ? Math.min(16, radius * .72) : Math.min(22, radius * .55);
-    const strength = kind === 'control' ? 10.5 : 5.5;
+    const band = kind === 'control' ? Math.min(16, radius * .72) : Math.min(22, radius * .72);
+    const strength = kind === 'control' ? 10.5 : 12;
     const refractiveIndex = 1.5;
     const maximumDeviation = Math.sqrt(refractiveIndex * refractiveIndex - 1);
 
@@ -157,7 +157,8 @@
   const motionStates = surfaces.map(panel => ({panel, visible: false, pointer: null}));
   const motionProperties = [
     '--glass-light-x', '--glass-light-y', '--glass-scroll-y',
-    '--glass-light-angle', '--glass-pointer-x', '--glass-pointer-y'
+    '--glass-light-angle', '--glass-pointer-x', '--glass-pointer-y',
+    '--glass-float-y', '--glass-tilt-x', '--glass-tilt-y', '--glass-hover-scale'
   ];
   const motionEnabled = () => !document.hidden && !reducedMotion.matches
     && !preferences.some(query => query.matches);
@@ -172,27 +173,53 @@
     });
   }
 
+  function layoutBounds(panel) {
+    // These surfaces are in the document's normal flow. Offset geometry ignores
+    // their animated translation, tilt and scale, so motion cannot feed back
+    // into the next scroll or pointer measurement.
+    let left = panel.offsetLeft;
+    let top = panel.offsetTop;
+    for (let parent = panel.offsetParent; parent; parent = parent.offsetParent) {
+      left += parent.offsetLeft + parent.clientLeft;
+      top += parent.offsetTop + parent.clientTop;
+    }
+    return {
+      left: left - window.scrollX,
+      top: top - window.scrollY,
+      width: panel.offsetWidth,
+      height: panel.offsetHeight
+    };
+  }
+
   function renderMotion() {
     motionFrame = 0;
     if (!motionEnabled()) return;
-    // Read all visible bounds before writing styles; refraction maps stay static.
+    // Read untransformed bounds before writing styles. Only the rim lighting and
+    // bounded panel motion react to scrolling; refraction maps stay static.
     const measurements = motionStates.filter(state => state.visible).map(state => ({
-      state, bounds: state.panel.getBoundingClientRect()
+      state, bounds: layoutBounds(state.panel)
     }));
     measurements.forEach(({state, bounds}) => {
+      if (!bounds.width || !bounds.height) return;
       const progress = Math.max(-1, Math.min(1,
         (innerHeight / 2 - bounds.top - bounds.height / 2) * 2 / (innerHeight + bounds.height)));
       const pointer = finePointer.matches ? state.pointer : null;
       const x = pointer ? Math.max(0, Math.min(100, (pointer.x - bounds.left) / bounds.width * 100)) : 20;
       const y = pointer ? Math.max(0, Math.min(100, (pointer.y - bounds.top) / bounds.height * 100)) : 40 + progress * 25;
       const angle = pointer ? (Math.atan2(y - 50, x - 50) * 180 / Math.PI + 450) % 360 : 315 + progress * 12;
-      const respondsToPointer = pointer && state.panel.dataset.glassKind === 'control';
+      const isPanel = state.panel.dataset.glassKind === 'panel';
+      const movesControl = pointer && !isPanel;
+      const tiltsPanel = pointer && isPanel;
       state.panel.style.setProperty('--glass-light-x', `${x.toFixed(2)}%`);
       state.panel.style.setProperty('--glass-light-y', `${y.toFixed(2)}%`);
       state.panel.style.setProperty('--glass-scroll-y', `${(progress * 10).toFixed(2)}px`);
       state.panel.style.setProperty('--glass-light-angle', `${angle.toFixed(2)}deg`);
-      state.panel.style.setProperty('--glass-pointer-x', `${(respondsToPointer ? (x - 50) * .025 : 0).toFixed(2)}px`);
-      state.panel.style.setProperty('--glass-pointer-y', `${(respondsToPointer ? (y - 50) * .025 : 0).toFixed(2)}px`);
+      state.panel.style.setProperty('--glass-pointer-x', `${(movesControl ? (x - 50) * .025 : 0).toFixed(2)}px`);
+      state.panel.style.setProperty('--glass-pointer-y', `${(movesControl ? (y - 50) * .025 : 0).toFixed(2)}px`);
+      state.panel.style.setProperty('--glass-float-y', `${(isPanel ? -progress * 8 : 0).toFixed(2)}px`);
+      state.panel.style.setProperty('--glass-tilt-x', `${(tiltsPanel ? (50 - y) * .012 : 0).toFixed(3)}deg`);
+      state.panel.style.setProperty('--glass-tilt-y', `${(tiltsPanel ? (x - 50) * .012 : 0).toFixed(3)}deg`);
+      state.panel.style.setProperty('--glass-hover-scale', tiltsPanel ? '1.008' : '1');
     });
   }
 
