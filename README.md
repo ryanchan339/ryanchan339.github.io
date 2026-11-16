@@ -26,7 +26,8 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 ## Edit
 
 - `index.html`: introduction and resume/social links, followed by three grouped panels for education, experience, and projects.
-- `home.css`: the homepage layout, with translucent glass surfaces, static blue/lavender background washes, and accessible opaque fallbacks.
+- `home.css`: the homepage layout, with clear glass surfaces, reflective rims, blue/lavender background ribbons, and accessible opaque fallbacks.
+- `assets/liquid-glass.js`: static edge-refraction maps for the homepage panels in Chromium, with a CSS glass fallback in other browsers.
 - `work.html`: four project showcases, with three recorded demos and an NFL application architecture summary.
 - `experience.html`: professional, research, and teaching experience, plus illustrative Python Two Sum and transformer acceleration animations.
 - `contact.html`: email, LinkedIn, GitHub, and copy-email action.
@@ -86,6 +87,8 @@ The original design now includes the current Swift/iOS and TypeScript/Bedrock ex
 
 ## Glass homepage panels
 
-Home follows one reading order: introduction, resume/social links, Education, Experience, and Projects. The last three sections each occupy one rounded glass panel; roles and projects are separated by subtle rules within their panel. The standalone skills section is removed. All three roles are visible without tabs. Project thumbnails sit beside descriptions on desktop and stack on small screens, with SpotifyBook and recorded demos reachable through All projects.
+Home follows one reading order: introduction, resume/social links, Education, Experience, and Projects. The last three sections each occupy one rounded glass panel; roles and projects are separated by subtle rules within their panel. The standalone skills section is removed. All three roles and all four projects, including SpotifyBook, are visible without tabs. Project thumbnails sit beside descriptions on desktop and stack on small screens; recorded demos remain on Work and the project pages.
 
-Translucent white surfaces sit over static blue/lavender washes, with bright inset borders and soft shadows. Only the three panels and floating navigation use background blur. Reduced-transparency, increased-contrast, forced-color, and unsupported-blur environments receive opaque fallbacks. Other pages, existing links, and analytics are retained.
+Clear surfaces sit over static blue/lavender ribbons, with reflective rims and soft shadows. Chromium receives rounded-edge refraction through per-panel SVG displacement maps; maps update only when panel sizes change. Text sits above the filtered surface and stays sharp. Other browsers receive translucent CSS glass. Reduced-transparency, increased-contrast, forced-color, and unsupported-blur environments receive opaque fallbacks.
+
+LinkedIn uses a blue button and GitHub uses a black-and-white button. Resume and Email omit arrow decorations. The standalone skills section is removed from both Home and Experience. Other content, links, and analytics are retained.

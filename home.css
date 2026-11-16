@@ -4,11 +4,13 @@
   --line: #dbe1eb;
   --blue: #41689e;
   --blue-deep: #2f5080;
-  background-color: #f2f5f9;
+  background-color: #eaf0f7;
   background-image:
-    radial-gradient(ellipse 72% 35% at 95% 8%, #e3def38c, transparent 75%),
-    radial-gradient(ellipse 75% 45% at 0% 34%, #d4eaf5a6, transparent 75%),
-    radial-gradient(ellipse 70% 50% at 100% 85%, #dedff499, transparent 75%);
+    url("assets/glass-backdrop.svg?v=20261116-liquid"),
+    radial-gradient(ellipse 65% 35% at 100% 5%, #cec6ee99, transparent 75%),
+    radial-gradient(ellipse 65% 35% at 0% 40%, #b6d8f099, transparent 75%),
+    radial-gradient(ellipse 60% 40% at 100% 90%, #d4d2efaa, transparent 75%);
+  background-size: 100% 100%, auto, auto, auto;
 }
 
 .home-page .site-nav {
@@ -51,31 +53,64 @@
 .home-button:hover, .home-social:hover { background: white; box-shadow: 0 3px 9px #34486812, inset 0 0 0 1px #647a9b30; }
 .home-button-primary:hover { background: #344766; }
 .home-social svg { width: 17px; height: 17px; }
+.home-github { background: #24292f; color: #fff; border-color: #24292f; box-shadow: 0 3px 8px #24292f20, inset 0 1px 0 #ffffff25; }
+.home-github:hover { background: #101418; box-shadow: 0 4px 12px #24292f30; }
+.home-linkedin { background: #0a66c2; color: #fff; border-color: #0a66c2; box-shadow: 0 3px 8px #0a66c226, inset 0 1px 0 #ffffff30; }
+.home-linkedin:hover { background: #004182; box-shadow: 0 4px 12px #0a66c236; }
 
-/* The section surfaces blur static background washes without continuous animation. */
+/* Content stays sharp above a separate, edge-refracting glass surface. */
 .home-panel {
   position: relative;
+  isolation: isolate;
   margin-top: 20px;
   padding: 28px 34px;
-  border: 1px solid #fffffff2;
+  border: 1px solid #ffffffa6;
   border-radius: 36px;
-  background: linear-gradient(135deg, #ffffffd9, #ffffffa6);
+  background: linear-gradient(125deg, #ffffff38, #ffffff0d 50%, #ffffff26);
   box-shadow:
-    0 14px 40px -18px #334c7636,
-    0 2px 5px #334c7605,
-    inset 0 1px 0 #fff,
-    inset 0 -1px 0 #ffffff80;
-  -webkit-backdrop-filter: blur(22px) saturate(1.2);
-  backdrop-filter: blur(22px) saturate(1.2);
+    0 16px 32px -16px #304f7840,
+    0 3px 8px #304f7808,
+    inset 1px 2px 2px #fffffff0,
+    inset -1px -2px 3px #6786aa35,
+    inset 0 0 12px 2px #ffffff60;
 }
+.liquid-filter-definitions { position: absolute; width: 0; height: 0; pointer-events: none; }
+.liquid-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(125deg, #ffffff26, #ffffff12 50%, #ffffff29);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  backdrop-filter: blur(8px) saturate(1.2);
+}
+.home-panel[data-refractive] > .liquid-backdrop { backdrop-filter: var(--refraction-filter) saturate(1.2); }
 .home-panel::before {
   content: "";
   position: absolute;
-  inset: 1px;
-  border: 1px solid #ffffff66;
-  border-radius: 34px;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: linear-gradient(145deg, #ffffff4d, transparent 24%, transparent 75%, #ffffff30);
   pointer-events: none;
 }
+.home-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(140deg, #fff 2%, #ffffffb3 18%, #ffffff0d 37%, #a9b8d66b 64%, #fff 89%, #ffffff80);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.home-panel > :not(.liquid-backdrop) { position: relative; z-index: 2; }
 .home-education { margin-top: 0; }
 .home-section-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; margin-bottom: 24px; }
 .home-section-heading h2 { margin: 0; font-size: 23px; line-height: 1.3; font-weight: 600; letter-spacing: -.025em; }
@@ -152,7 +187,6 @@
   .home-links { display: grid; grid-template-columns: repeat(2, max-content); gap: 8px; margin-top: 20px; }
   .home-button, .home-social { padding-inline: 14px; font-size: 12px; }
   .home-panel { padding: 23px 22px; border-radius: 28px; margin-top: 16px; }
-  .home-panel::before { border-radius: 26px; }
   .home-education { margin-top: 0; }
   .home-section-heading { gap: 14px; margin-bottom: 22px; }
   .home-section-heading h2 { font-size: 21px; }
@@ -190,20 +224,23 @@
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .home-panel, .home-page .site-nav { background: #fdfefe; }
+  .home-panel, .home-page .site-nav { background: #edf3fa; }
 }
 
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .home-panel, .home-page .site-nav { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; border-color: #9aa8bb; }
+  .liquid-backdrop, .home-panel::before, .home-panel::after { display: none; }
   .home-button, .home-social, .home-company-logo, .home-row-link, .home-project-copy h3 span { background: #fff; border-color: #9aa8bb; }
   .home-button-primary { background: #243146; border-color: #243146; }
   .home-amazon { background: #232f3e; border-color: #232f3e; }
+  .home-github { background: #24292f; border-color: #24292f; }
+  .home-linkedin { background: #0a66c2; border-color: #0a66c2; }
 }
 
 @media (forced-colors: active) {
   .home-page { background: Canvas; }
   .home-panel, .home-page .site-nav { background: Canvas; -webkit-backdrop-filter: none; backdrop-filter: none; border-color: CanvasText; box-shadow: none; }
-  .home-panel::before { display: none; }
+  .liquid-backdrop, .home-panel::before, .home-panel::after { display: none; }
   .home-company-logo { forced-color-adjust: none; }
   .home-experience-card + .home-experience-card, .home-project-card + .home-project-card { border-color: CanvasText; }
 }
