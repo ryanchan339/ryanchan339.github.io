@@ -4,12 +4,9 @@
   --line: #dbe1eb;
   --blue: #41689e;
   --blue-deep: #2f5080;
-  --glass-scene-color: #e8edf3;
-  --glass-scene-image:
-    radial-gradient(ellipse at 88% 20%, #a8c5e15c, transparent 40%),
-    radial-gradient(ellipse at 5% 73%, #b4d4ca59, transparent 38%),
-    radial-gradient(#6b829c26 .65px, transparent .85px);
-  --glass-scene-size: 1280px 1100px, 1280px 1100px, 32px 32px;
+  --glass-scene-color: #eef0f3;
+  --glass-scene-image: radial-gradient(#7f87911f .65px, transparent .85px);
+  --glass-scene-size: 32px 32px;
   background-color: var(--glass-scene-color);
   background-image: var(--glass-scene-image);
   background-size: var(--glass-scene-size);

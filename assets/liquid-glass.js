@@ -193,6 +193,7 @@
     element: section.querySelector('.home-section-heading'),
     index: panels.indexOf(section.querySelector('.home-panel'))
   })).filter(item => item.element && item.index >= 0);
+  const intro = document.querySelector('.home-intro');
   const footer = document.querySelector('.home-layout > .site-footer');
   if (footer) sectionFollowers.push({element: footer, index: panels.length - 1});
   const motionProperties = [
@@ -203,15 +204,13 @@
   ];
   const motionEnabled = () => !document.hidden && !reducedMotion.matches
     && !preferences.some(query => query.matches);
-  const maximumGap = 78;
-  const maximumOffset = 300;
-  const gapSpring = {value: 0, velocity: 0};
-  const anchorSpring = {value: 0, velocity: 0};
+  const maximumLag = 180;
+  const lagSprings = panels.map(() => ({value: 0, velocity: 0}));
   let motionFrame = 0;
   let lastFrameTime = 0;
   let lastScrollY = window.scrollY;
   let lastScrollTime = performance.now();
-  let scrollSpeed = 0;
+  let scrollVelocity = 0;
 
   function resetMotion() {
     cancelAnimationFrame(motionFrame);
@@ -219,9 +218,8 @@
     lastFrameTime = 0;
     lastScrollY = window.scrollY;
     lastScrollTime = performance.now();
-    scrollSpeed = 0;
-    gapSpring.value = gapSpring.velocity = 0;
-    anchorSpring.value = anchorSpring.velocity = 0;
+    scrollVelocity = 0;
+    lagSprings.forEach(spring => { spring.value = spring.velocity = 0; });
     motionStates.forEach(state => {
       state.pointer = null;
       motionProperties.forEach(property => state.panel.style.removeProperty(property));
@@ -257,23 +255,11 @@
     spring.velocity = (spring.velocity - frequency * coefficient * elapsed) * decay;
   }
 
-  function viewportAnchor(bounds) {
-    const anchorY = Math.min(120, innerHeight * .18);
-    if (!bounds.length || anchorY <= bounds[0].top) return 0;
-    for (let index = 0; index < bounds.length - 1; index++) {
-      if (anchorY < bounds[index + 1].top) {
-        return index + (anchorY - bounds[index].top)
-          / Math.max(1, bounds[index + 1].top - bounds[index].top);
-      }
-    }
-    return bounds.length - 1;
-  }
-
-  function currentScrollSpeed(now) {
+  function currentScrollVelocity(now) {
     // Leave a short hold between native scroll events, then release naturally
     // when scrolling stops instead of waiting for a separate scrollend event.
     const staleTime = Math.max(0, now - lastScrollTime - 70);
-    return scrollSpeed * Math.exp(-staleTime / 160);
+    return scrollVelocity * Math.exp(-staleTime / 160);
   }
 
   function renderMotion(now) {
@@ -288,30 +274,41 @@
       state, bounds: state.panel.dataset.glassKind === 'panel'
         ? panelBounds[panels.indexOf(state.panel)] : layoutBounds(state.panel)
     }));
-    const speedRatio = Math.max(0, Math.min(1, (currentScrollSpeed(now) - 80) / 1400));
-    const targetGap = maximumGap * speedRatio * speedRatio * (3 - 2 * speedRatio);
-    const targetAnchor = viewportAnchor(panelBounds);
-    springStep(gapSpring, targetGap, targetGap > gapSpring.value ? 20 : 14, elapsed);
-    if (gapSpring.value < 0 || gapSpring.value > maximumGap) {
-      gapSpring.value = Math.max(0, Math.min(maximumGap, gapSpring.value));
-      gapSpring.velocity = 0;
-    }
-    if (gapSpring.value < .02 && Math.abs(gapSpring.velocity) < .08 && targetGap === 0) {
-      gapSpring.value = gapSpring.velocity = 0;
-    }
-    if (gapSpring.value === 0) {
-      anchorSpring.value = targetAnchor;
-      anchorSpring.velocity = 0;
-    } else {
-      springStep(anchorSpring, targetAnchor, 16, elapsed);
-    }
+    const velocity = currentScrollVelocity(now);
+    const speedRatio = Math.max(0, Math.min(1, (Math.abs(velocity) - 80) / 1400));
+    const direction = Math.sign(velocity);
+    const easeBoundary = distance => {
+      const ratio = Math.max(0, Math.min(1, distance / (maximumLag * 2)));
+      return ratio * ratio * (3 - 2 * ratio);
+    };
+    // Use normal-flow geometry: translated cards must not extend the scroll
+    // range used to release the effect at either end of the page.
+    const introBounds = intro ? layoutBounds(intro) : null;
+    const endBounds = footer ? layoutBounds(footer) : panelBounds[panelBounds.length - 1];
+    const topStrength = easeBoundary(introBounds ? -introBounds.top - introBounds.height : window.scrollY);
+    const bottomStrength = easeBoundary(endBounds.top + endBounds.height - innerHeight);
+    const boundaryStrength = direction < 0 ? topStrength : bottomStrength;
+    const amplitude = maximumLag * speedRatio * speedRatio * (3 - 2 * speedRatio) * boundaryStrength;
     const offsets = panels.map((panel, index) => {
-      // One nonnegative gap keeps offsets ordered through direction changes.
-      // Clamping distant cards bounds the movement without shrinking any gap.
-      const offset = Math.max(-maximumOffset, Math.min(maximumOffset,
-        (index - anchorSpring.value) * gapSpring.value));
+      const bounds = panelBounds[index];
+      const position = Math.max(0, Math.min(1,
+        (bounds.top + bounds.height / 2 + innerHeight * .25) / (innerHeight * 1.5)));
+      // The leading edge stays near its normal position. Cards farther behind
+      // it lag more, with a curved profile so adjacent gaps are not uniform.
+      // Reverse the profile and the lag when the scroll direction reverses.
+      const trailingDistance = direction >= 0 ? position : 1 - position;
+      const target = direction * amplitude * trailingDistance * trailingDistance;
+      const spring = lagSprings[index];
+      // A shared damping rate preserves row order as the targets change.
+      springStep(spring, target, 16, elapsed);
+      if (!amplitude && Math.abs(spring.value) < .02 && Math.abs(spring.velocity) < .08) {
+        spring.value = spring.velocity = 0;
+      }
+      // Fade lingering spring motion as well as new targets, so the intro
+      // stays clear and the footer cannot drift past the natural page end.
+      const offset = spring.value * (spring.value < 0 ? topStrength : bottomStrength);
       panel.style.setProperty('--glass-stretch-y', `${offset.toFixed(2)}px`);
-      panel.style.setProperty('--glass-energy', (gapSpring.value / maximumGap).toFixed(4));
+      panel.style.setProperty('--glass-energy', (Math.abs(offset) / maximumLag).toFixed(4));
       return offset;
     });
     sectionFollowers.forEach(({element, index}) => {
@@ -347,7 +344,7 @@
       state.panel.style.setProperty('--glass-hover-scale', tiltsPanel ? hoverScale.toFixed(4) : '1');
     });
     // The spring requests frames only while stretching or returning to rest.
-    if (targetGap > 0 || gapSpring.value > 0) scheduleMotion();
+    if (amplitude > 0 || lagSprings.some(spring => spring.value || spring.velocity)) scheduleMotion();
     else lastFrameTime = 0;
   }
 
@@ -380,12 +377,12 @@
   window.addEventListener('scroll', () => {
     if (!motionEnabled()) return;
     const now = performance.now();
-    const distance = Math.abs(window.scrollY - lastScrollY);
-    if (distance > 0) {
+    const distance = window.scrollY - lastScrollY;
+    if (distance) {
       const sampleTime = Math.max(8, Math.min(64, now - lastScrollTime));
-      const sampleSpeed = Math.min(6000, distance * 1000 / sampleTime);
+      const sampleVelocity = Math.max(-6000, Math.min(6000, distance * 1000 / sampleTime));
       const blend = 1 - Math.exp(-sampleTime / 35);
-      scrollSpeed = currentScrollSpeed(now) * (1 - blend) + sampleSpeed * blend;
+      scrollVelocity = currentScrollVelocity(now) * (1 - blend) + sampleVelocity * blend;
       lastScrollTime = now;
       lastScrollY = window.scrollY;
     }
