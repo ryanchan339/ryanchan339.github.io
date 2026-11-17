@@ -60,9 +60,9 @@
     return {panel, filter, image, size: ''};
   });
 
-  function alignScene(panel, bounds, stretch = 0) {
+  function alignScene(panel, bounds) {
     panel.style.setProperty('--glass-scene-x', `${(-bounds.left - window.scrollX - panel.clientLeft).toFixed(2)}px`);
-    panel.style.setProperty('--glass-scene-y', `${(-bounds.top - window.scrollY - panel.clientTop - stretch).toFixed(2)}px`);
+    panel.style.setProperty('--glass-scene-y', `${(-bounds.top - window.scrollY - panel.clientTop).toFixed(2)}px`);
   }
 
   function buildLens(width, height, radius) {
@@ -135,8 +135,7 @@
       const width = Math.round(state.panel.clientWidth);
       const height = Math.round(state.panel.clientHeight);
       if (!width || !height) continue;
-      alignScene(state.panel, layoutBounds(state.panel),
-        parseFloat(state.panel.style.getPropertyValue('--glass-stretch-y')) || 0);
+      alignScene(state.panel, layoutBounds(state.panel));
       const cssRadius = parseFloat(getComputedStyle(state.panel).borderTopLeftRadius) || 0;
       const radius = Math.max(0, Math.min(cssRadius, width / 2, height / 2));
       const size = `${width}:${height}:${radius}`;
@@ -169,47 +168,28 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   const motionStates = surfaces.map(panel => ({panel, visible: false, pointer: null}));
-  const sectionFollowers = [...document.querySelectorAll('.home-section')].map(section => ({
-    element: section.querySelector('.home-section-heading'),
-    index: panels.indexOf(section.querySelector('.home-panel'))
-  })).filter(item => item.element && item.index >= 0);
-  const intro = document.querySelector('.home-intro');
-  const footer = document.querySelector('.home-layout > .site-footer');
-  if (footer) sectionFollowers.push({element: footer, index: panels.length - 1});
   const motionProperties = [
-    '--glass-light-x', '--glass-light-y', '--glass-scroll-y',
+    '--glass-light-x', '--glass-light-y',
     '--glass-light-angle', '--glass-pointer-x', '--glass-pointer-y',
-    '--glass-float-y', '--glass-stretch-y', '--glass-energy', '--glass-tilt-x',
+    '--glass-tilt-x',
     '--glass-tilt-y', '--glass-hover-scale'
   ];
   const motionEnabled = () => !document.hidden && !reducedMotion.matches
     && !preferences.some(query => query.matches);
-  const maximumLag = 180;
-  const lagSprings = panels.map(() => ({value: 0, velocity: 0}));
   let motionFrame = 0;
-  let lastFrameTime = 0;
-  let lastScrollY = window.scrollY;
-  let lastScrollTime = performance.now();
-  let scrollVelocity = 0;
 
   function resetMotion() {
     cancelAnimationFrame(motionFrame);
     motionFrame = 0;
-    lastFrameTime = 0;
-    lastScrollY = window.scrollY;
-    lastScrollTime = performance.now();
-    scrollVelocity = 0;
-    lagSprings.forEach(spring => { spring.value = spring.velocity = 0; });
     motionStates.forEach(state => {
       state.pointer = null;
       motionProperties.forEach(property => state.panel.style.removeProperty(property));
     });
-    sectionFollowers.forEach(({element}) => element.style.removeProperty('--glass-stretch-y'));
   }
 
   function layoutBounds(panel) {
     // These surfaces are in the document's normal flow. Offset geometry ignores
-    // their animated translation, tilt and scale, so motion cannot feed back
+    // their hover tilt and scale, so motion cannot feed back
     // into the next scroll or pointer measurement.
     let left = panel.offsetLeft;
     let top = panel.offsetTop;
@@ -225,85 +205,23 @@
     };
   }
 
-  function springStep(spring, target, frequency, elapsed) {
-    // Exact critically damped step: stable at different refresh rates and no
-    // overshoot when the target returns to zero.
-    const offset = spring.value - target;
-    const coefficient = spring.velocity + frequency * offset;
-    const decay = Math.exp(-frequency * elapsed);
-    spring.value = target + (offset + coefficient * elapsed) * decay;
-    spring.velocity = (spring.velocity - frequency * coefficient * elapsed) * decay;
-  }
-
-  function currentScrollVelocity(now) {
-    // Leave a short hold between native scroll events, then release naturally
-    // when scrolling stops instead of waiting for a separate scrollend event.
-    const staleTime = Math.max(0, now - lastScrollTime - 70);
-    return scrollVelocity * Math.exp(-staleTime / 160);
-  }
-
-  function renderMotion(now) {
+  function renderMotion() {
     motionFrame = 0;
     if (!motionEnabled()) return;
-    const elapsed = lastFrameTime ? Math.max(0, Math.min(.05, (now - lastFrameTime) / 1000)) : 1 / 60;
-    lastFrameTime = now;
-    // Read untransformed bounds before writing styles. Scrolling changes only
-    // the spring spacing and rim light; it never regenerates a refraction map.
-    const panelBounds = panels.map(layoutBounds);
+    // Native scrolling keeps every row in place. Only the decorative scene and
+    // rim light update, with no animation loop continuing after an input event.
     const measurements = motionStates.filter(state => state.visible).map(state => ({
-      state, bounds: state.panel.dataset.glassKind === 'panel'
-        ? panelBounds[panels.indexOf(state.panel)] : layoutBounds(state.panel)
+      state, bounds: layoutBounds(state.panel)
     }));
-    const velocity = currentScrollVelocity(now);
-    const speedRatio = Math.max(0, Math.min(1, (Math.abs(velocity) - 80) / 1400));
-    const direction = Math.sign(velocity);
-    const easeBoundary = distance => {
-      const ratio = Math.max(0, Math.min(1, distance / (maximumLag * 2)));
-      return ratio * ratio * (3 - 2 * ratio);
-    };
-    // Use normal-flow geometry: translated cards must not extend the scroll
-    // range used to release the effect at either end of the page.
-    const introBounds = intro ? layoutBounds(intro) : null;
-    const endBounds = footer ? layoutBounds(footer) : panelBounds[panelBounds.length - 1];
-    const topStrength = easeBoundary(introBounds ? -introBounds.top - introBounds.height : window.scrollY);
-    const bottomStrength = easeBoundary(endBounds.top + endBounds.height - innerHeight);
-    const boundaryStrength = direction < 0 ? topStrength : bottomStrength;
-    const amplitude = maximumLag * speedRatio * speedRatio * (3 - 2 * speedRatio) * boundaryStrength;
-    const offsets = panels.map((panel, index) => {
-      const bounds = panelBounds[index];
-      const position = Math.max(0, Math.min(1,
-        (bounds.top + bounds.height / 2 + innerHeight * .25) / (innerHeight * 1.5)));
-      // The leading edge stays near its normal position. Cards farther behind
-      // it lag more, with a curved profile so adjacent gaps are not uniform.
-      // Reverse the profile and the lag when the scroll direction reverses.
-      const trailingDistance = direction >= 0 ? position : 1 - position;
-      const target = direction * amplitude * trailingDistance * trailingDistance;
-      const spring = lagSprings[index];
-      // A shared damping rate preserves row order as the targets change.
-      springStep(spring, target, 16, elapsed);
-      if (!amplitude && Math.abs(spring.value) < .02 && Math.abs(spring.velocity) < .08) {
-        spring.value = spring.velocity = 0;
-      }
-      // Fade lingering spring motion as well as new targets, so the intro
-      // stays clear and the footer cannot drift past the natural page end.
-      const offset = spring.value * (spring.value < 0 ? topStrength : bottomStrength);
-      panel.style.setProperty('--glass-stretch-y', `${offset.toFixed(2)}px`);
-      panel.style.setProperty('--glass-energy', (Math.abs(offset) / maximumLag).toFixed(4));
-      return offset;
-    });
-    sectionFollowers.forEach(({element, index}) => {
-      element.style.setProperty('--glass-stretch-y', `${offsets[index].toFixed(2)}px`);
-    });
     measurements.forEach(({state, bounds}) => {
       if (!bounds.width || !bounds.height) return;
-      alignScene(state.panel, bounds, state.panel.dataset.glassKind === 'panel'
-        ? offsets[panels.indexOf(state.panel)] : 0);
+      alignScene(state.panel, bounds);
       const progress = Math.max(-1, Math.min(1,
         (innerHeight / 2 - bounds.top - bounds.height / 2) * 2 / (innerHeight + bounds.height)));
       const pointer = finePointer.matches ? state.pointer : null;
       const x = pointer ? Math.max(0, Math.min(100, (pointer.x - bounds.left) / bounds.width * 100)) : 20;
-      const y = pointer ? Math.max(0, Math.min(100, (pointer.y - bounds.top) / bounds.height * 100)) : 40 + progress * 25;
-      const angle = pointer ? (Math.atan2(y - 50, x - 50) * 180 / Math.PI + 450) % 360 : 315 + progress * 12;
+      const y = pointer ? Math.max(0, Math.min(100, (pointer.y - bounds.top) / bounds.height * 100)) : 40 + progress * 10;
+      const angle = pointer ? (Math.atan2(y - 50, x - 50) * 180 / Math.PI + 450) % 360 : 315 + progress * 8;
       const isPanel = state.panel.dataset.glassKind === 'panel';
       const movesControl = pointer && !isPanel;
       const tiltsPanel = pointer && isPanel;
@@ -314,18 +232,13 @@
       const hoverScale = 1 + Math.min(.035, horizontalRoom * 2 / bounds.width, 28 / bounds.height);
       state.panel.style.setProperty('--glass-light-x', `${x.toFixed(2)}%`);
       state.panel.style.setProperty('--glass-light-y', `${y.toFixed(2)}%`);
-      state.panel.style.setProperty('--glass-scroll-y', `${(progress * 10).toFixed(2)}px`);
       state.panel.style.setProperty('--glass-light-angle', `${angle.toFixed(2)}deg`);
       state.panel.style.setProperty('--glass-pointer-x', `${(movesControl ? (x - 50) * .025 : 0).toFixed(2)}px`);
       state.panel.style.setProperty('--glass-pointer-y', `${(movesControl ? (y - 50) * .025 : 0).toFixed(2)}px`);
-      state.panel.style.setProperty('--glass-float-y', '0px');
       state.panel.style.setProperty('--glass-tilt-x', `${(tiltsPanel ? (50 - y) * .02 : 0).toFixed(3)}deg`);
       state.panel.style.setProperty('--glass-tilt-y', `${(tiltsPanel ? (x - 50) * .02 : 0).toFixed(3)}deg`);
       state.panel.style.setProperty('--glass-hover-scale', tiltsPanel ? hoverScale.toFixed(4) : '1');
     });
-    // The spring requests frames only while stretching or returning to rest.
-    if (amplitude > 0 || lagSprings.some(spring => spring.value || spring.velocity)) scheduleMotion();
-    else lastFrameTime = 0;
   }
 
   function scheduleMotion() {
@@ -354,20 +267,7 @@
     state.panel.addEventListener('pointerleave', releasePointer, {passive: true});
     state.panel.addEventListener('pointercancel', releasePointer, {passive: true});
   });
-  window.addEventListener('scroll', () => {
-    if (!motionEnabled()) return;
-    const now = performance.now();
-    const distance = window.scrollY - lastScrollY;
-    if (distance) {
-      const sampleTime = Math.max(8, Math.min(64, now - lastScrollTime));
-      const sampleVelocity = Math.max(-6000, Math.min(6000, distance * 1000 / sampleTime));
-      const blend = 1 - Math.exp(-sampleTime / 35);
-      scrollVelocity = currentScrollVelocity(now) * (1 - blend) + sampleVelocity * blend;
-      lastScrollTime = now;
-      lastScrollY = window.scrollY;
-    }
-    scheduleMotion();
-  }, {passive: true});
+  window.addEventListener('scroll', scheduleMotion, {passive: true});
   window.addEventListener('resize', scheduleMotion, {passive: true});
   const syncMotion = () => {
     if (!motionEnabled()) resetMotion();

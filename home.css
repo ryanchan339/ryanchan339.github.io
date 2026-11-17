@@ -1,12 +1,15 @@
 .home-page {
+  /* Keep the first child's margin from moving the backdrop's origin. */
+  display: flow-root;
   --ink: #182230;
   --muted: #465366;
   --line: #dbe1eb;
   --blue: #41689e;
   --blue-deep: #2f5080;
-  --glass-scene-color: #eef0f3;
-  --glass-scene-image: radial-gradient(#7f87911f .65px, transparent .85px);
-  --glass-scene-size: 32px 32px;
+  /* The page and every lens use the same document-aligned backdrop. */
+  --glass-scene-color: #e3e9f1;
+  --glass-scene-image: radial-gradient(#526b8912 .6px, transparent .8px), url("assets/glass-backdrop.svg?v=20261116-calm-glass");
+  --glass-scene-size: 24px 24px, max(100vw, 720px) 1440px;
   background-color: var(--glass-scene-color);
   background-image: var(--glass-scene-image);
   background-size: var(--glass-scene-size);
@@ -60,14 +63,12 @@
 
 /* Each information row is a separate lens in a spaced vertical sequence. */
 .home-section { margin-top: 46px; }
-.home-section-heading, .home-layout > .site-footer { translate: 0 var(--glass-stretch-y, 0px); }
 .home-panel {
   position: relative;
   isolation: isolate;
   padding: 30px 34px;
   border: 1px solid;
   border-radius: 36px;
-  translate: 0 var(--glass-stretch-y, 0px);
   transform: perspective(1200px) rotateX(var(--glass-tilt-x, 0deg)) rotateY(var(--glass-tilt-y, 0deg)) scale(var(--glass-hover-scale, 1));
   transform-origin: center;
   transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .35s;
@@ -127,8 +128,8 @@
   border-radius: inherit;
   background: radial-gradient(ellipse at var(--glass-light-x, 50%) var(--glass-light-y, 15%), #ffffff59, transparent 70%);
   background-size: 100% 100%;
-  background-position: center var(--glass-scroll-y, 0px);
-  opacity: calc(.75 + var(--glass-energy, 0) * .25);
+  background-position: center;
+  opacity: .75;
   pointer-events: none;
 }
 .home-panel::before {
@@ -300,8 +301,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .home-panel, .home-button, .home-row-link, .home-project-copy .home-arrow, .arrow-icon { transition: none; }
-  .home-panel { translate: none; transform: none; }
-  .home-section-heading, .home-layout > .site-footer { translate: none; }
+  .home-panel { transform: none; }
   .home-row-link:hover .arrow-icon, .home-project-copy h3 a:hover .arrow-icon { transform: none; }
 }
 

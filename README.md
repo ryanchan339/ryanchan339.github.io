@@ -26,8 +26,9 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 ## Edit
 
 - `index.html`: introduction and resume/social links, followed by education, experience, and projects in individually spaced glass rows.
-- `home.css`: the homepage layout, with clear glass surfaces, reflective rims, a flat pale background, and accessible opaque fallbacks.
-- `assets/liquid-glass.js`: cached convex-edge refraction and specular maps, localized artwork reflections, and scroll-speed-driven spring spacing, with a CSS glass fallback in other browsers.
+- `home.css`: the homepage layout, with clear glass surfaces, reflective rims, a shared blue/lavender backdrop, and accessible opaque fallbacks.
+- `assets/glass-backdrop.svg`: static color washes and curved ribbons that supply visible detail for the clear glass to refract.
+- `assets/liquid-glass.js`: cached convex-edge refraction maps, document-aligned backdrop copies, and subtle pointer-responsive highlights, with native scrolling and a CSS glass fallback.
 - `work.html`: four project showcases, with three recorded demos and an NFL application architecture summary.
 - `experience.html`: professional, research, and teaching experience, plus illustrative Python Two Sum and transformer acceleration animations.
 - `contact.html`: email, LinkedIn, GitHub, and copy-email action.
@@ -89,9 +90,9 @@ The original design now includes the current Swift/iOS and TypeScript/Bedrock ex
 
 Home follows one reading order: name and current affiliation, resume/social links, Education, Experience, and Projects. Each education, experience, and project entry occupies its own rounded glass row, with clear vertical gaps and section labels above the rows. Experience uses the full résumé bullets on both Home and the Experience page, with a system sans-serif font, 17px body copy (16px on mobile), and darker text. All three roles and all four projects, including SpotifyBook, are visible without tabs. Project previews sit beside descriptions on desktop and stack on small screens. Video Search, Stock Trader, and SpotifyBook retain their animated openings and recorded demos; the NFL architecture diagram highlights its data flow on hover or focus.
 
-The information rows use a web approximation of liquid glass: clear centers, curved refractive edges, geometry-based highlights, and soft depth. A faint fragment of each row’s actual logo or project artwork sits behind the refracting edge and fades out before the text. This supplies local optical detail without adding a page-wide graphic or streak. The floating navigation retains its original black sliding selector and white labels.
+The information rows use a web approximation of liquid glass: clear centers, curved refractive edges, geometry-based highlights, and soft depth. The backdrop uses a cool base, muted blue/lavender washes, a little warm peach, and broad curved ribbons. The page and lenses share the same document-aligned background so its boundaries visibly bend at card edges while paragraph areas remain quiet. The floating navigation retains its original black sliding selector and white labels.
 
-Scroll speed controls an added 0–34px gap between rows. A critically damped spring expands the visual spacing during faster scrolling and retracts it to the normal 32px desktop or 24px mobile gap after scrolling stops. Positions stay in document order through reversals, with translation capped at 140px; section labels and the footer follow their adjacent row. This uses transforms without changing layout margins, and the animation frame loop stops when the spring settles. Hover adds a small tilt and expansion.
+Scrolling uses the browser’s native movement and momentum. Cards, headings, and the footer keep their normal positions and gaps, including when scroll direction reverses or scrolling stops. Decorative rim lighting updates on input without a spring or continuous frame loop. Hover retains a small tilt and expansion.
 
 Chromium receives backdrop refraction through SVG displacement maps based on a rounded meniscus profile. Other browsers keep the CSS backdrop and refract the controlled artwork layer with a regular SVG filter. A separate cached normal-based specular map draws the curved rim. Maps regenerate only when surface sizes change. Text stays above the optical layers and remains sharp. Reduced motion disables surface movement and automatic preview playback; visitors can still explicitly play a demo. Reduced-transparency, increased-contrast, forced-color, and unsupported-blur environments receive opaque fallbacks.
 
