@@ -7,7 +7,7 @@
   --blue: #41689e;
   --blue-deep: #2f5080;
   /* The page and every lens use the same document-aligned backdrop. */
-  --glass-scene-color: #fff;
+  --glass-scene-color: #f5f5f7;
   --glass-scene-image: none;
   --glass-scene-size: auto;
   background-color: var(--glass-scene-color);
