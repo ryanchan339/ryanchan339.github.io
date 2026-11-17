@@ -78,7 +78,11 @@
   border-color: #ffffff80;
   box-shadow: 0 5px 12px -5px #27303d36, inset 0 1px 0 #ffffffb3, inset 0 -1px 0 #3642521a;
 }
-.home-panel { background: transparent; }
+.home-panel {
+  background: transparent;
+  border-color: #ffffffb3;
+  box-shadow: 0 8px 24px -10px #18223026, 0 2px 5px -2px #1822301a, inset 0 1px 0 #fffffff2, inset 0 -1px 0 #50607829;
+}
 .liquid-filter-definitions { position: absolute; width: 0; height: 0; pointer-events: none; }
 .liquid-backdrop {
   position: absolute;
@@ -106,7 +110,8 @@
   inset: 0;
   background: #ffffff1a;
 }
-.home-panel .glass-scene::after { background: transparent; }
+.home-panel .glass-scene { opacity: .45; }
+.home-panel .glass-scene::after { background: #ffffff4d; }
 [data-refractive] > .liquid-backdrop {
   background: transparent;
   -webkit-backdrop-filter: none;
@@ -114,10 +119,15 @@
 }
 [data-refractive] .glass-scene { filter: var(--refraction-filter) blur(.3px) saturate(1.1); }
 .home-panel[data-refractive] .glass-scene { filter: var(--refraction-filter); }
-.home-panel > .liquid-backdrop,
 .home-button > .liquid-backdrop {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+}
+.home-panel > .liquid-backdrop {
+  /* Mix a softened real backdrop with the refractive scene above it. */
+  background: #ffffff4d;
+  -webkit-backdrop-filter: blur(6px) saturate(1.05);
+  backdrop-filter: blur(6px) saturate(1.05);
 }
 .home-panel::before,
 .home-button::before {
@@ -133,7 +143,7 @@
   pointer-events: none;
 }
 .home-panel::before {
-  background: linear-gradient(180deg, #ffffff66, transparent 8px, transparent calc(100% - 8px), #ffffff33);
+  background: linear-gradient(180deg, #ffffffa6, transparent 14px, transparent calc(100% - 12px), #ffffff26);
   background-position: 0 0;
 }
 .home-panel::after,
@@ -152,9 +162,12 @@
   pointer-events: none;
 }
 .home-panel > :not(.liquid-backdrop) { position: relative; z-index: 2; }
+.home-panel::after {
+  background: conic-gradient(from var(--glass-light-angle, -45deg), #fff, #ffffff1a 15%, #75849b66 28%, #ffffff40 42%, #fffffff2 54%, #ffffff33 73%, #7186a347 83%, #fff);
+}
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .home-panel:hover, .home-panel:focus-within {
-    box-shadow: 0 8px 16px -6px #27303d3d, inset 0 1px 0 #ffffffd9, inset 0 -1px 0 #3642521a;
+    box-shadow: 0 12px 30px -12px #18223033, 0 3px 8px -4px #18223026, inset 0 1px 0 #fff, inset 0 -1px 0 #50607829;
   }
   .home-button { transform: translate(var(--glass-pointer-x, 0px), var(--glass-pointer-y, 0px)); }
   .home-button:hover, .home-button:focus-visible { transform: translate(var(--glass-pointer-x, 0px), var(--glass-pointer-y, 0px)) scale(1.035); }

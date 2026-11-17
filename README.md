@@ -26,7 +26,7 @@ The workflow follows GitHub's documented configure/upload/deploy pattern: https:
 ## Edit
 
 - `index.html`: introduction and resume/social links, followed by education, experience, and projects in individually spaced glass rows.
-- `home.css`: the homepage layout, with clear glass surfaces, Apple’s light gray background (#f5f5f7), and accessible opaque fallbacks.
+- `home.css`: the homepage layout, with lightly frosted glass surfaces, Apple’s light gray background (#f5f5f7), and accessible opaque fallbacks.
 - `assets/liquid-glass.js`: cached convex-edge refraction maps, document-aligned backdrop copies, and pointer-responsive highlights, with native scrolling and a CSS glass fallback.
 - `work.html`: four project showcases, with three recorded demos and an NFL application architecture summary.
 - `experience.html`: professional, research, and teaching experience, plus illustrative Python Two Sum and transformer acceleration animations.
@@ -89,7 +89,7 @@ The original design now includes the current Swift/iOS and TypeScript/Bedrock ex
 
 Home follows one reading order: name and current affiliation, resume/social links, Education, Experience, and Projects. Each education, experience, and project entry occupies its own rounded glass row, with clear vertical gaps and section labels above the rows. Experience uses the full résumé bullets on both Home and the Experience page, with a system sans-serif font, 17px body copy (16px on mobile), and darker text. All three roles and all four projects, including SpotifyBook, are visible without tabs. Project previews sit beside descriptions on desktop and stack on small screens. Video Search, Stock Trader, and SpotifyBook retain their animated openings and recorded demos; the NFL architecture diagram highlights its data flow on hover or focus.
 
-The information rows use a web approximation of liquid glass: clear centers, curved refractive edges, geometry-based highlights, and soft depth. The page and lenses share Apple’s light gray background (#f5f5f7). The floating navigation retains its original black sliding selector and white labels.
+The information rows use a web approximation of liquid glass: lightly frosted centers, curved refractive edges, geometry-based highlights, and soft depth. A 30% white tint and 6px backdrop blur mix with a partly transparent refractive scene; a 1.5px softening filter applies only to that decorative scene. Reflective rims and restrained layered shadows define the surfaces while foreground text stays sharp. The page and lenses share Apple’s light gray background (#f5f5f7). The floating navigation retains its original black sliding selector and white labels.
 
 Scrolling uses the browser’s native movement and momentum. Cards keep their normal size and spacing throughout scrolling, without center-focus scaling or spring motion. Decorative rim lighting updates on input without a continuing frame loop. Hover retains a small tilt and expansion, with reduced-motion and contrast fallbacks.
 
