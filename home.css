@@ -2,14 +2,14 @@
   /* Keep the first child's margin from moving the backdrop's origin. */
   display: flow-root;
   --ink: #182230;
-  --muted: #2c3a4f;
+  --muted: #465366;
   --line: #dbe1eb;
   --blue: #41689e;
   --blue-deep: #2f5080;
   /* The page and every lens use the same document-aligned backdrop. */
-  --glass-scene-color: #f4f5f8;
-  --glass-scene-image: linear-gradient(#ffffffad, #ffffffad), url("assets/cover-wall.svg?v=20261116-cover-focus");
-  --glass-scene-size: auto, max(100vw, 840px) auto;
+  --glass-scene-color: #fff;
+  --glass-scene-image: none;
+  --glass-scene-size: auto;
   background-color: var(--glass-scene-color);
   background-image: var(--glass-scene-image);
   background-size: var(--glass-scene-size);
@@ -64,27 +64,21 @@
 /* Each information row is a separate lens in a spaced vertical sequence. */
 .home-section { margin-top: 46px; }
 .home-panel {
-  --glass-focus-amount: var(--glass-focus, 0);
   position: relative;
   isolation: isolate;
   padding: 30px 34px;
   border: 1px solid;
   border-radius: 36px;
-  transform: perspective(1200px) rotateX(var(--glass-tilt-x, 0deg)) rotateY(var(--glass-tilt-y, 0deg)) scale(var(--glass-focus-scale, 1)) scale(var(--glass-hover-scale, 1));
+  transform: perspective(1200px) rotateX(var(--glass-tilt-x, 0deg)) rotateY(var(--glass-tilt-y, 0deg)) scale(var(--glass-hover-scale, 1));
   transform-origin: center;
-  /* Scroll-linked scale follows position directly, without a trailing tween. */
-  transition: box-shadow .18s;
+  transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .35s;
 }
 .home-button, .home-panel {
   background: #ffffff1f;
   border-color: #ffffff80;
   box-shadow: 0 5px 12px -5px #27303d36, inset 0 1px 0 #ffffffb3, inset 0 -1px 0 #3642521a;
 }
-.home-panel {
-  background: transparent;
-  border-color: rgb(255 255 255 / calc(.5 + var(--glass-focus-amount) * .4));
-  box-shadow: 0 calc(5px + var(--glass-focus-amount) * 10px) calc(12px + var(--glass-focus-amount) * 20px) -5px rgb(39 48 61 / calc(.21 + var(--glass-focus-amount) * .13)), inset 0 1px 0 #ffffffb3, inset 0 -1px 0 #3642521a;
-}
+.home-panel { background: transparent; }
 .liquid-filter-definitions { position: absolute; width: 0; height: 0; pointer-events: none; }
 .liquid-backdrop {
   position: absolute;
@@ -112,7 +106,7 @@
   inset: 0;
   background: #ffffff1a;
 }
-.home-panel .glass-scene::after { background: #ffffff0f; }
+.home-panel .glass-scene::after { background: transparent; }
 [data-refractive] > .liquid-backdrop {
   background: transparent;
   -webkit-backdrop-filter: none;
@@ -141,7 +135,6 @@
 .home-panel::before {
   background: linear-gradient(180deg, #ffffff66, transparent 8px, transparent calc(100% - 8px), #ffffff33);
   background-position: 0 0;
-  opacity: calc(.55 + var(--glass-focus-amount) * .45);
 }
 .home-panel::after,
 .home-button::after {
@@ -158,11 +151,10 @@
   mask-composite: exclude;
   pointer-events: none;
 }
-.home-panel::after { opacity: calc(.7 + var(--glass-focus-amount) * .3); }
 .home-panel > :not(.liquid-backdrop) { position: relative; z-index: 2; }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .home-panel:hover, .home-panel:focus-within {
-    box-shadow: 0 calc(8px + var(--glass-focus-amount) * 9px) calc(16px + var(--glass-focus-amount) * 20px) -6px rgb(39 48 61 / calc(.24 + var(--glass-focus-amount) * .1)), inset 0 1px 0 #ffffffd9, inset 0 -1px 0 #3642521a;
+    box-shadow: 0 8px 16px -6px #27303d3d, inset 0 1px 0 #ffffffd9, inset 0 -1px 0 #3642521a;
   }
   .home-button { transform: translate(var(--glass-pointer-x, 0px), var(--glass-pointer-y, 0px)); }
   .home-button:hover, .home-button:focus-visible { transform: translate(var(--glass-pointer-x, 0px), var(--glass-pointer-y, 0px)) scale(1.035); }
@@ -309,7 +301,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .home-panel, .home-button, .home-row-link, .home-project-copy .home-arrow, .arrow-icon { transition: none; }
-  .home-panel { --glass-focus-amount: 0; transform: none; }
+  .home-panel { transform: none; }
   .home-row-link:hover .arrow-icon, .home-project-copy h3 a:hover .arrow-icon { transform: none; }
 }
 
@@ -318,7 +310,6 @@
 }
 
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
-  .home-panel { --glass-focus-amount: 0; transform: none; }
   .home-page { background-image: none; }
   .home-panel, .home-page .site-nav, .home-button { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; border-color: #9aa8bb; }
   .liquid-backdrop, .home-panel::before, .home-panel::after, .home-button::before, .home-button::after { display: none; }
@@ -330,7 +321,6 @@
 }
 
 @media (forced-colors: active) {
-  .home-panel { --glass-focus-amount: 0; transform: none; }
   .home-page { background: Canvas; }
   .home-panel, .home-page .site-nav, .home-button { background: Canvas; -webkit-backdrop-filter: none; backdrop-filter: none; border-color: CanvasText; box-shadow: none; }
   .liquid-backdrop, .home-panel::before, .home-panel::after, .home-button::before, .home-button::after { display: none; }

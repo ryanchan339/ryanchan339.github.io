@@ -172,7 +172,7 @@
     '--glass-light-x', '--glass-light-y',
     '--glass-light-angle', '--glass-pointer-x', '--glass-pointer-y',
     '--glass-tilt-x',
-    '--glass-tilt-y', '--glass-hover-scale', '--glass-focus', '--glass-focus-scale'
+    '--glass-tilt-y', '--glass-hover-scale'
   ];
   const motionEnabled = () => !document.hidden && !reducedMotion.matches
     && !preferences.some(query => query.matches);
@@ -189,7 +189,7 @@
 
   function layoutBounds(panel) {
     // These surfaces are in the document's normal flow. Offset geometry ignores
-    // their scroll zoom and hover tilt, so motion cannot feed back
+    // their hover tilt and scale, so motion cannot feed back
     // into the next scroll or pointer measurement.
     let left = panel.offsetLeft;
     let top = panel.offsetTop;
@@ -208,8 +208,8 @@
   function renderMotion() {
     motionFrame = 0;
     if (!motionEnabled()) return;
-    // Native scrolling keeps each row's layout in place. Zoom follows its
-    // viewport position directly, without a spring or a continuing frame loop.
+    // Native scrolling keeps every row in place. Only the decorative scene and
+    // rim light update, with no animation loop continuing after an input event.
     const measurements = motionStates.filter(state => state.visible).map(state => ({
       state, bounds: layoutBounds(state.panel)
     }));
@@ -225,21 +225,11 @@
       const isPanel = state.panel.dataset.glassKind === 'panel';
       const movesControl = pointer && !isPanel;
       const tiltsPanel = pointer && isPanel;
-      // Grow toward the viewport center and recede toward either edge. The
-      // same curve works in both directions, without tracking scroll velocity.
-      const proximity = 1 - Math.abs(progress);
-      const focus = proximity * proximity * (3 - 2 * proximity);
-      // Share one expansion budget between scroll focus and hover so the
-      // combined transform stays inside the gutters and clear of other rows.
+      // Make expansion visible while keeping tall or narrow cards inside
+      // their available gutters and clear of neighboring rows.
       const horizontalRoom = Math.max(0,
-        Math.min(bounds.left, document.documentElement.clientWidth - bounds.left - bounds.width) - 8);
-      const maximumScale = 1 + Math.min(.045, horizontalRoom * 2 / bounds.width, 28 / bounds.height);
-      const focusScale = isPanel ? .92 + (maximumScale - .92) * focus : 1;
-      const hoverScale = 1 + Math.min(.018, Math.max(0, maximumScale / focusScale - 1));
-      if (isPanel) {
-        state.panel.style.setProperty('--glass-focus', focus.toFixed(4));
-        state.panel.style.setProperty('--glass-focus-scale', focusScale.toFixed(5));
-      }
+        Math.min(bounds.left, innerWidth - bounds.left - bounds.width) - 8);
+      const hoverScale = 1 + Math.min(.035, horizontalRoom * 2 / bounds.width, 28 / bounds.height);
       state.panel.style.setProperty('--glass-light-x', `${x.toFixed(2)}%`);
       state.panel.style.setProperty('--glass-light-y', `${y.toFixed(2)}%`);
       state.panel.style.setProperty('--glass-light-angle', `${angle.toFixed(2)}deg`);
